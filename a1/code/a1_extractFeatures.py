@@ -122,8 +122,9 @@ def extract1(comment):
     valid_tokens = [w for w in words if
                     nfindall(rf"{check_punct}/", w) == 0]
     # print([v[:v.rfind('/')] for v in valid_tokens])
-    features[15] = len("".join([v[:v.find('/')] for v in valid_tokens])) / (len(
-      valid_tokens))  # n chars / n tokens
+    if len(valid_tokens) > 0:
+      features[15] = len("".join([v[:v.find('/')] for v in valid_tokens])) / (len(
+        valid_tokens))  # n chars / n tokens
     # print(features[15])
 
   # Norms

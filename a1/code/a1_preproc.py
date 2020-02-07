@@ -120,68 +120,73 @@ def preproc1(comment, steps=range(1, 5)):
         # modComm = re.sub(regex, r' \1 ', modComm)
         modComm = re.sub(r'( {2,})', '', modComm)
         modComm = re.sub(r"(\s*$)", "", modComm)
-    if 5 in steps:  # remove contractions
-        # patterns = [(r"(\'(?=(ve|d|ll|n|re|s|m)))", r' \1'),
-        #             (r"((?<=t|y)\')", r' \1'),
-        #             (r"(n\'t)", r' \1'),
-        #             (r"(s\')", r"s '")]
-        patterns = [(r"(\'ve)", 'have'),
-                    (r"(\'d)", 'did'),
-                    (r"(\'ll)", 'will'),
-                    (r"(\'re)", 'are'),
-                    (r"(\'s)", 'is'),
-                    (r"(\'m)", 'be'),
-                    (r"(n\'t)", 'not'),
-                    (r"(s\')", "s '")]
-        for pattern, repl in patterns:
-            modComm = comp(pattern).sub(' '+repl, modComm)
+    if modComm == '':
+        return '\n'
+    utterance = nlp(modComm)
+    modComm = ''
+    for sent in utterance.sents:
+        # if 5 in steps:  # remove contractions
+        #     # patterns = [(r"(\'(?=(ve|d|ll|n|re|s|m)))", r' \1'),
+        #     #             (r"((?<=t|y)\')", r' \1'),
+        #     #             (r"(n\'t)", r' \1'),
+        #     #             (r"(s\')", r"s '")]
+        #     patterns = [(r"(\'ve)", 'have'),
+        #                 (r"(\'d)", 'did'),
+        #                 (r"(\'ll)", 'will'),
+        #                 (r"(\'re)", 'are'),
+        #                 (r"(\'s)", 'is'),
+        #                 (r"(\'m)", 'be'),
+        #                 (r"(n\'t)", 'not'),
+        #                 (r"(s\')", "s '")]
+        #     for pattern, repl in patterns:
+        #         modComm = comp(pattern).sub(' '+repl, modComm)
 
-    if 6 in steps:  # POS tagging, stop word removal
-        def new_str(pos):
-            for token in pos:
-                if token.lemma_[0] == '-' and token.text[0] != '-':
-                    beg = token.text
-                else:
-                    beg = token.lemma_
-                yield beg + '/' + token.tag_
-        tags = nlp(modComm)
-        # modComm = " ".join([token.text+"/"+token.tag_ for token in tags if not token.is_stop])
-        modComm = " ".join(new_str(tags))
+        if 6 in steps:  # POS tagging, stop word removal
+            def new_str(pos):
+                for token in pos:
+                    if token.lemma_[0] == '-' and token.text[0] != '-':
+                        beg = token.text
+                    else:
+                        beg = token.lemma_
+                    yield beg + '/' + token.tag_
+            # modComm = " ".join([token.text+"/"+token.tag_ for token in tags if not token.is_stop])
+            modComm += " ".join(new_str(sent)) + '\n'
+            # modComm = re.sub(r'\s\n', "\n", modComm, re.IGNORECASE)
 
-    # if 7 in steps:  # Lemmatization
-    #     modComm += " "
-    #     # Remove tags
-    #     print(re.findall(r"(/\S*\s)", modComm))
-    #     modComm = re.sub(r"(/\S*\s)", " ", modComm)
-    #     pos = nlp(modComm)
-    #     def new_str(pos):
-    #         for token in pos:
-    #             if token.lemma_[0] == '-' and token.text[0] != '-':
-    #                 beg = token.text
-    #             else:
-    #                 beg = token.lemma_
-    #             yield beg + '/' + token.tag_
-    #     modComm = " ".join(new_str(pos))
+        # if 7 in steps:  # Lemmatization
+        #     modComm += " "
+        #     # Remove tags
+        #     print(re.findall(r"(/\S*\s)", modComm))
+        #     modComm = re.sub(r"(/\S*\s)", " ", modComm)
+        #     pos = nlp(modComm)
+        #     def new_str(pos):
+        #         for token in pos:
+        #             if token.lemma_[0] == '-' and token.text[0] != '-':
+        #                 beg = token.text
+        #             else:
+        #                 beg = token.lemma_
+        #             yield beg + '/' + token.tag_
+        #     modComm = " ".join(new_str(pos))
 
-    if 9 in steps:  # Add new lines between sentences
-        # assemble abbreviations
-        # abbrevs = "".join(common_abbreviations)
-        punctuation = r"([\.?!]|(\".*\"))\s"
-        # regex = rf"(((?<!\w\.\w){abbrevs}){punctuation})
-        regex = rf"((?<!\w\.\w){punctuation})"
-        modComm = re.sub(r"( {2,})", ' ', re.sub(regex, r'\1\n', modComm))
-        modComm = re.sub(r"(\s*$)", r"\n", modComm)
+        # if 9 in steps:  # Add new lines between sentences
+        #     # assemble abbreviations
+        #     # abbrevs = "".join(common_abbreviations)
+        #     punctuation = r"([\.?!]|(\".*\"))\s"
+        #     # regex = rf"(((?<!\w\.\w){abbrevs}){punctuation})
+        #     regex = rf"((?<!\w\.\w){punctuation})"
+        #     modComm = re.sub(r"( {2,})", ' ', re.sub(regex, r'\1\n', modComm))
+        #     modComm = re.sub(r"(\s*$)", r"\n", modComm)
 
-    # if 10 in steps:
-    #     modComm = modComm.lower()
+        # if 10 in steps:
+        #     modComm = modComm.lower()
 
-    # TODO: get Spacy document for modComm
-    
-    # TODO: use Spacy document for modComm to create a string.
-    # Make sure to:
-    #    * Insert "\n" between sentences.
-    #    * Split tokens with spaces.
-    #    * Write "/POS" after each token.
+        # TODO: get Spacy document for modComm
+
+        # TODO: use Spacy document for modComm to create a string.
+        # Make sure to:
+        #    * Insert "\n" between sentences.
+        #    * Split tokens with spaces.
+        #    * Write "/POS" after each token.
         
     return modComm
 
