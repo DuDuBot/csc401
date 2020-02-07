@@ -36,8 +36,9 @@ findall = functools.partial(re.findall, flags=re.IGNORECASE)
 nfindall = len_dec(findall)  # nfindall return number of matches from findall
 
 a1_dir = "/u/cs401/A1/"  # can't acess args...
-bgl = pd.read_csv(os.path.join(a1_dir, os.path.join("feats", "BristolNorms+GilhoolyLogie.csv")))
-warr = pd.read_csv(os.path.join(a1_dir, os.path.join("feats", "Ratings_Warriner_et_al.csv")))
+wordlists_dir = "/u/cs401/Wordlists"
+bgl = pd.read_csv(os.path.join(wordlists_dir, "BristolNorms+GilhoolyLogie.csv"))
+warr = pd.read_csv(os.path.join(wordlists_dir, "Ratings_Warriner_et_al.csv"))
 
 feats_base = os.path.join(a1_dir, 'feats')
 files = ['Left', 'Center', 'Right', 'Alt']  # files for different labels, in order.
