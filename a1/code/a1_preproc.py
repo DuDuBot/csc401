@@ -145,9 +145,6 @@ def preproc1(comment, steps=range(1, 5)):
                     beg = token.lemma_
                 yield beg + '/' + token.tag_
         tags = nlp(modComm)
-        for token in tags:
-            if token.text.find('dab') != -1:
-                print(token.tag_)
         # modComm = " ".join([token.text+"/"+token.tag_ for token in tags if not token.is_stop])
         modComm = " ".join(new_str(tags))
 
