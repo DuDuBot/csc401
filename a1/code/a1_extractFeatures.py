@@ -92,8 +92,6 @@ def extract1(comment):
               ]
 
   for i, (patt, flags) in enumerate(patterns):
-    if i == 0:
-      print(findall(patt, comment, flags=0))
     try:
       if len(flags) > 0:
         # nfindall return number of matches from findall

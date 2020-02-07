@@ -203,8 +203,8 @@ def main(args):
 
             sindex = args.ID[0] % len(data)
             stime = time.time()
-            # for i in range(sindex, sindex + args.max):
-            for i in range(0, 5):
+            for i in range(sindex, sindex + args.max):
+            # for i in range(0, 5):
                 if i > len(data):  # Ensure circular indexing
                     i -= data
                 if ((i+1) % 1000) == 0:
