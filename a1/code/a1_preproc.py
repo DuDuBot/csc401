@@ -194,6 +194,8 @@ def main(args):
     indir = args.a1_dir
     for subdir, dirs, files in os.walk(indir):
         for file in files:
+            if file not in ['Center', 'Right', 'Left', 'Alt']:
+                continue
             fullFile = os.path.join(subdir, file)
             print("Processing " + fullFile)
 
