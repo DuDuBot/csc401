@@ -40,6 +40,11 @@ wordlists_dir = "/u/cs401/Wordlists"
 bgl = pd.read_csv(os.path.join(wordlists_dir, "BristolNorms+GilhoolyLogie.csv"))
 warr = pd.read_csv(os.path.join(wordlists_dir, "Ratings_Warriner_et_al.csv"))
 
+bgl = bgl[["WORD", "AoA (100-700)", "IMG", "FAM"]]  # select just needed cols
+warr = warr[["Word", "V.Mean.Sum", "D.Mean.Sum", "A.Mean.Sum"]]
+bgl2 = bgl.set_index(['WORD'])
+warr2 = warr.set_index(['Word'])
+
 feats_base = os.path.join(a1_dir, 'feats')
 files = ['Left', 'Center', 'Right', 'Alt']  # files for different labels, in order.
 files = {f: [open(os.path.join(feats_base, f + '_IDs.txt')).readlines(),  # [0] is the IDs
@@ -50,6 +55,13 @@ files = {f: [open(os.path.join(feats_base, f + '_IDs.txt')).readlines(),  # [0] 
 for v in files.values():
     # remove the [2] entry and concatenate to features as desired.
     v[1] = np.concatenate([v[1], np.ones((len(v[1]), 1)) * v.pop()], axis=1)
+
+# make dict for id : line
+for k in files:
+    id_line = {}
+    for i, line in enumerate(files[k][0]):
+        id_line[str(line).strip()] = i
+    files[k][0] = id_line
 
 
 def extract1(comment):
@@ -65,7 +77,14 @@ def extract1(comment):
   Returns:
       feats : numpy Array, a 173-length vector of floating point features (only the first 29 are expected to be filled, here)
   '''
-
+  def flatten(arr):
+      new_arr = []
+      for a in arr:
+          if isinstance(a, pd.Series):
+              new_arr.extend(a.values)
+          else:
+              new_arr.append(a)
+      return new_arr
   features = np.zeros(173)
   patterns = [(r"([A-Z]\w{2,})/[A-Z]{2,4}", {'flags': 0}),  # 1. n uppercase > 3
               (r"(?<=\b)(?:" + "|".join(FIRST_PERSON_PRONOUNS) + ")(?=\/|\b)",
@@ -133,61 +152,70 @@ def extract1(comment):
     extract_words = [findall(retrieve_word, word) for word in words]
     extract_words = [w[0].lower() for w in extract_words if
                      len(w) > 0]  # they are lists from findall
-
-    valid_bgl = bgl.loc[np.in1d(bgl.WORD, extract_words)]  # words from comment in bgl
-    selected_bgl = [valid_bgl[valid_bgl.WORD == w] for w in extract_words]
+    valid_bgl = bgl2.loc[np.in1d(bgl2.index, extract_words)]  # words from comment in bgl
     # Below are all features Bristol Gillhooly and Logie
     # Start with AoA
-    AoA = [x["AoA (100-700)"].values[0] for x in selected_bgl if len(x) > 0]  # some words might not had a value
+    AoA = getattr(valid_bgl, "AoA (100-700)")
+    AoA = [AoA.get(x, np.nan) for x in extract_words]  # some words might not had a value
+    AoA = flatten(AoA)
     # Do the two BGL, AoA cases
-    if len(AoA) > 0:
+    if np.count_nonzero(~np.isnan(AoA)) > 0:
       # 18. norms average AoA
-      features[17] = np.mean(AoA)
+      features[17] = np.nanmean(AoA)
       # 21. standard deviation AoA
-      features[20] = np.std(AoA)
+      features[20] = np.nanstd(AoA)
     # now IMG
-    IMG = [x["IMG"].values[0] for x in selected_bgl if len(x) > 0]  # some words might not had a value
-    if len(IMG) > 0:
+    IMG = getattr(valid_bgl, "IMG")
+    IMG = [IMG.get(x, np.nan) for x in extract_words]  # some words might not had a value
+    IMG = flatten(IMG)
+    if np.count_nonzero(~np.isnan(IMG)) > 0:
       # 19. average IMG
-      features[18] = np.mean(IMG)
+      features[18] = np.nanmean(IMG)
       # 22. standard deviation IMG
-      features[21] = np.std(IMG)
+      features[21] = np.nanstd(IMG)
 
     # finally FAM
-    FAM = [x["FAM"].values[0] for x in selected_bgl if len(x) > 0]  # some words might not had a value
-    if len(FAM) > 0:
+    FAM = getattr(valid_bgl, "FAM")
+    FAM = [FAM.get(x, np.nan) for x in extract_words]  # some words might not had a value
+    FAM = flatten(FAM)
+    if np.count_nonzero(~np.isnan(FAM)) > 0:
       # 20. average FAM
-      features[19] = np.mean(FAM)
+      features[19] = np.nanmean(FAM)
       # 23. standard deviation FAM
-      features[22] = np.std(FAM)
+      features[22] = np.nanstd(FAM)
 
     # Now we start Warringer norms
     # valid_warr = [warr[warr.Word == w] for w in extract_words]  # words from comment in warr
     # DMS = [w["V.Mean.Sum"].values[0] for w in valid_warr if not w["V.Mean.Sum"].empty]
-    valid_warr = warr.loc[np.in1d(warr.Word, extract_words)]  # words from comment in warr
-    selected_warr = [valid_warr[valid_warr.Word == w] for w in extract_words]
+    valid_warr = warr2.loc[np.in1d(warr2.index, extract_words)]  # words from comment in warr
     # VMS = [w["V.Mean.Sum"].values[0] for w in valid_warr if not w["V.Mean.Sum"].empty]  # V.Mean.Sum from war
     # first V.Mean.Sum
-    VMS = [x["V.Mean.Sum"].values[0] for x in selected_warr if len(x) > 0]  # some words might not had a value
-    if len(VMS) > 0:
+    VMS = getattr(valid_warr, "V.Mean.Sum")
+    VMS = [VMS.get(x, np.nan) for x in extract_words]  # some words might not had a value
+    VMS = flatten(VMS)
+    if np.count_nonzero(~np.isnan(VMS)) > 0:
       # 24. average V.Mean.Sum
-      features[23] = np.mean(VMS)
+      features[23] = np.nanmean(VMS)
       # 27. standard deviation V.Mean.Sum
-      features[26] = np.std(VMS)
+      features[26] = np.nanstd(VMS)
     # second A.Mean.Sum
-    AMS = [x["A.Mean.Sum"].values[0] for x in selected_warr if len(x) > 0]  # some words might not had a value
-    if len(AMS) > 0:
+    AMS = getattr(valid_warr, "A.Mean.Sum")
+    AMS = [AMS.get(x, np.nan) for x in extract_words]  # some words might not had a value
+    AMS = flatten(AMS)
+    if np.count_nonzero(~np.isnan(AMS)) > 0:
       # 25. average A.Mean.Sum
-      features[24] = np.mean(AMS)
+      features[24] = np.nanmean(AMS)
       # 28. standard deviation A.Mean.Sum
-      features[27] = np.std(AMS)
+      features[27] = np.nanstd(AMS)
     # third D.Mean.Sum
-    DMS = [x["D.Mean.Sum"].values[0] for x in selected_warr if len(x) > 0]  # some words might not had a value
-    if len(DMS) > 0:
+    DMS = getattr(valid_warr, "D.Mean.Sum")
+    DMS = [DMS.get(x, np.nan) for x in extract_words]  # some words might not had a value
+    DMS = flatten(DMS)
+    if np.count_nonzero(~np.isnan(DMS)) > 0:
       # 26. average D.Mean.Sum
-      features[25] = np.mean(DMS)
+      features[25] = np.nanmean(DMS)
       # 29. standard deviation D.Mean.Sum
-      features[28] = np.std(DMS)
+      features[28] = np.nanstd(DMS)
 
   return features
 
@@ -208,13 +236,9 @@ def extract2(feats, comment_class, comment_id):
       the parameter feats.
   '''
   class_file = files[comment_class]
-  found = False
-  for i, line in enumerate(class_file[0]):
-    if str(comment_id) in line:
-      feats[29:] = class_file[1][i, :]
-      found = True
-      # break
-  if not found:
+  if comment_id in class_file[0]:
+    feats[29:] = class_file[1][class_file[0][comment_id], :]
+  else:
     print('not found')
   return feats
 
