@@ -93,7 +93,6 @@ def class32(output_dir, X_train, X_test, y_train, y_test, iBest):
        X_1k: numPy array, just 1K rows of X_train
        y_1k: numPy array, just 1K rows of y_train
    '''
-    print('TODO Section 3.2')
     if not os.path.exists(f"{output_dir}"):
         os.makedirs(f"{output_dir}")
     X_1k, y_1k = None, None
@@ -101,78 +100,87 @@ def class32(output_dir, X_train, X_test, y_train, y_test, iBest):
         cls = clone(classifiers[iBest])
         for ds_amount in [1, 5, 10, 15, 20]:
             ds_amount = ds_amount * 1000
-            n_classes = len(np.unique(y_train))
-            per_class_amt = ds_amount // n_classes
-            total_class = len(X_train)//n_classes
             print(f"performing ds_amount: {ds_amount}")
             # evenly select per class
-            X_train = np.concatenate([X_train[i*total_class:i*total_class+per_class_amt]
-                                     for i in range(n_classes)], axis=0)
-            y_train = np.concatenate([y_train[i*total_class:i*total_class+per_class_amt]
-                                     for i in range(n_classes)], axis=0)
+            X = X_train[:ds_amount]
+            y = y_train[:ds_amount]
             if X_1k is None and y_1k is None:
                 X_1k = X_train
                 y_1k = y_train
-            train_set = shuffle(X_train, y_train, random_state=2)
+            train_set = shuffle(X, y, random_state=2)
             cls.fit(*train_set)
             C = confusion_matrix(y_test, cls.predict(X_test))
             outf.write(f'{ds_amount}: {accuracy(C):.4f}\n')
-        pass
 
     return (X_1k, y_1k)
 
 
-# def class33(output_dir, X_train, X_test, y_train, y_test, i, X_1k, y_1k):
-#     ''' This function performs experiment 3.3
-#
-#     Parameters:
-#        output_dir: path of directory to write output to
-#        X_train: NumPy array, with the selected training features
-#        X_test: NumPy array, with the selected testing features
-#        y_train: NumPy array, with the selected training classes
-#        y_test: NumPy array, with the selected testing classes
-#        i: int, the index of the supposed best classifier (from task 3.1)
-#        X_1k: numPy array, just 1K rows of X_train (from task 3.2)
-#        y_1k: numPy array, just 1K rows of y_train (from task 3.2)
-#     '''
-#     print('TODO Section 3.3')
-#     if not os.path.exists(f"{output_dir}"):
-#         os.makedirs(f"{output_dir}")
-#     with open(f"{output_dir}/a1_3.3.txt", "w") as outf:
-#         # Prepare the variables with corresponding names, then uncomment
-#         # this, so it writes them to outf.
-#
-#         # for each number of features k_feat, write the p-values for
-#         # that number of features:
-#             # outf.write(f'{k_feat} p-values: {[round(pval, 4) for pval in p_values]}\n')
-#
-#         # outf.write(f'Accuracy for 1k: {accuracy_1k:.4f}\n')
-#         # outf.write(f'Accuracy for full dataset: {accuracy_full:.4f}\n')
-#         # outf.write(f'Chosen feature intersection: {feature_intersection}\n')
-#         # outf.write(f'Top-5 at higher: {top_5}\n')
-#         pass
-#
-#
-# def class34(output_dir, X_train, X_test, y_train, y_test, i):
-#     ''' This function performs experiment 3.4
-#
-#     Parameters
-#        output_dir: path of directory to write output to
-#        X_train: NumPy array, with the selected training features
-#        X_test: NumPy array, with the selected testing features
-#        y_train: NumPy array, with the selected training classes
-#        y_test: NumPy array, with the selected testing classes
-#        i: int, the index of the supposed best classifier (from task 3.1)
-#         '''
-#     print('TODO Section 3.4')
-#     if not os.path.exists(f"{output_dir}"):
-#         os.makedirs(f"{output_dir}")
-#     with open(f"{output_dir}/a1_3.4.txt", "w") as outf:
-#         # Prepare kfold_accuracies, then uncomment this, so it writes them to outf.
-#         # for each fold:
-#         #     outf.write(f'Kfold Accuracies: {[round(acc, 4) for acc in kfold_accuracies]}\n')
-#         # outf.write(f'p-values: {[round(pval, 4) for pval in p_values]}\n')
-#         pass
+def class33(output_dir, X_train, X_test, y_train, y_test, i, X_1k, y_1k):
+    ''' This function performs experiment 3.3
+
+    Parameters:
+       output_dir: path of directory to write output to
+       X_train: NumPy array, with the selected training features
+       X_test: NumPy array, with the selected testing features
+       y_train: NumPy array, with the selected training classes
+       y_test: NumPy array, with the selected testing classes
+       i: int, the index of the supposed best classifier (from task 3.1)
+       X_1k: numPy array, just 1K rows of X_train (from task 3.2)
+       y_1k: numPy array, just 1K rows of y_train (from task 3.2)
+    '''
+    if not os.path.exists(f"{output_dir}"):
+        os.makedirs(f"{output_dir}")
+    with open(f"{output_dir}/a1_3.3.txt", "w") as outf:
+        # doing best 5 and best 50, and writing the pvalues.
+        k_feat = 5
+        selector = SelectKBest(f_classif, k_feat)
+        X_new = selector.fit_transform(X_train, y_train)
+        p_values = selector.p_values
+        outf.write(f'{k_feat} p-values: {[round(pval, 4) for pval in p_values]}\n')
+        k_feat = 50
+        selector2 = SelectKBest(f_classif, k_feat)
+        _ = selector2.fit_transform(X_train, y_train)
+        p_values.append(selector2.p_values)
+        outf.write(f'{k_feat} p-values: {[round(pval, 4) for pval in p_values]}\n')
+        # training using best 5 features on 1k and 32k datasets for prev best cls.
+        cls = clone(classifiers[i])
+        cls.fit(X_new, y_train)
+        C = confusion_matrix(y_test, cls.predict(X_test))
+        accuracy_full = accuracy(C)
+        outf.write(f'Accuracy for full dataset: {accuracy_full:.4f}\n')
+        k_feat = 5
+        selector = SelectKBest(f_classif, k_feat)
+        X_new = selector.fit_transform(X_1k, y_1k)
+        cls = clone(classifiers[i])
+        cls.fit(X_new, y_1k)
+        C = confusion_matrix(y_test, cls.predict(X_test))
+        accuracy_1k = accuracy(C)
+        outf.write(f'Accuracy for 1k: {accuracy_1k:.4f}\n')
+
+        # outf.write(f'Chosen feature intersection: {feature_intersection}\n')
+        # outf.write(f'Top-5 at higher: {top_5}\n')
+        pass
+
+
+def class34(output_dir, X_train, X_test, y_train, y_test, i):
+    ''' This function performs experiment 3.4
+
+    Parameters
+       output_dir: path of directory to write output to
+       X_train: NumPy array, with the selected training features
+       X_test: NumPy array, with the selected testing features
+       y_train: NumPy array, with the selected training classes
+       y_test: NumPy array, with the selected testing classes
+       i: int, the index of the supposed best classifier (from task 3.1)
+        '''
+    if not os.path.exists(f"{output_dir}"):
+        os.makedirs(f"{output_dir}")
+    with open(f"{output_dir}/a1_3.4.txt", "w") as outf:
+        # Prepare kfold_accuracies, then uncomment this, so it writes them to outf.
+        # for each fold:
+        #     outf.write(f'Kfold Accuracies: {[round(acc, 4) for acc in kfold_accuracies]}\n')
+        # outf.write(f'p-values: {[round(pval, 4) for pval in p_values]}\n')
+        pass
 
 
     

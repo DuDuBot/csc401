@@ -226,7 +226,7 @@ def main(args):
   stime = time.clock()
   for i, comment in enumerate(data):
     if (i+1) % 500 == 0:
-      print(f"step: '{i+1}' at time '{time.time()-stime}'")
+      print(f"step: '{i+1}' at time '{time.clock()-stime}'")
 
     feats[i, :-1] = extract1(comment['body'])
     feats[i, :] = extract2(feats[i], comment['cat'], comment['id'])

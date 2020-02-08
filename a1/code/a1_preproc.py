@@ -207,7 +207,7 @@ def main(args):
             stime = time.time()
             for i in range(sindex, sindex + args.max):
             # for i in range(0, 5):
-                if i > len(data):  # Ensure circular indexing
+                if i == len(data):  # Ensure circular indexing
                     i -= data
                 if ((i+1) % 1000) == 0:
                     print(f"step: '{i+1}' at time '{time.time()-stime}'")
