@@ -123,7 +123,7 @@ def extract1(comment):
                     nfindall(rf"{check_punct}/", w) == 0]
     # print([v[:v.rfind('/')] for v in valid_tokens])
     if len(valid_tokens) > 0:
-      features[15] = len("".join([v[:v.find('/')] for v in valid_tokens])) / (len(
+      features[15] = len("".join([v[:v.rfind('/')] for v in valid_tokens])) / (len(
         valid_tokens))  # n chars / n tokens
     # print(features[15])
 

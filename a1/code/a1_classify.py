@@ -16,8 +16,8 @@ from sklearn.base import clone
 
 
 classifiers = [SGDClassifier(), GaussianNB(),
-                                 RandomForestClassifier(n_estimators=20, max_depth=10),
-                                 MLPClassifier(), AdaBoostClassifier()]
+                                 RandomForestClassifier(n_estimators=10, max_depth=5),
+                                 MLPClassifier(alpha=0.05), AdaBoostClassifier()]
 
 
 def accuracy(C):
