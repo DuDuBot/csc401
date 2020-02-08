@@ -194,6 +194,7 @@ def preproc1(comment, steps=range(1, 5)):
 def main(args):
     allOutput = []
     indir = args.a1_dir
+    stime = time.time()
     for subdir, dirs, files in os.walk(indir):
         for file in files:
             if file not in ['Center', 'Right', 'Left', 'Alt']:
@@ -204,7 +205,7 @@ def main(args):
             data = json.load(open(fullFile))
 
             sindex = args.ID[0] % len(data)
-            stime = time.time()
+
             for i in range(sindex, sindex + args.max):
             # for i in range(0, 5):
                 if i == len(data):  # Ensure circular indexing

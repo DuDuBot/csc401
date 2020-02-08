@@ -134,12 +134,11 @@ def extract1(comment):
     extract_words = [w[0].lower() for w in extract_words if
                      len(w) > 0]  # they are lists from findall
 
-    valid_bgl = [bgl[bgl.WORD == w] for w in extract_words]  # words from comment in bgl
-
+    valid_bgl = bgl.loc[np.in1d(bgl.WORD, extract_words)]  # words from comment in bgl
+    selected_bgl = [valid_bgl[valid_bgl.WORD == w] for w in extract_words]
     # Below are all features Bristol Gillhooly and Logie
     # Start with AoA
-    AoA = [b["AoA (100-700)"].values[0] for b in
-           valid_bgl if not b["AoA (100-700)"].empty]  # get AoA values from bgl
+    AoA = [x["AoA (100-700)"].values[0] for x in selected_bgl if len(x) > 0]  # some words might not had a value
     # Do the two BGL, AoA cases
     if len(AoA) > 0:
       # 18. norms average AoA
@@ -147,7 +146,7 @@ def extract1(comment):
       # 21. standard deviation AoA
       features[20] = np.std(AoA)
     # now IMG
-    IMG = [b["IMG"].values[0] for b in valid_bgl if not b['IMG'].empty]
+    IMG = [x["IMG"].values[0] for x in selected_bgl if len(x) > 0]  # some words might not had a value
     if len(IMG) > 0:
       # 19. average IMG
       features[18] = np.mean(IMG)
@@ -155,7 +154,7 @@ def extract1(comment):
       features[21] = np.std(IMG)
 
     # finally FAM
-    FAM = [b["FAM"].values[0] for b in valid_bgl if not b['FAM'].empty]
+    FAM = [x["FAM"].values[0] for x in selected_bgl if len(x) > 0]  # some words might not had a value
     if len(FAM) > 0:
       # 20. average FAM
       features[19] = np.mean(FAM)
@@ -163,24 +162,28 @@ def extract1(comment):
       features[22] = np.std(FAM)
 
     # Now we start Warringer norms
-    valid_warr = [warr[warr.Word == w] for w in extract_words]  # words from comment in warr
-    VMS = [w["V.Mean.Sum"].values[0] for w in valid_warr if not w["V.Mean.Sum"].empty]  # V.Mean.Sum from warr
+    # valid_warr = [warr[warr.Word == w] for w in extract_words]  # words from comment in warr
+    # DMS = [w["V.Mean.Sum"].values[0] for w in valid_warr if not w["V.Mean.Sum"].empty]
+    valid_warr = warr.loc[np.in1d(warr.Word, extract_words)]  # words from comment in warr
+    selected_warr = [valid_warr[valid_warr.Word == w] for w in extract_words]
+    # VMS = [w["V.Mean.Sum"].values[0] for w in valid_warr if not w["V.Mean.Sum"].empty]  # V.Mean.Sum from war
     # first V.Mean.Sum
+    VMS = [x["V.Mean.Sum"].values[0] for x in selected_warr if len(x) > 0]  # some words might not had a value
     if len(VMS) > 0:
       # 24. average V.Mean.Sum
       features[23] = np.mean(VMS)
       # 27. standard deviation V.Mean.Sum
       features[26] = np.std(VMS)
     # second A.Mean.Sum
-    AMS = [w["A.Mean.Sum"].values[0] for w in valid_warr if not w["A.Mean.Sum"].empty]  # A.Mean.Sum from warr
+    AMS = [x["A.Mean.Sum"].values[0] for x in selected_warr if len(x) > 0]  # some words might not had a value
     if len(AMS) > 0:
       # 25. average A.Mean.Sum
       features[24] = np.mean(AMS)
       # 28. standard deviation A.Mean.Sum
       features[27] = np.std(AMS)
     # third D.Mean.Sum
-    DMS = [w["D.Mean.Sum"].values[0] for w in valid_warr if not w["D.Mean.Sum"].empty]  # D.Mean.Sum from warr
-    if len(AMS) > 0:
+    DMS = [x["D.Mean.Sum"].values[0] for x in selected_warr if len(x) > 0]  # some words might not had a value
+    if len(DMS) > 0:
       # 26. average D.Mean.Sum
       features[25] = np.mean(DMS)
       # 29. standard deviation D.Mean.Sum
