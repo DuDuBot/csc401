@@ -69,7 +69,8 @@ def class31(output_dir, X_train, X_test, y_train, y_test):
             if acc > best_acc:
                 best_acc = acc
                 iBest = i
-            outf.write(f'Results for {str(cls.__class__).split(".")[-1].replace(">", "").replace("\'", "")}:\n')  # Classifier name
+            name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'", "")
+            outf.write(f'Results for {name}:\n')  # Classifier name
             outf.write(f'\tAccuracy: {acc:.4f}\n')
             outf.write(f'\tRecall: {[round(item, 4) for item in rec]}\n')
             outf.write(f'\tPrecision: {[round(item, 4) for item in prec]}\n')
