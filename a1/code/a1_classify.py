@@ -29,14 +29,14 @@ def recall(C):
     ''' Compute recall given Numpy array confusion matrix C. Returns a list of floating point values '''
     diag = np.diagonal(C)
     sum_by_class = np.sum(C, axis=1)
-    return np.divide(diag, sum_by_class, np.zeros(len(diag)), out=np.zeros_like(diag), where=sum_by_class!=0)
+    return np.divide(diag, sum_by_class, out=np.zeros(4), where=sum_by_class!=0)
 
 
 def precision(C):
     ''' Compute precision given Numpy array confusion matrix C. Returns a list of floating point values '''
     diag = np.diagonal(C)
     sum_by_classification = np.sum(C, axis=0)
-    return np.divide(diag, sum_by_classification, np.zeros(len(diag)), out=np.zeros_like(diag), where=sum_by_classification!=0)
+    return np.divide(diag, sum_by_classification, out=np.zeros(4), where=sum_by_classification!=0)
     
 
 def class31(output_dir, X_train, X_test, y_train, y_test):
