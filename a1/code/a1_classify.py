@@ -188,7 +188,7 @@ def class33(output_dir, X_train, X_test, y_train, y_test, i, X_1k, y_1k):
         print(features_32k, features_1k)
         intersection = np.intersect1d(features_1k, features_32k, return_indices=True)
         print(intersection)
-        top_5 = X_train[:, features_32k]
+        top_5 = features_32k
         outf.write(f'Chosen feature intersection: {intersection}\n')
         outf.write(f'Top-5 at higher: {top_5}\n')
 
