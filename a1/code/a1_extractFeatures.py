@@ -78,13 +78,13 @@ def extract1(comment):
       feats : numpy Array, a 173-length vector of floating point features (only the first 29 are expected to be filled, here)
   '''
   def flatten(arr):
-      new_arr = []
-      for a in arr:
-          if isinstance(a, pd.Series):
-              new_arr.extend(a.values)
-          else:
-              new_arr.append(a)
-      return new_arr
+    new_arr = []
+    for a in arr:
+      if isinstance(a, pd.Series):
+        new_arr.extend(a.values)
+      else:
+        new_arr.append(a)
+    return new_arr
   features = np.zeros(173)
   patterns = [(r"([A-Z]\w{2,})/[A-Z]{2,4}", {'flags': 0}),  # 1. n uppercase > 3
               (r"(?<=\b)(?:" + "|".join(FIRST_PERSON_PRONOUNS) + ")(?=\/|\b)",
@@ -109,22 +109,53 @@ def extract1(comment):
               # (r"(\b"+r"|".join(SLANG)+")(?:/[.]{0,4})", {}),
               (r"(?:\s|^)("+r"|".join(SLANG)+")(?:/[.]{0,4})", {})  # 14. n slang words
               ]
-
+  word_tokens = comment.split()  # as per preprocessing
+  # words, tokens = [], []
+  # for string in word_tokens:
+  #   words.append(string[:string.rfind('/')])
+  #   tokens.append(string[string.rfind('/')+1:])
+  # for word, token in zip(words, tokens):
+  #     features[0] += nfindall(r"([A-Z]\w{2,})", word, flags=0)  # 1. n uppercase > 3
+  #     features[1] += 1 if word in FIRST_PERSON_PRONOUNS else 0  # 2. n first-person pronouns
+  #     features[2] += 1 if word in SECOND_PERSON_PRONOUNS else 0  # 3. n second-person pronouns
+  #     features[3] += 1 if word in THIRD_PERSON_PRONOUNS else 0  # 4. n third-person pronouns
+  #     if token == 'CC':
+  #         features[4] += 1  # 5. n coordinating conjunctions
+  #     elif token == 'VBD':
+  #         features[5] += 1  # 6. n past-tense verbs
+  #     elif token == 'NN' or token == 'NNS':
+  #         features[9] += 1  # 10. n common nouns
+  #     elif token == 'NNP' or token == 'NNPS':
+  #         features[10] += 1  # 11. n proper nouns
+  #     elif token == 'RB' or token == 'RBR' or token == 'RBS':
+  #         features[11] += 1  # 12. n adverbs
+  #     elif token == 'WDT' or token == 'WP$' or token == 'WRB' or token == 'WP':
+  #         features[12] += 1  # 13. n wh-words
+  #     features[7] += nfindall(r",/,|(?<!/),", string)  # 8. n commas
+  #     features[8] += nfindall(r"([\#\$\!\?\.\:\;\(\)\"\',]{2,}|\.\.\.)", word)  # 9. n multchar punctuations
+  #     features[13] += 1 if word in SLANG else 0  # 14. n slang words
+  # features[6] += nfindall(r"(?:(?:going|gonna|will|'ll)"
+  #                           r"(?:/?.{0,4})|go/VBG)\s+to"
+  #                           r"(?:/.{0,2})\s+(\w*/VB)(?=\b|/)", comment)  # 7. n future tense
   for i, (patt, flags) in enumerate(patterns):
     try:
       if len(flags) > 0:
         # nfindall return number of matches from findall
-        features[i] = nfindall(patt, comment, **flags)
+        features[i] += nfindall(patt, comment, **flags)
       else:
         # nfindall return number of matches from findall
-        features[i] = nfindall(patt, comment)
+        features[i] += nfindall(patt, comment)
     except:
       import traceback
       print(traceback.format_exc())
 
   check_punct = r"([\#\$\!\?\.\:\;\(\)\"\',\[\]/]{1,}|\.\.\.)"  # check for punctuation
   sentences = comment.split("\n")[:-1]  # as per processing, we have extra \n at end
-  words = comment.split()  # as per preprocessing
+  if len(word_tokens) > 0:  # extract just word from each word/token pair
+    retrieve_word = r"(/?\w+)(?=/)"  # they are separated by a / with token
+    extract_words = [findall(retrieve_word, word) for word in word_tokens]
+    extract_words = [w[0].lower() for w in extract_words if
+                     len(w) > 0]  # they are lists from findall
   if len(sentences) > 0:  # check divide by 0 errors.
     # 15. Avg n tokens in sentence
     # nfindall return number of matches from findall
@@ -134,29 +165,33 @@ def extract1(comment):
     # 17. n sentences
     features[16] = len(sentences)
 
-  if len(words) > 0:
+  if len(word_tokens) > 0:
     # 16. Avg len tokens excluding punctutation only, in chars
     # findall returns all matches
-    # below returns all tokens not proceeded by only punctuation.
-    valid_tokens = [w for w in words if
-                    nfindall(rf"{check_punct}/", w) == 0]
+    # below returns None for tokens proceeded by only punctuation.
+    valid_tokens = [w for w in word_tokens if re.match(rf"{check_punct}/", w) is None]
     # print([v[:v.rfind('/')] for v in valid_tokens])
-    if len(valid_tokens) > 0:
+    if len(extract_words) > 0:
       features[15] = len("".join([v[:v.rfind('/')] for v in valid_tokens])) / (len(
         valid_tokens))  # n chars / n tokens
     # print(features[15])
 
   # Norms
-  if len(words) > 0:  # extract just word from each word
-    retrieve_word = r"(\w+)(?=/)"  # they are separated by a / with token
-    extract_words = [findall(retrieve_word, word) for word in words]
-    extract_words = [w[0].lower() for w in extract_words if
-                     len(w) > 0]  # they are lists from findall
-    valid_bgl = bgl2.loc[np.in1d(bgl2.index, extract_words)]  # words from comment in bgl
+  if len(word_tokens) > 0:  # extract just word from each word
+    # retrieve_word = r"(\w+)(?=/)"  # they are separated by a / with token
+    # extract_words = [findall(retrieve_word, word) for word in words]
+    # extract_words = [w[0].lower() for w in extract_words if
+    #                  len(w) > 0]  # they are lists from findall
+    # valid_bgl = bgl2.loc[np.in1d(bgl2.index, extract_words)]  # words from comment in bgl
+    chosen_bgl = []
+    for x in extract_words:
+      try:
+        chosen_bgl.append(bgl2.loc[x])  # some words might not have a value
+      except:
+        pass
     # Below are all features Bristol Gillhooly and Logie
     # Start with AoA
-    AoA = getattr(valid_bgl, "AoA (100-700)")
-    AoA = [AoA.get(x, np.nan) for x in extract_words]  # some words might not had a value
+    AoA = [x.get("AoA (100-700)", np.nan) for x in chosen_bgl]
     AoA = flatten(AoA)
     # Do the two BGL, AoA cases
     if np.count_nonzero(~np.isnan(AoA)) > 0:
@@ -165,8 +200,7 @@ def extract1(comment):
       # 21. standard deviation AoA
       features[20] = np.nanstd(AoA)
     # now IMG
-    IMG = getattr(valid_bgl, "IMG")
-    IMG = [IMG.get(x, np.nan) for x in extract_words]  # some words might not had a value
+    IMG = [x.get("IMG", np.nan) for x in chosen_bgl]
     IMG = flatten(IMG)
     if np.count_nonzero(~np.isnan(IMG)) > 0:
       # 19. average IMG
@@ -175,8 +209,7 @@ def extract1(comment):
       features[21] = np.nanstd(IMG)
 
     # finally FAM
-    FAM = getattr(valid_bgl, "FAM")
-    FAM = [FAM.get(x, np.nan) for x in extract_words]  # some words might not had a value
+    FAM = [x.get("FAM", np.nan) for x in chosen_bgl]
     FAM = flatten(FAM)
     if np.count_nonzero(~np.isnan(FAM)) > 0:
       # 20. average FAM
@@ -187,11 +220,16 @@ def extract1(comment):
     # Now we start Warringer norms
     # valid_warr = [warr[warr.Word == w] for w in extract_words]  # words from comment in warr
     # DMS = [w["V.Mean.Sum"].values[0] for w in valid_warr if not w["V.Mean.Sum"].empty]
-    valid_warr = warr2.loc[np.in1d(warr2.index, extract_words)]  # words from comment in warr
+    # valid_warr = warr2.loc[np.in1d(warr2.index, extract_words)]  # words from comment in warr
+    chosen_warr = []
+    for x in extract_words:
+      try:
+        chosen_warr.append(warr2.loc[x])  # some words might not have a value
+      except:
+        pass
     # VMS = [w["V.Mean.Sum"].values[0] for w in valid_warr if not w["V.Mean.Sum"].empty]  # V.Mean.Sum from war
     # first V.Mean.Sum
-    VMS = getattr(valid_warr, "V.Mean.Sum")
-    VMS = [VMS.get(x, np.nan) for x in extract_words]  # some words might not had a value
+    VMS = [x.get("V.Mean.Sum", np.nan) for x in chosen_warr]
     VMS = flatten(VMS)
     if np.count_nonzero(~np.isnan(VMS)) > 0:
       # 24. average V.Mean.Sum
@@ -199,8 +237,7 @@ def extract1(comment):
       # 27. standard deviation V.Mean.Sum
       features[26] = np.nanstd(VMS)
     # second A.Mean.Sum
-    AMS = getattr(valid_warr, "A.Mean.Sum")
-    AMS = [AMS.get(x, np.nan) for x in extract_words]  # some words might not had a value
+    AMS = [x.get("A.Mean.Sum", np.nan) for x in chosen_warr]
     AMS = flatten(AMS)
     if np.count_nonzero(~np.isnan(AMS)) > 0:
       # 25. average A.Mean.Sum
@@ -208,8 +245,7 @@ def extract1(comment):
       # 28. standard deviation A.Mean.Sum
       features[27] = np.nanstd(AMS)
     # third D.Mean.Sum
-    DMS = getattr(valid_warr, "D.Mean.Sum")
-    DMS = [DMS.get(x, np.nan) for x in extract_words]  # some words might not had a value
+    DMS = [x.get("D.Mean.Sum", np.nan) for x in chosen_warr]
     DMS = flatten(DMS)
     if np.count_nonzero(~np.isnan(DMS)) > 0:
       # 26. average D.Mean.Sum
