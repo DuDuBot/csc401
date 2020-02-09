@@ -29,14 +29,14 @@ def recall(C):
     ''' Compute recall given Numpy array confusion matrix C. Returns a list of floating point values '''
     diag = np.diagonal(C)
     sum_by_class = np.sum(C, axis=1)
-    return np.divide(diag, sum_by_class, out=np.zeros(4), where=sum_by_class!=0)
+    return np.divide(diag, sum_by_class, out=np.zeros(len(diag)), where=sum_by_class!=0)
 
 
 def precision(C):
     ''' Compute precision given Numpy array confusion matrix C. Returns a list of floating point values '''
     diag = np.diagonal(C)
     sum_by_classification = np.sum(C, axis=0)
-    return np.divide(diag, sum_by_classification, out=np.zeros(4), where=sum_by_classification!=0)
+    return np.divide(diag, sum_by_classification, out=np.zeros((len(diag))), where=sum_by_classification!=0)
     
 
 def class31(output_dir, X_train, X_test, y_train, y_test):
@@ -69,7 +69,7 @@ def class31(output_dir, X_train, X_test, y_train, y_test):
             if acc > best_acc:
                 best_acc = acc
                 iBest = i
-            outf.write(f'Results for {cls.__name__}:\n')  # Classifier name
+            outf.write(f'Results for {cls.__class__.split(".")[-1]}:\n')  # Classifier name
             outf.write(f'\tAccuracy: {acc:.4f}\n')
             outf.write(f'\tRecall: {[round(item, 4) for item in rec]}\n')
             outf.write(f'\tPrecision: {[round(item, 4) for item in prec]}\n')
