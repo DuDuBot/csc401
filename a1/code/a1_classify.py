@@ -163,12 +163,12 @@ def class33(output_dir, X_train, X_test, y_train, y_test, i, X_1k, y_1k):
         selector = SelectKBest(f_classif, k_feat)
         X_new = selector.fit_transform(X_train, y_train)
         features_32k = selector.get_support(True)
-        p_values = selector.p_values
+        p_values = selector.pvalues_
         outf.write(f'{k_feat} p-values: {[round(pval, 4) for pval in p_values]}\n')
         k_feat = 50
         selector = SelectKBest(f_classif, k_feat)
         _ = selector.fit_transform(X_train, y_train)
-        p_values.append(selector.p_values)
+        p_values = selector.pvalues_
         outf.write(f'{k_feat} p-values: {[round(pval, 4) for pval in p_values]}\n')
         # training using best 5 features on 1k and 32k datasets for prev best cls.
         cls = clone(classifiers[i])
