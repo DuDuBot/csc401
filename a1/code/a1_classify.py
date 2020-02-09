@@ -8,6 +8,7 @@ from sklearn.feature_selection import f_classif
 from sklearn.feature_selection import SelectKBest
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import KFold
 from sklearn.neural_network import MLPClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import SGDClassifier
@@ -179,18 +180,43 @@ def class33(output_dir, X_train, X_test, y_train, y_test, i, X_1k, y_1k):
         k_feat = 5
         selector = SelectKBest(f_classif, k_feat)
         X_new = selector.fit_transform(X_1k, y_1k)
+        print(f'1k p-values: {[round(pval, 4) for pval in selector.pvalues_]}')
         cls = clone(classifiers[i])
         cls.fit(X_new, y_1k)
         C = confusion_matrix(y_test, cls.predict(selector.transform(X_test)))
         accuracy_1k = accuracy(C)
         outf.write(f'Accuracy for 1k: {accuracy_1k:.4f}\n')
         features_1k = selector.get_support(True)
-        print(features_32k, features_1k)
         intersection = np.intersect1d(features_1k, features_32k, return_indices=True)
-        print(intersection)
         top_5 = features_32k
         outf.write(f'Chosen feature intersection: {intersection}\n')
         outf.write(f'Top-5 at higher: {top_5}\n')
+        outf.write('The top-5 features for both the 32k and 1k datasets are '
+                   'the same, with them being the number of first-person '
+                   'pronouns, second-person pronouns, number of adverbs, as well as 2 features from the'
+                   ' linquistic query and word count features. The linquistic '
+                   'features are supposed to be useful for determining sentiment, '
+                   'which is likely a differentiating factor between more left- versus'
+                   ' more right-wing people (and therefore their statements). Since '
+                   'left-wing people are more progessive, it is possible that is '
+                   'captured in the way they speak. Further, looking at the mean'
+                   'values for pronouns, the first-person pronouns has a mean'
+                   'value of ~2.38 for left-leaning texts and values of ~1 for the '
+                   'other labels, indicating that left texts use substantially more'
+                   'first-person pronouns. Second-person pronounds have a '
+                   'good distribution between all 4 labels, ranging from ~1.5'
+                   'for left texts to ~0.3 for right texts, and being sometwhere'
+                   ' in the middle for center and alt texts. These (somewhat)'
+                   ' separate values indicate that these features are good for '
+                   'helping diffentiate the class for a text. The standard '
+                   'deviation is relatively high, (>2), indicating that this feature'
+                   'does not linearly separate our data (which we already knew, '
+                   'or our accuracies would be much higher). However, it is still useful.'
+                   'The mean number of adverbs ranges from 1.5 to 4.5, with left and right '
+                   'texts showing more adverbs than center of alt. This result is intersting'
+                   ', as it is possible that left or right texts use more adverbs to '
+                   'express stronger emotion. The standard deviation goes as high as 7, '
+                   'though, indicating that this ranges a lot (as it should).')
 
 
 def class34(output_dir, X_train, X_test, y_train, y_test, i):
@@ -207,11 +233,40 @@ def class34(output_dir, X_train, X_test, y_train, y_test, i):
     if not os.path.exists(f"{output_dir}"):
         os.makedirs(f"{output_dir}")
     with open(f"{output_dir}/a1_3.4.txt", "w") as outf:
-        # Prepare kfold_accuracies, then uncomment this, so it writes them to outf.
-        # for each fold:
-        #     outf.write(f'Kfold Accuracies: {[round(acc, 4) for acc in kfold_accuracies]}\n')
-        # outf.write(f'p-values: {[round(pval, 4) for pval in p_values]}\n')
-        pass
+        X_all = np.concatenate([X_train, X_test], axis=0)
+        y_all = np.concatenate([y_train, y_test], axis=0)
+        validator = KFold(shuffle=True, random_state=2)
+        cls_to_acc = {}
+        names = []
+        best_name = None
+        j = 0
+        p_values = []
+        for cls_base in classifiers:
+            kfold_accuracies = []
+            for train_index, test_index in validator.split(X_all):
+                cls = clone(cls_base)
+                X_train, X_test = X_all[train_index], X_all[test_index]
+                y_train, y_test = y_all[train_index], y_all[test_index]
+                cls.fit(X_train, y_train)
+                C = confusion_matrix(y_test, cls.predict(X_test))
+                kfold_accuracies.append(accuracy(C))
+            outf.write(f'Kfold Accuracies: {[round(acc, 4) for acc in kfold_accuracies]}\n')
+            name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'", "")
+            cls_to_acc[name] = kfold_accuracies
+            if j == i:
+                best_name = name
+            else:
+                names.append(name)
+            j += 1
+        for name in names:
+            S, pvalue = ttest_rel(cls_to_acc[name], cls_to_acc[best_name])
+            print(pvalue)
+            try:
+                print(S.pvalue)
+            except:
+                pass
+            p_values.append(pvalue)
+        outf.write(f'p-values: {[round(pval, 4) for pval in p_values]}\n')
 
 
     
@@ -232,7 +287,6 @@ if __name__ == "__main__":
                                                         stratify=data[:, -1]
                                                         )
     X_train, y_train = shuffle(X_train, y_train, random_state=2)
-    X_test, y_test = shuffle(X_test, y_test, random_state=2)
     iBest = class31(args.output_dir, X_train, X_test, y_train, y_test)
     (X_1k, y_1k) = class32(args.output_dir, X_train, X_test, y_train, y_test, iBest)
     class33(args.output_dir, X_train, X_test, y_train, y_test, iBest, X_1k, y_1k)

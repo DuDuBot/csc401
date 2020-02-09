@@ -273,7 +273,7 @@ def extract2(feats, comment_class, comment_id):
   '''
   class_file = files[comment_class]
   if comment_id in class_file[0]:
-    feats[29:] = class_file[1][class_file[0][comment_id], :]
+    feats[29:] = class_file[1][class_file[0][comment_id], :-1]
   else:
     print('not found')
   return feats
@@ -292,7 +292,9 @@ def main(args):
       print(f"step: '{i+1}' at time '{time.clock()-stime}'")
 
     feats[i, :-1] = extract1(comment['body'])
-    feats[i, :] = extract2(feats[i], comment['cat'], comment['id'])
+    feats[i, :-1] = extract2(feats[i, :-1], comment['cat'], comment['id'])
+    class_file = files[comment['cat']]
+    feats[-1] = class_file[1][0, -1]
 
   np.savez_compressed(args.output, feats)
 
