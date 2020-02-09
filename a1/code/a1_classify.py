@@ -234,6 +234,7 @@ if __name__ == "__main__":
     X_train, y_train = shuffle(X_train, y_train, random_state=2)
     X_test, y_test = shuffle(X_test, y_test, random_state=2)
     iBest = class31(args.output_dir, X_train, X_test, y_train, y_test)
-    class32(args.output_dir, X_train, X_test, y_train, y_test, iBest)
+    (X_1k, y_1k) = class32(args.output_dir, X_train, X_test, y_train, y_test, iBest)
+    class33(args.output_dir, X_train, X_test, y_train, y_test, iBest, X_1k, y_1k)
     # TODO: load data and split into train and test.
     # TODO : complete each classification experiment, in sequence.
