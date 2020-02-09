@@ -173,7 +173,7 @@ def class33(output_dir, X_train, X_test, y_train, y_test, i, X_1k, y_1k):
         # training using best 5 features on 1k and 32k datasets for prev best cls.
         cls = clone(classifiers[i])
         cls.fit(X_new, y_train)
-        C = confusion_matrix(y_test, cls.predict(X_test))
+        C = confusion_matrix(y_test[:, features_32k], cls.predict(X_test[:, features_32k]))
         accuracy_full = accuracy(C)
         outf.write(f'Accuracy for full dataset: {accuracy_full:.4f}\n')
         k_feat = 5
