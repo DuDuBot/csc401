@@ -294,7 +294,7 @@ def main(args):
     feats[i, :-1] = extract1(comment['body'])
     feats[i, :-1] = extract2(feats[i, :-1], comment['cat'], comment['id'])
     class_file = files[comment['cat']]
-    feats[-1] = class_file[1][0, -1]
+    feats[i, -1] = class_file[1][0, -1]
 
   np.savez_compressed(args.output, feats)
 

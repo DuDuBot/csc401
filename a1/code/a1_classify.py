@@ -243,16 +243,20 @@ def class34(output_dir, X_train, X_test, y_train, y_test, i):
         j = 0
         p_values = []
         for cls_base in classifiers:
+            name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'", "")
+            print(f'working on classifier: {name}')
             kfold_accuracies = []
+            fold = 0
             for train_index, test_index in validator.split(X_all):
+                print(f'fold: {fold}')
                 cls = clone(cls_base)
                 X_train, X_test = X_all[train_index], X_all[test_index]
                 y_train, y_test = y_all[train_index], y_all[test_index]
                 cls.fit(X_train, y_train)
                 C = confusion_matrix(y_test, cls.predict(X_test))
                 kfold_accuracies.append(accuracy(C))
+                fold += 1
             outf.write(f'Kfold Accuracies: {[round(acc, 4) for acc in kfold_accuracies]}\n')
-            name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'", "")
             cls_to_acc[name] = kfold_accuracies
             if j == i:
                 best_name = name
@@ -261,11 +265,6 @@ def class34(output_dir, X_train, X_test, y_train, y_test, i):
             j += 1
         for name in names:
             S, pvalue = ttest_rel(cls_to_acc[name], cls_to_acc[best_name])
-            print(pvalue)
-            try:
-                print(S.pvalue)
-            except:
-                pass
             p_values.append(pvalue)
         outf.write(f'p-values: {[round(pval, 4) for pval in p_values]}\n')
 
