@@ -180,7 +180,7 @@ def class33(output_dir, X_train, X_test, y_train, y_test, i, X_1k, y_1k):
         k_feat = 5
         selector = SelectKBest(f_classif, k_feat)
         X_new = selector.fit_transform(X_1k, y_1k)
-        print(f'1k p-values: {[round(pval, 4) for pval in selector.pvalues_]}')
+        # print(f'1k p-values: {[round(pval, 4) for pval in selector.pvalues_]}')
         cls = clone(classifiers[i])
         cls.fit(X_new, y_1k)
         C = confusion_matrix(y_test, cls.predict(selector.transform(X_test)))
@@ -216,7 +216,8 @@ def class33(output_dir, X_train, X_test, y_train, y_test, i, X_1k, y_1k):
                    'texts showing more adverbs than center of alt. This result is intersting'
                    ', as it is possible that left or right texts use more adverbs to '
                    'express stronger emotion. The standard deviation goes as high as 7, '
-                   'though, indicating that this ranges a lot (as it should).')
+                   'though, indicating that this ranges a lot (as it should).'
+                   'The pvalues between the 32k and 1k dataset are the same, if not, close.')
 
 
 def class34(output_dir, X_train, X_test, y_train, y_test, i):
