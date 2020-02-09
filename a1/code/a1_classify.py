@@ -290,5 +290,6 @@ if __name__ == "__main__":
     iBest = class31(args.output_dir, X_train, X_test, y_train, y_test)
     (X_1k, y_1k) = class32(args.output_dir, X_train, X_test, y_train, y_test, iBest)
     class33(args.output_dir, X_train, X_test, y_train, y_test, iBest, X_1k, y_1k)
+    class34(args.output_dir, X_train, X_test, y_train, y_test, iBest)
     # TODO: load data and split into train and test.
     # TODO : complete each classification experiment, in sequence.
