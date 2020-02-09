@@ -69,12 +69,21 @@ def class31(output_dir, X_train, X_test, y_train, y_test):
             if acc > best_acc:
                 best_acc = acc
                 iBest = i
-            outf.write(f'Results for {str(cls.__class__).split(".")[-1].replace(">", "")}:\n')  # Classifier name
+            outf.write(f'Results for {str(cls.__class__).split(".")[-1].replace(">", "").replace("\'", "")}:\n')  # Classifier name
             outf.write(f'\tAccuracy: {acc:.4f}\n')
             outf.write(f'\tRecall: {[round(item, 4) for item in rec]}\n')
             outf.write(f'\tPrecision: {[round(item, 4) for item in prec]}\n')
             outf.write(f'\tConfusion Matrix: \n{C}\n\n')
-
+        outf.write('we see that the RandomForestClassifier and the AdaBoost '
+                   'classifiers perform the best on this data. This result is '
+                   'expected because these are both ensemble-based models '
+                   '(they aggregrate many weak-learners to reduce variance).'
+                   ' The reduced helps these models generalize better, especially '
+                   'in low data regimes. Both the SGD and MLP classifiers are based '
+                   'on neural architectures which are known to require lots of '
+                   'data to perform well. Finally, the GaussianNB likely suffers '
+                   'despite NB\'s relative success in simple NKP problems because '
+                   'text is oftern not modelled well using a Gaussian distribution.')
     return iBest
 
 
@@ -111,7 +120,24 @@ def class32(output_dir, X_train, X_test, y_train, y_test, iBest):
             cls.fit(*train_set)
             C = confusion_matrix(y_test, cls.predict(X_test))
             outf.write(f'{ds_amount}: {accuracy(C):.4f}\n')
-
+        outf.write('Evidently, the more data has a significant impact on the'
+                   'model performance, with a strict increase in the test '
+                   'accuracy as the training data increases. Interestingly, '
+                   'There is not much improvement between 15k to 20k samples, '
+                   'likely because we are hitting the limit capacity for the'
+                   'default 50 classifiers in the Adaboost classifier (best).'
+                   'Regardless, the accuracies are quite low across all dataset'
+                   'sizes, likely due to the variance captured in the training '
+                   'data. Generally, these descriptive features like age of '
+                   'acquisition, etc., might not well relate with the actual '
+                   'categorization of left, right, alt, and center. An improvement'
+                   'might be to use a higher-capacity model, with lots more raw data. '
+                   'I would suggest raw data because, with enough of it, and a '
+                   'good learning algorithm, the model can learn from the text'
+                   'the important features, rather than us guessing what will '
+                   'explain the correlation best. Of course, we could also try '
+                   'other features that are better tailored to enable the models '
+                   'to learn the correlation between input and output.')
     return (X_1k, y_1k)
 
 
@@ -135,12 +161,13 @@ def class33(output_dir, X_train, X_test, y_train, y_test, i, X_1k, y_1k):
         k_feat = 5
         selector = SelectKBest(f_classif, k_feat)
         X_new = selector.fit_transform(X_train, y_train)
+        features_32k = selector.get_support(True)
         p_values = selector.p_values
         outf.write(f'{k_feat} p-values: {[round(pval, 4) for pval in p_values]}\n')
         k_feat = 50
-        selector2 = SelectKBest(f_classif, k_feat)
-        _ = selector2.fit_transform(X_train, y_train)
-        p_values.append(selector2.p_values)
+        selector = SelectKBest(f_classif, k_feat)
+        _ = selector.fit_transform(X_train, y_train)
+        p_values.append(selector.p_values)
         outf.write(f'{k_feat} p-values: {[round(pval, 4) for pval in p_values]}\n')
         # training using best 5 features on 1k and 32k datasets for prev best cls.
         cls = clone(classifiers[i])
@@ -156,10 +183,13 @@ def class33(output_dir, X_train, X_test, y_train, y_test, i, X_1k, y_1k):
         C = confusion_matrix(y_test, cls.predict(X_test))
         accuracy_1k = accuracy(C)
         outf.write(f'Accuracy for 1k: {accuracy_1k:.4f}\n')
-
-        # outf.write(f'Chosen feature intersection: {feature_intersection}\n')
-        # outf.write(f'Top-5 at higher: {top_5}\n')
-        pass
+        features_1k = selector.get_support(True)
+        print(features_32k, features_1k)
+        intersection = np.intersect1d(features_1k, features_32k, return_indices=True)
+        print(intersection)
+        top_5 = X_train[:, features_32k]
+        outf.write(f'Chosen feature intersection: {intersection}\n')
+        outf.write(f'Top-5 at higher: {top_5}\n')
 
 
 def class34(output_dir, X_train, X_test, y_train, y_test, i):
