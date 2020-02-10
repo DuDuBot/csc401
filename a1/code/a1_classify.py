@@ -344,10 +344,11 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
                                                                         "")
       print(f'starting classifier: {name}')
       outf.write(f'Results for {name}:\n')  # Classifier name
-      if name != 'MultinomialNB':
+      if name.lower().find('multi') != -1:
         cls.fit(scaler.transform(X_train), y_train)
         C = confusion_matrix(y_test, cls.predict(scaler.transform(X_test)))
       else:
+        print('doing multinomial')
         cls.fit(X_train.clip(min=0), y_train)
         C = confusion_matrix(y_test, cls.predict(X_test.clip(min=0)))
       acc = accuracy(C)
