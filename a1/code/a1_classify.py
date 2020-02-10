@@ -411,7 +411,7 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
       outf.write(f'params for this best classifier, "{name}" were: {cls_best.best_params_}\n')
     outf.write('\n')
     outf.write('As we can see, there is a significant increase of around 3-5\% per classifier. '
-               'Unfortunately, the best classifier, AdaBoost, did not have a significant increase due to hyperparameter optimization.'
+               'Unfortunately, the best classifier, AdaBoost, did not have a significant increase due to hyperparameter optimization. Importantly, We are using part of the training data held out for validation to test, to avoid mis quoting the accuracy (we cannot use test data for hyper parameter tuning)'
                'This hsows that though hyperparameter optimization does have a big impact, in this case, '
                'we are limited not by the model capacity, but by the feature information. It is possible that LSA or LDA, as we will explore next, '
                'will enable us to have a better accuracy.\n')
@@ -422,7 +422,9 @@ def classify_lda(output_dir, X_train, X_test, y_train, y_test):
     cls = AdaBoostClassifier(**{'n_estimators': 100, 'learning_rate': 0.5})  # best classifier from rgridsearch
     cls.fit(X_train, y_train)
     C = confusion_matrix(y_test, cls.predict(X_test))
-    outf.write(f"accuracy using LDa is: {accuracy(C)} for Adaboost, the best classifier from before.")
+    outf.write(f"accuracy using LDa is: {accuracy(C)} for Adaboost, the best classifier from before.\n")
+    outf.write("Interestingly, there is no significant change in accuracy. I also tested with 250 components for LDa and found it had lower accuracy"
+               "This leads me to believe that there is significant mis-labelling in our feature set and that we should look at better selecting the labels for each sample and collecting more data to improve the classifier results.")
 
 
 if __name__ == "__main__":
@@ -438,42 +440,42 @@ if __name__ == "__main__":
   data = data[data.files[0]]
   best_accuracy = []
   stime = time.clock()
-  # X_train, X_test, y_train, y_test = train_test_split(data[:, :173],
-  #                                                     data[:, -1],
-  #                                                     test_size=0.2,
-  #                                                     random_state=0,
-  #                                                     stratify=data[:, -1]
-  #                                                     )
-  # X_train, y_train = shuffle(X_train, y_train, random_state=2)
-  # iBest = class31(args.output_dir, X_train, X_test, y_train, y_test)
-  # print(f'done class31 at {time.clock()-stime}')
-  # (X_1k, y_1k) = class32(args.output_dir, X_train, X_test, y_train, y_test,
-  #                        iBest)
-  # print(f'done class32 at {time.clock()-stime}')
-  # class33(args.output_dir, X_train, X_test, y_train, y_test, iBest, X_1k, y_1k)
-  # print(f'done class33 at {time.clock()-stime}')
-  # class34(args.output_dir, X_train, X_test, y_train, y_test, iBest)
-  # print(f'done class34 at {time.clock()-stime}')
-  # BELOW IS FOR BONUS, uncomment to run
-  # print('starting bonus, this might take awhile')
-  # classify_bonus(args.output_dir, X_train, X_test, y_train, y_test)
-  # print(f'done class_bonus at {time.clock()-stime}')
-  infile = args.input
-  if infile.find('.npz') == -1:
-    infile += '_bonus_LDA'
-    outf = infile
-  else:
-    outf = infile[:infile.rfind('.')] + '_bonus_LDA' + '.txt'
-    infile = infile[:infile.rfind('.')] + '_bonus_LDA' + infile[infile.rfind('.'):]
-  data = np.load(infile)
-  data = data[data.files[0]]
-  best_accuracy = []
-  stime = time.clock()
-  X_train, X_test, y_train, y_test = train_test_split(data[:, :-1],
+  X_train, X_test, y_train, y_test = train_test_split(data[:, :173],
                                                       data[:, -1],
                                                       test_size=0.2,
                                                       random_state=0,
                                                       stratify=data[:, -1]
                                                       )
   X_train, y_train = shuffle(X_train, y_train, random_state=2)
-  classify_lda(args.output_dir, X_train, X_test, y_train, y_test)
+  iBest = class31(args.output_dir, X_train, X_test, y_train, y_test)
+  print(f'done class31 at {time.clock()-stime}')
+  (X_1k, y_1k) = class32(args.output_dir, X_train, X_test, y_train, y_test,
+                         iBest)
+  print(f'done class32 at {time.clock()-stime}')
+  class33(args.output_dir, X_train, X_test, y_train, y_test, iBest, X_1k, y_1k)
+  print(f'done class33 at {time.clock()-stime}')
+  class34(args.output_dir, X_train, X_test, y_train, y_test, iBest)
+  print(f'done class34 at {time.clock()-stime}')
+  # BELOW IS FOR BONUS, uncomment to run
+  # print('starting bonus, this might take awhile')
+  # classify_bonus(args.output_dir, X_train, X_test, y_train, y_test)
+  # print(f'done class_bonus at {time.clock()-stime}')
+  # infile = args.input
+  # if infile.find('.npz') == -1:
+  #   infile += '_bonus_LDA'
+  #   outf = infile
+  # else:
+  #   outf = infile[:infile.rfind('.')] + '_bonus_LDA' + '.txt'
+  #   infile = infile[:infile.rfind('.')] + '_bonus_LDA' + infile[infile.rfind('.'):]
+  # data = np.load(infile)
+  # data = data[data.files[0]]
+  # best_accuracy = []
+  # stime = time.clock()
+  # X_train, X_test, y_train, y_test = train_test_split(data[:, :-1],
+  #                                                     data[:, -1],
+  #                                                     test_size=0.2,
+  #                                                     random_state=0,
+  #                                                     stratify=data[:, -1]
+  #                                                     )
+  # X_train, y_train = shuffle(X_train, y_train, random_state=2)
+  # classify_lda(args.output_dir, X_train, X_test, y_train, y_test)

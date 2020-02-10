@@ -3,6 +3,10 @@ standard scaling (mean and std dev removal).
 
 I additionally explored another classifier, multinomialNB.
 Finally, I optimized the parameters for each using randomized grid search to see how they all perform.
+The results for these components are in a1_bonus.txt and are written in the a1_classify.py under the function
+classify_bonus.
 
 I also explored LDA, a Bayesian version of LSA using Dirichlet priors and compared it with LSA.
-Please see a1_bonus.txt for the classification bonus and a1_bonus_LDA for the LDA bonus results.
+The analysis of these features is in a1_bonus_lda.txt
+I then train the best classifier on the LDA features to see if there is any improvement.
+The results are in a1_bonus_class_LDA.txt

@@ -189,3 +189,4 @@ performing multinomialNB without scaling (because you cannot.
  [ 487  143 1171  199]
  [ 649  172  927  252]]
  params for this best classifier were: {'alpha': 1e-05}
+As we can see, there is a significant increase of around 3-5\% per classifier, as expected, since we have now optimized the hyperparams. Importantly, We are using part of the training data held out for validation to test, to avoid mis quoting the accuracy (we cannot use test data for hyper parameter tuning). Unfortunately, the best classifier, AdaBoost, did not have a significant increase due to hyperparameter optimization. This hsows that though hyperparameter optimization does have a big impact, in this case, we are limited not by the model capacity, but by the feature information. It is possible that LSA or LDA, as we will explore next, will enable us to have a better accuracy.

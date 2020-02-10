@@ -1,1 +1,2 @@
 accuracy using LDa is: 0.459375 for Adaboost, the best classifier from before.
+Interestingly, there is no significant change in accuracy. I also tested with 250 components for LDa and found it had lower accuracy. This leads me to believe that there is significant mis-labelling in our feature set and that we should look at better selecting the labels for each sample and collecting more data to improve the classifier results.

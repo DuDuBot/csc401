@@ -314,44 +314,6 @@ def extract_bonus(text):
   return data
 
 
-def extract_bonus_more_components(text):
-  """This method extracts the LDA and LSA features, saving them to a file. Then,
-  the method returns the LDA features for use in classification, since LDA is
-  empirically shown to beat LSA in general.
-
-  :param text: text to be featurized using LDA or LSA (full comment)
-  :param infile: infile to write to (as string) for learnings from this bonus
-  :return: all LDA features as matrix
-  """
-  # we keep words with their tag to see if a different tagged word has different topic etc.
-  for use_LDA in [False, True]:
-    if use_LDA:
-      featurizer = CountVectorizer(stop_words='english')
-    else:
-      featurizer = TfidfVectorizer(sublinear_tf=True, stop_words='english')
-    data, labels, = zip(*[(c['body'], c['cat']) for c in text])
-    new_data = []
-    for comment in data:
-      row = " ".join([word[:word.rfind('/')] for word in comment.split(' ')])
-      # sentence is now just lemmatized, tokenized words separated by spaces,
-      # as required by sklearn Coutnvectorizer.
-      new_data.append(row)
-    data = new_data
-    labels = [files[lbl][1][0, -1] for lbl in labels]  # transform to integer
-    data = featurizer.fit_transform(data)
-    n_components = 250
-    if use_LDA:
-      topic_modeller = LatentDirichletAllocation(n_components=n_components,
-                                                 batch_size=100,
-                                                 random_state=2)
-    else:
-      topic_modeller = TruncatedSVD(n_components=n_components, n_iter=1,
-                                    random_state=2)
-    data = topic_modeller.fit_transform(data)
-    labels = np.array(labels)[:, np.newaxis]
-    data = np.concatenate([data, labels], axis=1)
-  return data
-
 def main(args):
   # Now, files is a mapping from the {label: [ids, features]},
   # where features has the label integer concatenated to the end.
@@ -380,7 +342,6 @@ def main(args):
   #   outf = infile[:infile.rfind('.')] + '_bonus_LDA' + '.txt'
   #   infile = infile[:infile.rfind('.')] + '_bonus_LDA' + infile[infile.rfind('.'):]
   # feats = extract_bonus(data)
-  # feats = extract_bonus_more_components(data)  # using 250 components, because 100 had similar acc.
   # np.savez_compressed(infile, feats)
 
 
