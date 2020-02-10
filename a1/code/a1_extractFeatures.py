@@ -23,26 +23,25 @@ SLANG = {
   'nm', 'np', 'plz', 'ru', 'so', 'tc', 'tmi', 'ym', 'ur', 'u', 'sol', 'fml'}
 
 
-def len_dec(fn):
+def len_dec(fn):  # decorator to automatically take the length of a list returned by 'fn'
   def len_fn(*args, **kwargs):
     return len(fn(*args, **kwargs))
-
   return len_fn
 
 
-
 # Global vars
-findall = functools.partial(re.findall, flags=re.IGNORECASE)
+findall = functools.partial(re.findall, flags=re.IGNORECASE)  # assume we ignore case unless told otherwise.
 nfindall = len_dec(findall)  # nfindall return number of matches from findall
 
 a1_dir = "/u/cs401/A1/"  # can't acess args...
+# Files opened once to save time.
 wordlists_dir = "/u/cs401/Wordlists"
-bgl = pd.read_csv(os.path.join(wordlists_dir, "BristolNorms+GilhoolyLogie.csv"))
-warr = pd.read_csv(os.path.join(wordlists_dir, "Ratings_Warriner_et_al.csv"))
+bgl = pd.read_csv(os.path.join(wordlists_dir, "BristolNorms+GilhoolyLogie.csv"),
+                  usecols=["WORD", "AoA (100-700)", "IMG", "FAM"])  # select just needed cols
+warr = pd.read_csv(os.path.join(wordlists_dir, "Ratings_Warriner_et_al.csv"),
+                   usecols=["Word", "V.Mean.Sum", "D.Mean.Sum", "A.Mean.Sum"])  # select just needed cols
 
-bgl = bgl[["WORD", "AoA (100-700)", "IMG", "FAM"]]  # select just needed cols
-warr = warr[["Word", "V.Mean.Sum", "D.Mean.Sum", "A.Mean.Sum"]]
-bgl2 = bgl.set_index(['WORD'])
+bgl2 = bgl.set_index(['WORD'])  # set the index to the word columns for faster retrieval later.
 warr2 = warr.set_index(['Word'])
 
 feats_base = os.path.join(a1_dir, 'feats')
@@ -53,15 +52,21 @@ files = {f: [open(os.path.join(feats_base, f + '_IDs.txt')).readlines(),  # [0] 
          }
 
 for v in files.values():
-    # remove the [2] entry and concatenate to features as desired.
+    # remove the [2] entry and concatenate to features so that the -1 index is the label as desired.
     v[1] = np.concatenate([v[1], np.ones((len(v[1]), 1)) * v.pop()], axis=1)
 
-# make dict for id : line
+# files[$file][0] is a list of strings where each line is an ID (result of readlines).
+# we turn this into a dict where each ID is a key, and value is the line number,
+# so that we can access it easier later (in O(1) time).
 for k in files:
     id_line = {}
     for i, line in enumerate(files[k][0]):
         id_line[str(line).strip()] = i
     files[k][0] = id_line
+
+# Now files is a dict, where the key is the file name, and the value is a list where,
+# list[0] is a dict holding the id: line # relationship
+# list[1] are the feature values, with the label appended to the end already.
 
 
 def extract1(comment):
@@ -77,7 +82,9 @@ def extract1(comment):
   Returns:
       feats : numpy Array, a 173-length vector of floating point features (only the first 29 are expected to be filled, here)
   '''
-  def flatten(arr):
+  def flatten(arr):  # takes an pd.Series objects due to duplicate word entries in the provided
+    # files (they exist) and flattens it to separate entries so that our final array
+    # only has float values.
     new_arr = []
     for a in arr:
       if isinstance(a, pd.Series):
@@ -85,8 +92,9 @@ def extract1(comment):
       else:
         new_arr.append(a)
     return new_arr
-  features = np.zeros(173)
-  patterns = [(r"([A-Z]\w{2,})/[A-Z]{2,4}", {'flags': 0}),  # 1. n uppercase > 3
+  features = np.zeros(173)  #
+  # The patters are a list of regex patterns we will process in a for loop
+  patterns = [(r"([A-Z]\w{2,})/[A-Z]{2,4}", {'flags': 0}),  # 1. n uppercase > 3, case-sensitive
               (r"(?<=\b)(?:" + "|".join(FIRST_PERSON_PRONOUNS) + ")(?=\/|\b)",
                {}),  # 2. n first-person pronouns
               (r"(?<=\b)(?:" + "|".join(SECOND_PERSON_PRONOUNS) + ")(?=\b|\/)",
@@ -110,40 +118,13 @@ def extract1(comment):
               (r"(?:\s|^)("+r"|".join(SLANG)+")(?:/[.]{0,4})", {})  # 14. n slang words
               ]
   word_tokens = comment.split()  # as per preprocessing
-  # words, tokens = [], []
-  # for string in word_tokens:
-  #   words.append(string[:string.rfind('/')])
-  #   tokens.append(string[string.rfind('/')+1:])
-  # for word, token in zip(words, tokens):
-  #     features[0] += nfindall(r"([A-Z]\w{2,})", word, flags=0)  # 1. n uppercase > 3
-  #     features[1] += 1 if word in FIRST_PERSON_PRONOUNS else 0  # 2. n first-person pronouns
-  #     features[2] += 1 if word in SECOND_PERSON_PRONOUNS else 0  # 3. n second-person pronouns
-  #     features[3] += 1 if word in THIRD_PERSON_PRONOUNS else 0  # 4. n third-person pronouns
-  #     if token == 'CC':
-  #         features[4] += 1  # 5. n coordinating conjunctions
-  #     elif token == 'VBD':
-  #         features[5] += 1  # 6. n past-tense verbs
-  #     elif token == 'NN' or token == 'NNS':
-  #         features[9] += 1  # 10. n common nouns
-  #     elif token == 'NNP' or token == 'NNPS':
-  #         features[10] += 1  # 11. n proper nouns
-  #     elif token == 'RB' or token == 'RBR' or token == 'RBS':
-  #         features[11] += 1  # 12. n adverbs
-  #     elif token == 'WDT' or token == 'WP$' or token == 'WRB' or token == 'WP':
-  #         features[12] += 1  # 13. n wh-words
-  #     features[7] += nfindall(r",/,|(?<!/),", string)  # 8. n commas
-  #     features[8] += nfindall(r"([\#\$\!\?\.\:\;\(\)\"\',]{2,}|\.\.\.)", word)  # 9. n multchar punctuations
-  #     features[13] += 1 if word in SLANG else 0  # 14. n slang words
-  # features[6] += nfindall(r"(?:(?:going|gonna|will|'ll)"
-  #                           r"(?:/?.{0,4})|go/VBG)\s+to"
-  #                           r"(?:/.{0,2})\s+(\w*/VB)(?=\b|/)", comment)  # 7. n future tense
   for i, (patt, flags) in enumerate(patterns):
     try:
-      if len(flags) > 0:
-        # nfindall return number of matches from findall
+      if len(flags) > 0:  # by default we use re.IGNORECASE, this gives an option to be case-sensitive.
+        # nfindall returns number of matches from findall
         features[i] += nfindall(patt, comment, **flags)
       else:
-        # nfindall return number of matches from findall
+        # nfindall returns number of matches from findall
         features[i] += nfindall(patt, comment)
     except:
       import traceback
@@ -170,23 +151,18 @@ def extract1(comment):
     # findall returns all matches
     # below returns None for tokens proceeded by only punctuation.
     valid_tokens = [w for w in word_tokens if re.match(rf"{check_punct}/", w) is None]
-    # print([v[:v.rfind('/')] for v in valid_tokens])
     if len(extract_words) > 0:
       features[15] = len("".join([v[:v.rfind('/')] for v in valid_tokens])) / (len(
         valid_tokens))  # n chars / n tokens
-    # print(features[15])
 
   # Norms
   if len(word_tokens) > 0:  # extract just word from each word
     # retrieve_word = r"(\w+)(?=/)"  # they are separated by a / with token
-    # extract_words = [findall(retrieve_word, word) for word in words]
-    # extract_words = [w[0].lower() for w in extract_words if
-    #                  len(w) > 0]  # they are lists from findall
-    # valid_bgl = bgl2.loc[np.in1d(bgl2.index, extract_words)]  # words from comment in bgl
     chosen_bgl = []
-    for x in extract_words:
+    for x in extract_words:  # this is faster than pd.isin, but ugly -_-
       try:
-        chosen_bgl.append(bgl2.loc[x])  # some words might not have a value
+        chosen_bgl.append(bgl2.loc[x])  # some words might not have a value,
+        # this gets a row as a series with the column values intact.
       except:
         pass
     # Below are all features Bristol Gillhooly and Logie
@@ -218,16 +194,12 @@ def extract1(comment):
       features[22] = np.nanstd(FAM)
 
     # Now we start Warringer norms
-    # valid_warr = [warr[warr.Word == w] for w in extract_words]  # words from comment in warr
-    # DMS = [w["V.Mean.Sum"].values[0] for w in valid_warr if not w["V.Mean.Sum"].empty]
-    # valid_warr = warr2.loc[np.in1d(warr2.index, extract_words)]  # words from comment in warr
     chosen_warr = []
-    for x in extract_words:
+    for x in extract_words:  # again, fastest method
       try:
         chosen_warr.append(warr2.loc[x])  # some words might not have a value
       except:
         pass
-    # VMS = [w["V.Mean.Sum"].values[0] for w in valid_warr if not w["V.Mean.Sum"].empty]  # V.Mean.Sum from war
     # first V.Mean.Sum
     VMS = [x.get("V.Mean.Sum", np.nan) for x in chosen_warr]
     VMS = flatten(VMS)
@@ -272,8 +244,9 @@ def extract2(feats, comment_class, comment_id):
       the parameter feats.
   '''
   class_file = files[comment_class]
-  if comment_id in class_file[0]:
-    feats[29:] = class_file[1][class_file[0][comment_id], :-1]
+  if comment_id in class_file[0]:  # classfile[0] is the dict from before.
+    # if its in, we are safe to access the value, which is the line # aka which feature to take.
+    feats[29:] = class_file[1][class_file[0][comment_id], :-1]  # we take up to the label, as per doc string.
   else:
     print('not found')
   return feats
@@ -294,7 +267,7 @@ def main(args):
     feats[i, :-1] = extract1(comment['body'])
     feats[i, :-1] = extract2(feats[i, :-1], comment['cat'], comment['id'])
     class_file = files[comment['cat']]
-    feats[i, -1] = class_file[1][0, -1]
+    feats[i, -1] = class_file[1][0, -1]  # adding the label since extract2 doesn't do that.
 
   np.savez_compressed(args.output, feats)
 
