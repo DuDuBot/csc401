@@ -320,7 +320,7 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
       name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
                                                                         "")
       outf.write(f'Results for {name}:\n')  # Classifier name
-      if name.lower().find('multi') != -1:
+      if name.lower().find('multi') == -1:
         cls.fit(scaler.transform(X_train), y_train)
         C = confusion_matrix(y_test, cls.predict(scaler.transform(X_test)))
       else:
