@@ -344,7 +344,7 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
                                                                         "")
       print(f'starting classifier: {name}')
       outf.write(f'Results for {name}:\n')  # Classifier name
-      if name != 'MultinomialN':
+      if name != 'MultinomialNB':
         cls.fit(scaler.transform(X_train), y_train)
         C = confusion_matrix(y_test, cls.predict(scaler.transform(X_test)))
       else:
