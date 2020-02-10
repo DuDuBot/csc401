@@ -119,7 +119,7 @@ def class31(output_dir, X_train, X_test, y_train, y_test):
                'in low data regimes. However, the MLP model, being a neural architecture, is a surprising result as they generally require lots of data to perform well. The MLP structure chosen by SKLearn is likely a simple MLP that does not require much data. '
                'The SGDClassifier uses a linear SVM given the default configuration which is surprising that it does not perform well, since they generally perform well despite low-data (since they learn a simple margin from support vectors). Finally, the GaussianNB likely suffers '
                'despite NB\'s relative success in simple NKP problems because '
-               'text is oftern not modelled well using a Gaussian distribution.')
+               'text is often not modelled well using a Gaussian distribution.')
   return iBest
 
 

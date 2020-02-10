@@ -1,4 +1,4 @@
-skipping
+explained variance from total variance is: 0.2142329323671762
 topic 0 is best described by the 10 words: ['capable' 'really' 'just' 'difference' 'iq' 'sign' 'big' 'proud'
  'strange' 'institution'] with probabilities: [0.0066743  0.00700774 0.00712117 0.01685114 0.00755426 0.03980909
  0.00779688 0.01160291 0.0168507  0.0070896 ]
