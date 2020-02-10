@@ -367,7 +367,7 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
       params = search_params[name]
       name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
                                                                         "")
-      rgridsearch = RandomizedSearchCV(cls, params, n_iter=20, random_state=2, scoring='accuracy')
+      rgridsearch = RandomizedSearchCV(cls, params, n_iter=30, random_state=2, scoring='accuracy')
       outf.write(f'Results for {name}:\n')  # Classifier name
       rgridsearch.fit(scaler.transform(X_train), y_train)
       C = confusion_matrix(y_test, rgridsearch.predict(scaler.transform(X_test)))
