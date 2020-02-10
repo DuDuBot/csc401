@@ -469,7 +469,7 @@ if __name__ == "__main__":
   data = data[data.files[0]]
   best_accuracy = []
   stime = time.clock()
-  X_train, X_test, y_train, y_test = train_test_split(data[:, :173],
+  X_train, X_test, y_train, y_test = train_test_split(data[:, :-1],
                                                       data[:, -1],
                                                       test_size=0.2,
                                                       random_state=0,

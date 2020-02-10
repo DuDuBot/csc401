@@ -334,15 +334,15 @@ def main(args):
   np.savez_compressed(args.output, feats)
 
   # BELOW IS FOR BONUS uncomment to run
-  # infile = args.output
-  # if infile.find('.npz') == -1:
-  #   infile += '_bonus_LDA'
-  #   outf = infile
-  # else:
-  #   outf = infile[:infile.rfind('.')] + '_bonus_LDA' + '.txt'
-  #   infile = infile[:infile.rfind('.')] + '_bonus_LDA' + infile[infile.rfind('.'):]
-  # feats = extract_bonus(data)
-  # np.savez_compressed(infile, feats)
+  infile = args.output
+  if infile.find('.npz') == -1:
+    infile += '_bonus_LDA'
+    outf = infile
+  else:
+    outf = infile[:infile.rfind('.')] + '_bonus_LDA' + '.txt'
+    infile = infile[:infile.rfind('.')] + '_bonus_LDA' + infile[infile.rfind('.'):]
+  feats = extract_bonus(data)
+  np.savez_compressed(infile, feats)
 
 
 if __name__ == "__main__":
