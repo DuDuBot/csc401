@@ -1,0 +1,33 @@
+trying HyperParam optimization
+. As neither scaling preprocessing had a major effect, we will not use them.Results for MLPClassifier:
+	Accuracy: 0.4450
+	Recall: [0.594, 0.526, 0.4475, 0.2125]
+	Precision: [0.575, 0.3673, 0.4368, 0.4163]
+	Confusion Matrix: 
+[[1188  414  227  171]
+ [ 312 1052  438  198]
+ [ 278  600  895  227]
+ [ 288  798  489  425]]
+
+params for this best classifier were: {'max_iter': 200, 'learning_rate': 'constant', 'hidden_layer_sizes': 50, 'early_stopping': False, 'activation': 'relu'}Results for AdaBoostClassifier:
+	Accuracy: 0.4619
+	Recall: [0.6705, 0.3825, 0.482, 0.3125]
+	Precision: [0.5704, 0.41, 0.4471, 0.3841]
+	Confusion Matrix: 
+[[1341  189  252  218]
+ [ 343  765  446  446]
+ [ 317  381  964  338]
+ [ 350  531  494  625]]
+
+params for this best classifier were: {'n_estimators': 100, 'learning_rate': 0.5}Results for MultinomialNB:
+performing multinomialNB without scaling (because you cannot.
+	Accuracy: 0.3407
+	Recall: [0.5215, 0.13, 0.5855, 0.126]
+	Precision: [0.3769, 0.3812, 0.3095, 0.3281]
+	Confusion Matrix: 
+[[1043  107  752   98]
+ [ 588  260  933  219]
+ [ 487  143 1171  199]
+ [ 649  172  927  252]]
+
+params for this best classifier were: {'alpha': 1e-05}
