@@ -359,17 +359,17 @@ def main(args):
   data = json.load(open(args.input))
   feats = np.zeros((len(data), 173 + 1))
 
-  stime = time.clock()
-  for i, comment in enumerate(data):
-    if (i+1) % 500 == 0:
-      print(f"step: '{i+1}' at time '{time.clock()-stime}'")
-
-    feats[i, :-1] = extract1(comment['body'])
-    feats[i, :-1] = extract2(feats[i, :-1], comment['cat'], comment['id'])
-    class_file = files[comment['cat']]
-    feats[i, -1] = class_file[1][0, -1]  # adding the label since extract2 doesn't do that.
-
-  np.savez_compressed(args.output, feats)
+  # stime = time.clock()
+  # for i, comment in enumerate(data):
+  #   if (i+1) % 500 == 0:
+  #     print(f"step: '{i+1}' at time '{time.clock()-stime}'")
+  #
+  #   feats[i, :-1] = extract1(comment['body'])
+  #   feats[i, :-1] = extract2(feats[i, :-1], comment['cat'], comment['id'])
+  #   class_file = files[comment['cat']]
+  #   feats[i, -1] = class_file[1][0, -1]  # adding the label since extract2 doesn't do that.
+  #
+  # np.savez_compressed(args.output, feats)
 
   # BELOW IS FOR BONUS uncomment to run
   infile = args.output
