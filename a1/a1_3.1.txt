@@ -1,0 +1,51 @@
+Results for SGDClassifier:
+	Accuracy: 0.3794
+	Recall: [0.774, 0.0375, 0.2375, 0.4685]
+	Precision: [0.4269, 0.2953, 0.4218, 0.313]
+	Confusion Matrix: 
+[[1548   33   98  321]
+ [ 739   75  296  890]
+ [ 618   61  475  846]
+ [ 721   85  257  937]]
+
+Results for GaussianNB:
+	Accuracy: 0.3292
+	Recall: [0.8605, 0.2595, 0.156, 0.041]
+	Precision: [0.3222, 0.3167, 0.4041, 0.3306]
+	Confusion Matrix: 
+[[1721  147  104   28]
+ [1247  519  170   64]
+ [1078  536  312   74]
+ [1295  437  186   82]]
+
+Results for RandomForestClassifier:
+	Accuracy: 0.4184
+	Recall: [0.6535, 0.2675, 0.522, 0.2305]
+	Precision: [0.5046, 0.3891, 0.3768, 0.3647]
+	Confusion Matrix: 
+[[1307  153  374  166]
+ [ 468  535  640  357]
+ [ 367  309 1044  280]
+ [ 448  378  713  461]]
+
+Results for MLPClassifier:
+	Accuracy: 0.4329
+	Recall: [0.488, 0.547, 0.4005, 0.296]
+	Precision: [0.607, 0.3522, 0.4638, 0.3797]
+	Confusion Matrix: 
+[[ 976  550  210  264]
+ [ 222 1094  323  361]
+ [ 208  649  801  342]
+ [ 202  813  393  592]]
+
+Results for AdaBoostClassifier:
+	Accuracy: 0.4542
+	Recall: [0.666, 0.3925, 0.4845, 0.274]
+	Precision: [0.5497, 0.403, 0.4336, 0.3931]
+	Confusion Matrix: 
+[[1332  211  288  169]
+ [ 366  785  471  378]
+ [ 342  390  969  299]
+ [ 383  562  507  548]]
+
+we see that the RandomForestClassifier and the AdaBoost classifiers perform the best on this data. This result is expected because these are both ensemble-based models (they aggregrate many weak-learners to reduce variance). The reduced helps these models generalize better, especially in low data regimes. Both the SGD and MLP classifiers are based on neural architectures which are known to require lots of data to perform well. Finally, the GaussianNB likely suffers despite NB's relative success in simple NKP problems because text is oftern not modelled well using a Gaussian distribution.
