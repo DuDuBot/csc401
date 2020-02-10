@@ -320,8 +320,13 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
       name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
                                                                         "")
       outf.write(f'Results for {name}:\n')  # Classifier name
-      cls.fit(scaler.transform(X_train), y_train)
-      C = confusion_matrix(y_test, cls.predict(scaler.transform(X_test)))
+      if name.lower().find('multi') != -1:
+        cls.fit(scaler.transform(X_train), y_train)
+        C = confusion_matrix(y_test, cls.predict(scaler.transform(X_test)))
+      else:
+        outf.write('performing multinomialNB without scaling (because you cannot.\n')
+        cls.fit(X_train.clip(min=0), y_train)
+        C = confusion_matrix(y_test, cls.predict(X_test.clip(min=0)))
       acc = accuracy(C)
       rec = recall(C)
       prec = precision(C)
@@ -348,7 +353,7 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
         cls.fit(scaler.transform(X_train), y_train)
         C = confusion_matrix(y_test, cls.predict(scaler.transform(X_test)))
       else:
-        print('doing multinomial')
+        outf.write('performing multinomialNB without scaling (because you cannot.\n')
         cls.fit(X_train.clip(min=0), y_train)
         C = confusion_matrix(y_test, cls.predict(X_test.clip(min=0)))
       acc = accuracy(C)
