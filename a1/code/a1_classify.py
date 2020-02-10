@@ -314,7 +314,7 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
     scaler.fit(X_train)
     iBest = 0
     best_acc = 0
-    outf.write('Trying mean and std removal scaling')
+    outf.write('Trying mean and std removal scaling\n')
     for i, to_clone in enumerate(classifiers_bonus):
       cls = clone(to_clone)
       name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
@@ -339,7 +339,7 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
       outf.write(f'\tPrecision: {[round(item, 4) for item in prec]}\n')
       outf.write(f'\tConfusion Matrix: \n{C}\n\n')
     outf.write('\n')
-    outf.write('Trying minmax scaling')
+    outf.write('Trying minmax scaling\n')
     scaler = MinMaxScaler()
     scaler.fit(X_train)
     iBest = 0
@@ -368,7 +368,7 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
       outf.write(f'\tPrecision: {[round(item, 4) for item in prec]}\n')
       outf.write(f'\tConfusion Matrix: \n{C}\n\n')
     outf.write('\n')
-    outf.write('trying HyperParam optimization')
+    outf.write('trying HyperParam optimization\n. As neither scaling preprocessing had a major effect, we will not use them.')
     for i, to_clone in enumerate(classifiers_bonus):
       cls = clone(to_clone)
       name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
@@ -376,8 +376,13 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
       params = search_params[name]
       rgridsearch = RandomizedSearchCV(cls, params, n_iter=30, random_state=2, scoring='accuracy')
       outf.write(f'Results for {name}:\n')  # Classifier name
-      rgridsearch.fit(scaler.transform(X_train), y_train)
-      C = confusion_matrix(y_test, rgridsearch.predict(scaler.transform(X_test)))
+      if name.lower().find('multi') == -1:
+        rgridsearch.fit(X_train, y_train)
+        C = confusion_matrix(y_test, rgridsearch.predict(X_test))
+      else:
+        outf.write('performing multinomialNB without scaling (because you cannot.\n')
+        rgridsearch.fit(X_train.clip(min=0), y_train)
+        C = confusion_matrix(y_test, rgridsearch.predict(X_test.clip(min=0)))
       acc = accuracy(C)
       rec = recall(C)
       prec = precision(C)
