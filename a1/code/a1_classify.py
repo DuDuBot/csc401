@@ -314,60 +314,60 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
     scaler.fit(X_train)
     iBest = 0
     best_acc = 0
-    outf.write('Trying mean and std removal scaling\n')
-    for i, to_clone in enumerate(classifiers_bonus):
-      cls = clone(to_clone)
-      name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
-                                                                        "")
-      print(f'starting classifier: {name} for standard scaling')
-      outf.write(f'Results for {name}:\n')  # Classifier name
-      if name.lower().find('multi') == -1:
-        cls.fit(scaler.transform(X_train), y_train)
-        C = confusion_matrix(y_test, cls.predict(scaler.transform(X_test)))
-      else:
-        outf.write('performing multinomialNB without scaling (because you cannot.\n')
-        cls.fit(X_train.clip(min=0), y_train)
-        C = confusion_matrix(y_test, cls.predict(X_test.clip(min=0)))
-      acc = accuracy(C)
-      rec = recall(C)
-      prec = precision(C)
-      if acc > best_acc:
-        best_acc = acc
-        iBest = i
-      outf.write(f'\tAccuracy: {acc:.4f}\n')
-      outf.write(f'\tRecall: {[round(item, 4) for item in rec]}\n')
-      outf.write(f'\tPrecision: {[round(item, 4) for item in prec]}\n')
-      outf.write(f'\tConfusion Matrix: \n{C}\n\n')
-    outf.write('\n')
-    outf.write('Trying minmax scaling\n')
-    scaler = MinMaxScaler()
-    scaler.fit(X_train)
-    iBest = 0
-    best_acc = 0
-    for i, to_clone in enumerate(classifiers_bonus):
-      cls = clone(to_clone)
-      name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
-                                                                        "")
-      print(f'starting classifier: {name}  for minmax scaling')
-      outf.write(f'Results for {name}:\n')  # Classifier name
-      if name.lower().find('multi') == -1:
-        cls.fit(scaler.transform(X_train), y_train)
-        C = confusion_matrix(y_test, cls.predict(scaler.transform(X_test)))
-      else:
-        outf.write('performing multinomialNB without scaling (because you cannot.\n')
-        cls.fit(X_train.clip(min=0), y_train)
-        C = confusion_matrix(y_test, cls.predict(X_test.clip(min=0)))
-      acc = accuracy(C)
-      rec = recall(C)
-      prec = precision(C)
-      if acc > best_acc:
-        best_acc = acc
-        iBest = i
-      outf.write(f'\tAccuracy: {acc:.4f}\n')
-      outf.write(f'\tRecall: {[round(item, 4) for item in rec]}\n')
-      outf.write(f'\tPrecision: {[round(item, 4) for item in prec]}\n')
-      outf.write(f'\tConfusion Matrix: \n{C}\n\n')
-    outf.write('\n')
+    # outf.write('Trying mean and std removal scaling\n')
+    # for i, to_clone in enumerate(classifiers_bonus):
+    #   cls = clone(to_clone)
+    #   name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
+    #                                                                     "")
+    #   print(f'starting classifier: {name} for standard scaling')
+    #   outf.write(f'Results for {name}:\n')  # Classifier name
+    #   if name.lower().find('multi') == -1:
+    #     cls.fit(scaler.transform(X_train), y_train)
+    #     C = confusion_matrix(y_test, cls.predict(scaler.transform(X_test)))
+    #   else:
+    #     outf.write('performing multinomialNB without scaling (because you cannot.\n')
+    #     cls.fit(X_train.clip(min=0), y_train)
+    #     C = confusion_matrix(y_test, cls.predict(X_test.clip(min=0)))
+    #   acc = accuracy(C)
+    #   rec = recall(C)
+    #   prec = precision(C)
+    #   if acc > best_acc:
+    #     best_acc = acc
+    #     iBest = i
+    #   outf.write(f'\tAccuracy: {acc:.4f}\n')
+    #   outf.write(f'\tRecall: {[round(item, 4) for item in rec]}\n')
+    #   outf.write(f'\tPrecision: {[round(item, 4) for item in prec]}\n')
+    #   outf.write(f'\tConfusion Matrix: \n{C}\n\n')
+    # outf.write('\n')
+    # outf.write('Trying minmax scaling\n')
+    # scaler = MinMaxScaler()
+    # scaler.fit(X_train)
+    # iBest = 0
+    # best_acc = 0
+    # for i, to_clone in enumerate(classifiers_bonus):
+    #   cls = clone(to_clone)
+    #   name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
+    #                                                                     "")
+    #   print(f'starting classifier: {name}  for minmax scaling')
+    #   outf.write(f'Results for {name}:\n')  # Classifier name
+    #   if name.lower().find('multi') == -1:
+    #     cls.fit(scaler.transform(X_train), y_train)
+    #     C = confusion_matrix(y_test, cls.predict(scaler.transform(X_test)))
+    #   else:
+    #     outf.write('performing multinomialNB without scaling (because you cannot.\n')
+    #     cls.fit(X_train.clip(min=0), y_train)
+    #     C = confusion_matrix(y_test, cls.predict(X_test.clip(min=0)))
+    #   acc = accuracy(C)
+    #   rec = recall(C)
+    #   prec = precision(C)
+    #   if acc > best_acc:
+    #     best_acc = acc
+    #     iBest = i
+    #   outf.write(f'\tAccuracy: {acc:.4f}\n')
+    #   outf.write(f'\tRecall: {[round(item, 4) for item in rec]}\n')
+    #   outf.write(f'\tPrecision: {[round(item, 4) for item in prec]}\n')
+    #   outf.write(f'\tConfusion Matrix: \n{C}\n\n')
+    # outf.write('\n')
     outf.write('trying HyperParam optimization\n. As neither scaling preprocessing had a major effect, we will not use them.')
     for i, to_clone in enumerate(classifiers_bonus):
       if i < 3:
