@@ -260,7 +260,7 @@ def extract_bonus(text):
   empirically shown to beat LSA in general.
 
   :param text: text to be featurized using LDA or LSA (full comment)
-  :param outfile: outfile to write to (as string) for learnings from this bonus
+  :param infile: infile to write to (as string) for learnings from this bonus
   :return: all LDA features as matrix
   """
   # we keep words with their tag to see if a different tagged word has different topic etc.
@@ -321,28 +321,28 @@ def main(args):
   data = json.load(open(args.input))
   feats = np.zeros((len(data), 173 + 1))
 
-  # stime = time.clock()
-  # for i, comment in enumerate(data):
-  #   if (i+1) % 500 == 0:
-  #     print(f"step: '{i+1}' at time '{time.clock()-stime}'")
-  #
-  #   feats[i, :-1] = extract1(comment['body'])
-  #   feats[i, :-1] = extract2(feats[i, :-1], comment['cat'], comment['id'])
-  #   class_file = files[comment['cat']]
-  #   feats[i, -1] = class_file[1][0, -1]  # adding the label since extract2 doesn't do that.
-  #
-  # np.savez_compressed(args.output, feats)
+  stime = time.clock()
+  for i, comment in enumerate(data):
+    if (i+1) % 500 == 0:
+      print(f"step: '{i+1}' at time '{time.clock()-stime}'")
+
+    feats[i, :-1] = extract1(comment['body'])
+    feats[i, :-1] = extract2(feats[i, :-1], comment['cat'], comment['id'])
+    class_file = files[comment['cat']]
+    feats[i, -1] = class_file[1][0, -1]  # adding the label since extract2 doesn't do that.
+
+  np.savez_compressed(args.output, feats)
 
   # BELOW IS FOR BONUS uncomment to run
-  outfile = args.output
-  if outfile.find('.npz') == -1:
-    outfile += '_bonus_LDA'
-    outf = outfile
-  else:
-    outf = outfile[:outfile.rfind('.')] + '_bonus_LDA' + '.txt'
-    outfile = outfile[:outfile.rfind('.')] + '_bonus_LDA' + outfile[outfile.rfind('.'):]
-  feats = extract_bonus(data)
-  np.savez_compressed(outfile, feats)
+  # infile = args.output
+  # if infile.find('.npz') == -1:
+  #   infile += '_bonus_LDA'
+  #   outf = infile
+  # else:
+  #   outf = infile[:infile.rfind('.')] + '_bonus_LDA' + '.txt'
+  #   infile = infile[:infile.rfind('.')] + '_bonus_LDA' + infile[infile.rfind('.'):]
+  # feats = extract_bonus(data)
+  # np.savez_compressed(infile, feats)
 
 
 if __name__ == "__main__":

@@ -207,7 +207,7 @@ def class33(output_dir, X_train, X_test, y_train, y_test, i, X_1k, y_1k):
     outf.write(f'{k_feat} p-values: {[round(pval, 4) for pval in p_values]}\n')
     # training using best 5 features on 1k and 32k datasets for prev best cls.
     cls = clone(classifiers[i])
-    cls.fit(X_new, y_train)
+    cls.fit(X_new, y_train)  # 32k dataset
     C = confusion_matrix(y_test, cls.predict(selector.transform(X_test)))
     accuracy_full = accuracy(C)
     outf.write(f'Accuracy for full dataset: {accuracy_full:.4f}\n')
@@ -372,7 +372,9 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
     iBest = 0
     cls_best = None
     best_acc = None
-    for i, to_clone in enumerate(classifiers_bonus):
+    for i, to_clone in enumerate(classifiers_bonus):  # now we use rgridsearch to do hyperparam optimization
+      # randomized is always better than pure grid search in convergence. We could do bayesian optimization, but that takes
+      # significantly more effort to set up with the Sklearn ecosystem (even using skopt).
       if i < 3:
         continue
       cls = clone(to_clone)
@@ -439,26 +441,27 @@ if __name__ == "__main__":
                                                       stratify=data[:, -1]
                                                       )
   X_train, y_train = shuffle(X_train, y_train, random_state=2)
-  # iBest = class31(args.output_dir, X_train, X_test, y_train, y_test)
-  # print(f'done class31 at {time.clock()-stime}')
-  # (X_1k, y_1k) = class32(args.output_dir, X_train, X_test, y_train, y_test,
-  #                        iBest)
-  # print(f'done class32 at {time.clock()-stime}')
-  # class33(args.output_dir, X_train, X_test, y_train, y_test, iBest, X_1k, y_1k)
-  # print(f'done class33 at {time.clock()-stime}')
-  # class34(args.output_dir, X_train, X_test, y_train, y_test, iBest)
-  # print(f'done class34 at {time.clock()-stime}')
+  iBest = class31(args.output_dir, X_train, X_test, y_train, y_test)
+  print(f'done class31 at {time.clock()-stime}')
+  (X_1k, y_1k) = class32(args.output_dir, X_train, X_test, y_train, y_test,
+                         iBest)
+  print(f'done class32 at {time.clock()-stime}')
+  class33(args.output_dir, X_train, X_test, y_train, y_test, iBest, X_1k, y_1k)
+  print(f'done class33 at {time.clock()-stime}')
+  class34(args.output_dir, X_train, X_test, y_train, y_test, iBest)
+  print(f'done class34 at {time.clock()-stime}')
+  # BELOW IS FOR BONUS, uncomment to run
   # print('starting bonus, this might take awhile')
   # classify_bonus(args.output_dir, X_train, X_test, y_train, y_test)
   # print(f'done class_bonus at {time.clock()-stime}')
-  outfile = args.output
-  if outfile.find('.npz') == -1:
-    outfile += '_bonus_LDA'
-    outf = outfile
+  infile = args.input
+  if infile.find('.npz') == -1:
+    infile += '_bonus_LDA'
+    outf = infile
   else:
-    outf = outfile[:outfile.rfind('.')] + '_bonus_LDA' + '.txt'
-    outfile = outfile[:outfile.rfind('.')] + '_bonus_LDA' + outfile[outfile.rfind('.'):]
-  data = np.load(outfile)
+    outf = infile[:infile.rfind('.')] + '_bonus_LDA' + '.txt'
+    infile = infile[:infile.rfind('.')] + '_bonus_LDA' + infile[infile.rfind('.'):]
+  data = np.load(infile)
   data = data[data.files[0]]
   best_accuracy = []
   stime = time.clock()
