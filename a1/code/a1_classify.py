@@ -342,6 +342,7 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
       cls = clone(to_clone)
       name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
                                                                         "")
+      print(f'starting classifier: {name}')
       outf.write(f'Results for {name}:\n')  # Classifier name
       if name != 'MultinomialN':
         cls.fit(scaler.transform(X_train), y_train)
