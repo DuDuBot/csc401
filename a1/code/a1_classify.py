@@ -15,6 +15,7 @@ from sklearn.linear_model import SGDClassifier
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.utils import shuffle
 from sklearn.base import clone
+import time
 
 classifiers = [SGDClassifier(), GaussianNB(),
                RandomForestClassifier(n_estimators=10, max_depth=5),
@@ -390,6 +391,7 @@ if __name__ == "__main__":
   data = np.load(args.input)
   data = data[data.files[0]]
   best_accuracy = []
+  stime = time.clock()
   X_train, X_test, y_train, y_test = train_test_split(data[:, :173],
                                                       data[:, -1],
                                                       test_size=0.2,
@@ -398,8 +400,14 @@ if __name__ == "__main__":
                                                       )
   X_train, y_train = shuffle(X_train, y_train, random_state=2)
   iBest = class31(args.output_dir, X_train, X_test, y_train, y_test)
+  print(f'done class31 at {time.clock()-stime}')
   (X_1k, y_1k) = class32(args.output_dir, X_train, X_test, y_train, y_test,
                          iBest)
+  print(f'done class32 at {time.clock()-stime}')
   class33(args.output_dir, X_train, X_test, y_train, y_test, iBest, X_1k, y_1k)
+  print(f'done class33 at {time.clock()-stime}')
   class34(args.output_dir, X_train, X_test, y_train, y_test, iBest)
+  print(f'done class34 at {time.clock()-stime}')
+  print('starting bonus, this might take awhile')
   classify_bonus(args.output_dir, X_train, X_test, y_train, y_test)
+  print(f'done class_bonus at {time.clock()-stime}')
