@@ -348,8 +348,8 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
         cls.fit(scaler.transform(X_train), y_train)
         C = confusion_matrix(y_test, cls.predict(scaler.transform(X_test)))
       else:
-        cls.fit(X_train, y_train)
-        C = confusion_matrix(y_test, cls.predict(X_test))
+        cls.fit(X_train.clip(min=0), y_train)
+        C = confusion_matrix(y_test, cls.predict(X_test.clip(min=0)))
       acc = accuracy(C)
       rec = recall(C)
       prec = precision(C)
