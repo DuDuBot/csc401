@@ -319,6 +319,7 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
       cls = clone(to_clone)
       name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
                                                                         "")
+      print(f'starting classifier: {name} for standard scaling')
       outf.write(f'Results for {name}:\n')  # Classifier name
       if name.lower().find('multi') == -1:
         cls.fit(scaler.transform(X_train), y_train)
@@ -347,7 +348,7 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
       cls = clone(to_clone)
       name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
                                                                         "")
-      print(f'starting classifier: {name}')
+      print(f'starting classifier: {name}  for minmax scaling')
       outf.write(f'Results for {name}:\n')  # Classifier name
       if name.lower().find('multi') == -1:
         cls.fit(scaler.transform(X_train), y_train)
@@ -370,9 +371,9 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
     outf.write('trying HyperParam optimization')
     for i, to_clone in enumerate(classifiers_bonus):
       cls = clone(to_clone)
-      params = search_params[name]
       name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
                                                                         "")
+      params = search_params[name]
       rgridsearch = RandomizedSearchCV(cls, params, n_iter=30, random_state=2, scoring='accuracy')
       outf.write(f'Results for {name}:\n')  # Classifier name
       rgridsearch.fit(scaler.transform(X_train), y_train)

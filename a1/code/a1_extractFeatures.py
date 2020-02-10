@@ -6,6 +6,7 @@ import re
 import functools
 import os
 import time
+from sklearn.decomposition import LatentDirichletAllocation, TruncatedSVD
 
 # Provided wordlists.
 FIRST_PERSON_PRONOUNS = {
