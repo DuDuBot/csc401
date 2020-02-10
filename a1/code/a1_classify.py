@@ -45,7 +45,7 @@ search_params = {'SGDClassifier':
                  'MLPClassifier':
                    {'hidden_layer_sizes': [1, 5, 10, 20, 50, 100],
                     'activation': ['relu', 'tanh'],
-                    'learning_rate': ['constant', 'adapt'],
+                    'learning_rate': ['constant', 'adaptive'],
                     'max_iter': [200, 500, 1000],
                     'early_stopping': [False, True]},
                  'AdaBoostClassifier':
