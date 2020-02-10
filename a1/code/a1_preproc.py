@@ -41,7 +41,7 @@ def preproc1(comment, steps=range(1, 5)):
     modComm = ''
     for sent in utterance.sents:  # iterate over sentences
         if 6 in steps:  # POS tagging, stop word removal
-            def new_str(pos):  # this is a generator that constructs a word+token using spacy's NLP
+            def new_str(pos):  # this is a generator that constructs a word+tag using spacy's NLP
                 for token in pos:
                     if token.lemma_[0] == '-' and token.text[0] != '-':  # as per handout
                         beg = token.text

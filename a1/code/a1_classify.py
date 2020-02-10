@@ -44,7 +44,7 @@ search_params = {'SGDClassifier':
                     'min_samples_leaf': [1, 2]},
                  'MLPClassifier':
                    {'hidden_layer_sizes': [1, 5, 10, 20, 50, 100],
-                    'activiation': ['relu', 'tanh'],
+                    'activation': ['relu', 'tanh'],
                     'learning_rate': ['constant', 'adapt'],
                     'max_iter': [200, 500, 1000],
                     'early_stopping': [False, True]},
@@ -345,6 +345,8 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
     iBest = 0
     best_acc = 0
     for i, to_clone in enumerate(classifiers_bonus):
+      if i < 3:
+        continue
       cls = clone(to_clone)
       name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
                                                                         "")
@@ -373,6 +375,7 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
       cls = clone(to_clone)
       name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
                                                                         "")
+      print(f'starting Randomized search optimization for {name}')
       params = search_params[name]
       rgridsearch = RandomizedSearchCV(cls, params, n_iter=30, random_state=2, scoring='accuracy')
       outf.write(f'Results for {name}:\n')  # Classifier name

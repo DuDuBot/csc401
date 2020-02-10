@@ -7,6 +7,7 @@ import functools
 import os
 import time
 from sklearn.decomposition import LatentDirichletAllocation, TruncatedSVD
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 
 # Provided wordlists.
 FIRST_PERSON_PRONOUNS = {
@@ -118,7 +119,7 @@ def extract1(comment):
               # (r"(\b"+r"|".join(SLANG)+")(?:/[.]{0,4})", {}),
               (r"(?:\s|^)("+r"|".join(SLANG)+")(?:/[.]{0,4})", {})  # 14. n slang words
               ]
-  word_tokens = comment.split()  # as per preprocessing
+  word_tags = comment.split()  # as per preprocessing
   for i, (patt, flags) in enumerate(patterns):
     try:
       if len(flags) > 0:  # by default we use re.IGNORECASE, this gives an option to be case-sensitive.
@@ -133,9 +134,9 @@ def extract1(comment):
 
   check_punct = r"([\#\$\!\?\.\:\;\(\)\"\',\[\]/]{1,}|\.\.\.)"  # check for punctuation
   sentences = comment.split("\n")[:-1]  # as per processing, we have extra \n at end
-  if len(word_tokens) > 0:  # extract just word from each word/token pair
-    retrieve_word = r"(/?\w+)(?=/)"  # they are separated by a / with token
-    extract_words = [findall(retrieve_word, word) for word in word_tokens]
+  if len(word_tags) > 0:  # extract just word from each word/tag pair
+    retrieve_word = r"(/?\w+)(?=/)"  # they are separated by a / with tag
+    extract_words = [findall(retrieve_word, word) for word in word_tags]
     extract_words = [w[0].lower() for w in extract_words if
                      len(w) > 0]  # they are lists from findall
   if len(sentences) > 0:  # check divide by 0 errors.
@@ -147,17 +148,17 @@ def extract1(comment):
     # 17. n sentences
     features[16] = len(sentences)
 
-  if len(word_tokens) > 0:
+  if len(word_tags) > 0:
     # 16. Avg len tokens excluding punctutation only, in chars
     # findall returns all matches
     # below returns None for tokens proceeded by only punctuation.
-    valid_tokens = [w for w in word_tokens if re.match(rf"{check_punct}/", w) is None]
+    valid_tokens = [w for w in word_tags if re.match(rf"{check_punct}/", w) is None]
     if len(extract_words) > 0:
       features[15] = len("".join([v[:v.rfind('/')] for v in valid_tokens])) / (len(
         valid_tokens))  # n chars / n tokens
 
   # Norms
-  if len(word_tokens) > 0:  # extract just word from each word
+  if len(word_tags) > 0:  # extract just word from each word
     # retrieve_word = r"(\w+)(?=/)"  # they are separated by a / with token
     chosen_bgl = []
     for x in extract_words:  # this is faster than pd.isin, but ugly -_-
@@ -253,6 +254,40 @@ def extract2(feats, comment_class, comment_id):
   return feats
 
 
+def extract_bonus(text, outfile):
+  """
+
+  :param text: text to be featurized using LDA or LSA (full comment)
+  :param outfile: outfile to write to (as string) for learnings from this bonus
+  :return: all features as matrix
+  """
+  # we keep words with their tag to see if a different tagged word has different topic etc.
+  for use_LDA in [True, False]:
+    if use_LDA:
+      featurizer = CountVectorizer(stop_words='english')
+    else:
+      featurizer = TfidfVectorizer(sublinear_tf=True, stop_words='english')
+    data, labels, = zip(*[(c['body'], c['cat']) for c in text])
+    labels = [files[lbl][1][0, -1] for lbl in labels]  # transform to integer
+    data = featurizer.fit_transform(data)
+    if use_LDA:
+      n_components = 100
+      topic_modeller = LatentDirichletAllocation(n_components=n_components, batch_size=100, random_state=2)
+    else:
+      topic_modeller = TruncatedSVD(n_components=100, n_iter=1, random_state=2)
+    data = topic_modeller.fit_transform(data)
+    data = np.concatenate([data, labels], axis=1)
+    with open(outfile, 'w' if use_LDA else 'a') as outf:
+      if use_LDA:
+        topic_distribution = topic_modeller.components_ / topic_modeller.components_.sum(axis=1)[:, np.newaxis]
+        for i in range(n_components):
+          top_10_words = topic_distribution[i, np.argpartition(topic_distribution, -10)[-10:]]
+          outf.write(f'topic {i} is best described by the 10 words: f{top_10_words}\n')
+      else:
+        outf.write(f"explained variance from total variance is: {topic_modeller.explained_variance_ratio_.sum()}\n")
+  return data
+
+
 def main(args):
   # Now, files is a mapping from the {label: [ids, features]},
   # where features has the label integer concatenated to the end.
@@ -271,6 +306,17 @@ def main(args):
     feats[i, -1] = class_file[1][0, -1]  # adding the label since extract2 doesn't do that.
 
   np.savez_compressed(args.output, feats)
+
+  # BELOW IS FOR BONUS
+  outfile = args.output
+  if outfile.find('.npz') == -1:
+    outfile += '_bonus'
+    outf = outfile
+  else:
+    outf = outfile[:outfile.rfind('.')] + '_bonus' + '.txt'
+    outfile = outfile[:outfile.rfind('.')] + '_bonus' + outfile[outfile.rfind('.'):]
+  feats = extract_bonus(data, outf)
+  np.savez_compressed(outfile, feats)
 
 
 if __name__ == "__main__":
