@@ -254,7 +254,7 @@ def extract2(feats, comment_class, comment_id):
   return feats
 
 
-def extract_bonus(text, outfile):
+def extract_bonus(text):
   """This method extracts the LDA and LSA features, saving them to a file. Then,
   the method returns the LDA features for use in classification, since LDA is
   empirically shown to beat LSA in general.
@@ -290,7 +290,7 @@ def extract_bonus(text, outfile):
     data = topic_modeller.fit_transform(data)
     labels = np.array(labels)[:, np.newaxis]
     data = np.concatenate([data, labels], axis=1)
-    with open(outfile, 'w' if not use_LDA else 'a') as outf:
+    with open('a1_bonus_lda.txt', 'w' if not use_LDA else 'a') as outf:
       if use_LDA:
         topic_distribution = topic_modeller.components_ / topic_modeller.components_.sum(axis=1)[:, np.newaxis]
         for i in range(n_components):
@@ -300,7 +300,7 @@ def extract_bonus(text, outfile):
           outf.write(f'topic {i} is best described by the 10 words: {top_10_words} with probabilities: {top_10_probs}\n')
       else:
         outf.write(f"explained variance from total variance is: {topic_modeller.explained_variance_ratio_.sum()}\n")
-  with open(outfile, 'a') as outf:
+  with open('a1_bonus_lda.txt', 'a') as outf:
     outf.write('We see that topic 0 are likely positive adverbs, similar to what we saw with our Kbest feature selection. '
                'Topic 1 is difficult to describe, but could be described as how pro-life or thoughtful the text is.'
                'Topic 2 makes a lot of sense, and is related to the religion and country of origin.'
@@ -341,7 +341,7 @@ def main(args):
   # else:
   #   outf = outfile[:outfile.rfind('.')] + '_bonus_LDA' + '.txt'
   #   outfile = outfile[:outfile.rfind('.')] + '_bonus_LDA' + outfile[outfile.rfind('.'):]
-  # feats = extract_bonus(data, outf)
+  # feats = extract_bonus(data)
   # np.savez_compressed(outfile, feats)
 
 
