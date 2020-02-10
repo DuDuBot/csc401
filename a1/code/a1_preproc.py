@@ -5,7 +5,6 @@ import json
 import re
 import spacy
 import html
-import functools
 import time
 
 nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
