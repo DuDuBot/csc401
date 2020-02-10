@@ -1,0 +1,8 @@
+For my bonus, I explored additional preprocesing steps in including minmax scaling and
+standard scaling (mean and std dev removal).
+
+I additionally explored another classifier, multinomialNB.
+Finally, I optimized the parameters for each using randomized grid search to see how they all perform.
+
+I also explored LDA, a Bayesian version of LSA using Dirichlet priors and compared it with LSA.
+Please see a1_bonus.txt for the classification bonus and a1_bonus_LDA for the LDA bonus results.

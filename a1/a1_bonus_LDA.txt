@@ -1,0 +1,275 @@
+skipping
+topic 0 is best described by the 10 words: ['capable' 'really' 'just' 'difference' 'iq' 'sign' 'big' 'proud'
+ 'strange' 'institution'] with probabilities: [0.0066743  0.00700774 0.00712117 0.01685114 0.00755426 0.03980909
+ 0.00779688 0.01160291 0.0168507  0.0070896 ]
+topic 1 is best described by the 10 words: ['thing' 'time' 'just' 'make' 'think' 'people' 'like' 'life' 'say' 'know'] with probabilities: [0.00953594 0.00984042 0.01002881 0.01144117 0.01328682 0.02111171
+ 0.02400316 0.0126344  0.01472537 0.01916664]
+topic 2 is best described by the 10 words: ['middle' 'germany' 'nation' 'muslim' 'world' 'china' 'europe' 'refugee'
+ 'people' 'country'] with probabilities: [0.01241417 0.01405252 0.01498318 0.01574338 0.0204554  0.02683299
+ 0.01773649 0.0203487  0.02494911 0.05778511]
+topic 3 is best described by the 10 words: ['change' 'actually' 'film' 'drag' 'look' 'make' 'think' 'like' 'wear'
+ 'makeup'] with probabilities: [0.00573958 0.00606429 0.00634719 0.00647257 0.00864025 0.00733825
+ 0.00654905 0.00973644 0.02885721 0.01217291]
+topic 4 is best described by the 10 words: ['look' 'upvote' 'read' 'video' 'link' 'page' 'article' 'post' 'comment'
+ 'just'] with probabilities: [0.01529484 0.01540674 0.01629768 0.01750661 0.01542652 0.01740909
+ 0.01830807 0.1396023  0.05010452 0.02117286]
+topic 5 is best described by the 10 words: ['make' 'think' 'people' 'like' 'guy' 'harassment' 'consent' 'ass'
+ 'sexual' 'fat'] with probabilities: [0.00790717 0.00909732 0.00839919 0.01059302 0.01057058 0.01137351
+ 0.04215233 0.01268339 0.01806072 0.02482227]
+topic 6 is best described by the 10 words: ['just' 'come' 'swear' 'bad' 'culture' 'great' 'make' 'people' 'america'
+ 'website'] with probabilities: [0.0069742  0.00702243 0.00705165 0.00754311 0.08216363 0.01173525
+ 0.00873406 0.01206915 0.08991534 0.02373614]
+topic 7 is best described by the 10 words: ['think' 'voat' 'fellow' 'year' 'mexico' '50' 'hot' 'save' 'censor' 'late'] with probabilities: [0.00917061 0.00937541 0.01048952 0.01089178 0.01237144 0.01149746
+ 0.01581358 0.04478505 0.0167638  0.02312221]
+topic 8 is best described by the 10 words: ['pm' 'dr' 'bot' 'reply' 'rrb' 'original' 'good' 'version' 'feedback' 'tl'] with probabilities: [0.01615991 0.03113604 0.01808828 0.03146125 0.02749822 0.02444342
+ 0.01742198 0.02118571 0.01729748 0.02004804]
+topic 9 is best described by the 10 words: ['want' 'know' 'just' 'tell' 'say' 'kid' 'parent' 'family' 'child' 'girl'] with probabilities: [0.01334844 0.01618448 0.01795171 0.0207363  0.02438972 0.03345102
+ 0.02443614 0.03327828 0.02590998 0.02240411]
+topic 10 is best described by the 10 words: ['accurate' 'effective' 'surprise' 'child' 'know' 'cop' 'assault' 'mean'
+ 'say' 'think'] with probabilities: [0.00976691 0.01055882 0.01140689 0.01237655 0.01480243 0.01855492
+ 0.02109046 0.01831739 0.01470258 0.02869921]
+topic 11 is best described by the 10 words: ['panel' 'work' 'catholic' 'kanye' 'popular' 'soros' 'george' 'look'
+ 'april' 'retard'] with probabilities: [0.00572376 0.00572905 0.00590287 0.0057581  0.00625945 0.0262658
+ 0.00980461 0.0089163  0.00878223 0.01185746]
+topic 12 is best described by the 10 words: ['like' 'time' 'know' 'ill' 'japanese' 'dream' 'morning' 'day' 'pride'
+ 'way'] with probabilities: [0.00722114 0.00723504 0.0086378  0.01050707 0.01622148 0.00917691
+ 0.01004426 0.00834724 0.00757854 0.00766431]
+topic 13 is best described by the 10 words: ['maybe' 'meat' 'tough' 'cat' 'laugh' 'treat' 'animal' 'like' 'dog'
+ 'people'] with probabilities: [0.00862813 0.00882847 0.00941723 0.02329094 0.02135413 0.01278716
+ 0.02958362 0.02662665 0.02659118 0.02274943]
+topic 14 is best described by the 10 words: ['like' 'narrative' 'msm' 'people' 'lie' 'movie' 'just' 'trump' 'left'
+ 'medium'] with probabilities: [0.01086952 0.01310944 0.01335595 0.01361146 0.01418911 0.01509107
+ 0.01631037 0.01924819 0.02682858 0.06320912]
+topic 15 is best described by the 10 words: ['country' 'people' 'like' 'land' 'palestinians' 'make' 'just' 'live'
+ 'arab' 'israeli'] with probabilities: [0.00747815 0.00779208 0.00811121 0.03055069 0.01391589 0.00904702
+ 0.01088364 0.01483189 0.01182755 0.01153899]
+topic 16 is best described by the 10 words: ['good' 'paul' 'lose' 'bag' 'need' 'food' 'healthy' 'meme' 'science' 'eat'] with probabilities: [0.00903214 0.0096113  0.0097864  0.00998139 0.01056404 0.04492043
+ 0.01075348 0.0205081  0.01086221 0.05685723]
+topic 17 is best described by the 10 words: ['like' 'know' 'job' 'think' 'people' 'employer' 'just' 'star' 'apply'
+ 'nfp'] with probabilities: [0.00555384 0.00615522 0.00624713 0.00634709 0.00626831 0.0074739
+ 0.01240689 0.00905747 0.01278052 0.00833059]
+topic 18 is best described by the 10 words: ['really' 'electoral' 'say' 'just' 'cia' 'think' 'people' 'ok' 'nsa' 'spy'] with probabilities: [0.008185   0.00826317 0.0087114  0.01036017 0.01830509 0.01406887
+ 0.00987277 0.02879061 0.00902229 0.01182414]
+topic 19 is best described by the 10 words: ['wipe' 'think' 'mistake' 'fool' 'wear' 'like' 'people' 'offend' 'make'
+ 'mouth'] with probabilities: [0.00790591 0.01104094 0.01570754 0.01145102 0.0079875  0.0131933
+ 0.01830002 0.00935161 0.01449393 0.00930832]
+topic 20 is best described by the 10 words: ['trick' 'blow' 'sorry' 'read' 'pass' 'forget' 'loss' 'source' 'canada'
+ 'communism'] with probabilities: [0.00765542 0.00908319 0.00987871 0.01220788 0.01194027 0.0106406
+ 0.01373501 0.04683713 0.02363082 0.01605975]
+topic 21 is best described by the 10 words: ['regime' 'shave' 'failure' 'charge' 'troll' 'experiment' 'model' 'think'
+ 'like' 'just'] with probabilities: [0.0078687  0.00862351 0.01019637 0.00885312 0.04392785 0.00869525
+ 0.00884387 0.00919805 0.01463125 0.01129045]
+topic 22 is best described by the 10 words: ['like' 'choose' 'need' 'iud' 'use' 'option' 'think' 'mom' 'wife' 'mother'] with probabilities: [0.00922294 0.0096     0.01035322 0.01477647 0.01098725 0.01478585
+ 0.01500448 0.01626046 0.04655543 0.02963192]
+topic 23 is best described by the 10 words: ['good' 'really' 'wish' 'egg' 'think' 'thing' 'op' 'wow' 'make' 'say'] with probabilities: [0.00649427 0.00672921 0.0150772  0.01338862 0.00785792 0.01419131
+ 0.07261662 0.03705252 0.00761741 0.01252369]
+topic 24 is best described by the 10 words: ['think' 'work' 'odd' 'car' 'logical' 'make' 'like' 'club' 'wtf' 'just'] with probabilities: [0.00668922 0.00675685 0.01406612 0.00736378 0.00828179 0.01386532
+ 0.0095968  0.01503256 0.01724937 0.02407843]
+topic 25 is best described by the 10 words: ['oil' 'sell' 'burn' 'market' 'price' 'right' 'speech' 'government' 'free'
+ 'buy'] with probabilities: [0.01692507 0.02217067 0.0171247  0.01730192 0.02235849 0.02712189
+ 0.02837036 0.03004551 0.05205062 0.04283089]
+topic 26 is best described by the 10 words: ['time' 'know' 'god' 'art' 'bible' 'jesus' 'explain' 'hell' 'work'
+ 'christ'] with probabilities: [0.01021608 0.01355491 0.01098203 0.01135553 0.01707328 0.02632092
+ 0.02228454 0.01307831 0.01325353 0.01087518]
+topic 27 is best described by the 10 words: ['kim' 'oh' 'ya' 'suicide' 'south' 'death' 'north' 'korea' 'dead' 'die'] with probabilities: [0.00926791 0.00958225 0.01315149 0.01980762 0.01927008 0.02045801
+ 0.04458204 0.03581002 0.02714464 0.05531771]
+topic 28 is best described by the 10 words: ['time' 'gross' 'buddy' 'growth' 'clue' 'use' 'solution' 'ah' 'communist'
+ 'hitler'] with probabilities: [0.00545049 0.00975425 0.01420853 0.00851185 0.00671564 0.00859356
+ 0.01113526 0.03194527 0.2356576  0.03504621]
+topic 29 is best described by the 10 words: ['feudalism' 'eagle' 'taken' 'wager' 'subliminal' '1987' 'crude' 'praise'
+ 'delete' 'magic'] with probabilities: [0.0009344  0.0009344  0.0009344  0.00116732 0.00116741 0.00116741
+ 0.00186646 0.00332372 0.80880382 0.0027159 ]
+topic 30 is best described by the 10 words: ['travel' 'time' 'billion' 'visit' 'soon' 'light' 'rate' 'million' '000'
+ 'train'] with probabilities: [0.01721835 0.01911156 0.01920872 0.02315128 0.02367706 0.02626388
+ 0.0266899  0.0327793  0.04667757 0.03584919]
+topic 31 is best described by the 10 words: ['likely' 'just' 'letter' 'thing' 'agree' 'right' 'think' 'freedom' 'wait'
+ 'good'] with probabilities: [0.00640349 0.00684916 0.00719668 0.00890787 0.07226006 0.01341839
+ 0.01354676 0.00941447 0.07168643 0.01272653]
+topic 32 is best described by the 10 words: ['make' 'leftist' 'want' 'border' 'iran' 'assad' 'like' 'control' 'birth'
+ 'usa'] with probabilities: [0.00992033 0.01076999 0.01098972 0.02560995 0.0242484  0.01542332
+ 0.01138142 0.08276775 0.04253891 0.01690199]
+topic 33 is best described by the 10 words: ['radiation' 'afghanistan' 'army' 'awesome' 'just' 'guy' 'say' 'like'
+ 'wikileaks' 'rapist'] with probabilities: [0.00454126 0.00526363 0.01328264 0.02032216 0.00552303 0.00817673
+ 0.00734152 0.00633436 0.00844293 0.14839646]
+topic 34 is best described by the 10 words: ['think' 'cause' 'way' 'blah' 'good' 'like' 'remind' 'bro' 'people'
+ 'idiot'] with probabilities: [0.00757154 0.00787677 0.00975313 0.00995619 0.01073603 0.01106573
+ 0.01222683 0.01418529 0.01414278 0.03699923]
+topic 35 is best described by the 10 words: ['thing' 'make' 'crime' 'hide' 'people' 'want' 'just' 'criminal' 'violent'
+ 'think'] with probabilities: [0.00980735 0.01056105 0.0138799  0.01244562 0.02779495 0.01964995
+ 0.02521342 0.01066799 0.01220816 0.01511372]
+topic 36 is best described by the 10 words: ['jw' 'beast' 'chain' 'cell' 'clinton' 'mail' 'scandal' 'hillary'
+ 'ignorance' 'sad'] with probabilities: [0.00326962 0.00365063 0.00385662 0.00543447 0.27879896 0.15840994
+ 0.15440809 0.00902691 0.00451774 0.04176485]
+topic 37 is best described by the 10 words: ['just' 'feminist' 'say' 'woman' 'gender' 'people' 'man' 'female' 'rape'
+ 'male'] with probabilities: [0.01168851 0.01262569 0.01280183 0.11114531 0.01704183 0.01489644
+ 0.0924696  0.01351143 0.03463606 0.01340267]
+topic 38 is best described by the 10 words: ['say' 'democrat' 'trump' 'liberal' 'election' 'party' 'republican'
+ 'candidate' 'vote' 'people'] with probabilities: [0.00994879 0.01200283 0.01335562 0.04212818 0.03323655 0.05898912
+ 0.01488616 0.01463904 0.0171222  0.0133585 ]
+topic 39 is best described by the 10 words: ['murder' 'shoot' 'people' 'fight' 'terrorist' 'gun' 'isis' 'war' 'kill'
+ 'attack'] with probabilities: [0.01182783 0.01344497 0.02278358 0.02563765 0.02440334 0.02671386
+ 0.03045918 0.02697879 0.05542853 0.02985482]
+topic 40 is best described by the 10 words: ['thing' 'way' 'like' 'sex' 'just' 'think' 'look' 'people' 'person' 'say'] with probabilities: [0.00710663 0.00799111 0.01583516 0.03313237 0.01419566 0.01871794
+ 0.0108509  0.02046171 0.00863886 0.0104394 ]
+topic 41 is best described by the 10 words: ['moderate' 'think' 'somebody' 'standard' 'tag' 'support' 'just' 'know'
+ 'comment' 'prison'] with probabilities: [0.00896277 0.00974988 0.0136552  0.02045472 0.02004297 0.01449987
+ 0.01501439 0.02118482 0.01056783 0.03108026]
+topic 42 is best described by the 10 words: ['need' 'really' 'perfect' 'say' 'people' 'think' 'favor' 'make' 'like'
+ 'just'] with probabilities: [0.00638086 0.00649679 0.00718502 0.00860982 0.01056727 0.01318956
+ 0.00956351 0.00739392 0.02058654 0.01459637]
+topic 43 is best described by the 10 words: ['say' 'like' 'brain' 'just' 'people' 'wrong' 'screw' 'role' 'downvote'
+ 'think'] with probabilities: [0.00637215 0.00892391 0.00899287 0.00990993 0.01022527 0.01153861
+ 0.01317352 0.01436887 0.04607695 0.01041411]
+topic 44 is best described by the 10 words: ['world' 'mean' 'like' 'people' 'life' 'extremist' 'know' 'make' 'just'
+ 'use'] with probabilities: [0.00450695 0.00480925 0.01352962 0.02009289 0.00585539 0.00578794
+ 0.00571009 0.00653496 0.0115046  0.00491885]
+topic 45 is best described by the 10 words: ['way' 'think' 'hire' 'ahead' 'just' 'like' 'partner' 'know' 'good' 'low'] with probabilities: [0.00741794 0.00974108 0.00992142 0.01040329 0.01046353 0.01939545
+ 0.01112685 0.01562776 0.01366181 0.03292792]
+topic 46 is best described by the 10 words: ['say' 'make' 'state' 'people' 'justice' 'law' 'minority' 'black' 'white'
+ 'race'] with probabilities: [0.00594734 0.00742951 0.00989668 0.00790997 0.00990122 0.05020253
+ 0.01068078 0.01409888 0.04165864 0.01056702]
+topic 47 is best described by the 10 words: ['influence' 'people' 'really' 'just' 'think' 'look' 'like' 'make'
+ 'british' 'work'] with probabilities: [0.00609023 0.0136167  0.00663115 0.00750086 0.00919151 0.00715293
+ 0.01907238 0.00889463 0.01049258 0.0076206 ]
+topic 48 is best described by the 10 words: ['make' 'time' 'abortion' 'okay' 'life' 'advice' 'romney' 'thank' 'baby'
+ 'child'] with probabilities: [0.00762017 0.00881458 0.02005003 0.01128111 0.01102999 0.01554232
+ 0.00945886 0.15710449 0.04488712 0.01811273]
+topic 49 is best described by the 10 words: ['right' 'fascist' 'stop' 'terrorism' 'think' 'people' 'content' 'dumb'
+ 'tweet' 'smart'] with probabilities: [0.00928019 0.01033601 0.00938853 0.01066243 0.01066167 0.01503433
+ 0.01505746 0.01864797 0.01887646 0.0334405 ]
+topic 50 is best described by the 10 words: ['like' 'brutal' 'wage' 'mean' 'uk' 'blue' 'drone' 'technically' 'just'
+ 'shitty'] with probabilities: [0.00697333 0.00711038 0.00874441 0.00934542 0.02012842 0.02168333
+ 0.01450415 0.01035496 0.02388696 0.0179547 ]
+topic 51 is best described by the 10 words: ['thing' 'like' 'good' 'say' 'christianity' 'right' 'abuse' 'people' 'god'
+ 'christian'] with probabilities: [0.00772286 0.00844542 0.00875065 0.01004773 0.01033799 0.0111052
+ 0.01133068 0.01845904 0.01417561 0.01648308]
+topic 52 is best described by the 10 words: ['cost' 'tax' 'use' 'company' 'make' 'job' 'people' 'money' 'pay' 'work'] with probabilities: [0.00888804 0.0175109  0.0091142  0.01589208 0.01350011 0.01849517
+ 0.01865427 0.03423296 0.04407031 0.02191394]
+topic 53 is best described by the 10 words: ['scientist' 'enjoy' 'make' 'global' 'just' 'opinion' 'research' 'people'
+ 'insult' 'say'] with probabilities: [0.01258663 0.01295752 0.01431006 0.01464648 0.01479055 0.04804749
+ 0.02122928 0.01502691 0.01494537 0.01498177]
+topic 54 is best described by the 10 words: ['good' 'degree' 'use' 'alien' 'york' 'make' 'nope' 'sure' 'service'
+ 'like'] with probabilities: [0.00722328 0.00776356 0.00827031 0.0088935  0.00841427 0.00917385
+ 0.02219436 0.01675067 0.03544183 0.00907381]
+topic 55 is best described by the 10 words: ['canadian' 'need' 'like' 'shut' 'real' 'fox' 'cnn' 'news' 'fake' 'say'] with probabilities: [0.00723698 0.00796437 0.00808575 0.01225104 0.00840834 0.01140137
+ 0.02533588 0.11249397 0.06994761 0.00865969]
+topic 56 is best described by the 10 words: ['team' 'good' 'time' 'like' 'car' 'think' 'people' 'just' 'say' 'true'] with probabilities: [0.00871202 0.0101235  0.01176609 0.01092991 0.0119147  0.02085921
+ 0.01275812 0.02351967 0.04037223 0.04666834]
+topic 57 is best described by the 10 words: ['np' 'user' 'reddit' 'account' 'access' 'protect' 'require' 'request'
+ 'damn' 'link'] with probabilities: [0.02333194 0.03395974 0.02524852 0.06846325 0.02359959 0.03960384
+ 0.02681404 0.02485838 0.04159394 0.05147998]
+topic 58 is best described by the 10 words: ['fbi' 'podesta' 'say' 'just' 'know' 'people' 'straight' 'like' 'email'
+ 'gay'] with probabilities: [0.01275489 0.01287099 0.01301777 0.01559179 0.01481551 0.0162356
+ 0.01417334 0.01677209 0.02719853 0.04236787]
+topic 59 is best described by the 10 words: ['like' 'small' 'red' 'care' 'topic' 'just' 'make' 'flag' 'cute' 'use'] with probabilities: [0.00689856 0.00918835 0.03370196 0.00935185 0.01975772 0.00981531
+ 0.0074432  0.00870394 0.00951566 0.01062387]
+topic 60 is best described by the 10 words: ['mean' 'like' 'mate' 'episode' 'society' 'people' 'make' 'want' 'just'
+ 'woman'] with probabilities: [0.00639138 0.00734943 0.00748244 0.00771714 0.00751053 0.00941656
+ 0.01005041 0.00959038 0.01228163 0.01261971]
+topic 61 is best described by the 10 words: ['sweden' 'day' 'long' 'start' 'year' 'ago' 'today' 'old' 'month' '20'] with probabilities: [0.00958319 0.01026565 0.0105877  0.01092217 0.18006461 0.0685606
+ 0.01626629 0.07781749 0.03024858 0.01303068]
+topic 62 is best described by the 10 words: ['arabia' 'trump' 'propaganda' 'conspiracy' 'russia' 'saudi' 'president'
+ 'russian' 'donald' 'win'] with probabilities: [0.01198688 0.11267923 0.01206426 0.0414871  0.05760537 0.0181975
+ 0.02556734 0.03450872 0.01697092 0.01223249]
+topic 63 is best described by the 10 words: ['drain' 'make' 'actually' 'socialist' 'people' 'deport' 'illegal' 'want'
+ 'eu' 'porn'] with probabilities: [0.00893578 0.00946666 0.0122372  0.01087163 0.01082976 0.01010029
+ 0.05073407 0.01149046 0.01078981 0.01468038]
+topic 64 is best described by the 10 words: ['use' 'say' 'argument' 'just' 'time' 'try' 'make' 'like' 'point' 'thing'] with probabilities: [0.00562363 0.0056988  0.03149907 0.00788971 0.00938429 0.00832315
+ 0.01127245 0.00641693 0.00771816 0.00785044]
+topic 65 is best described by the 10 words: ['sun' 'just' 'people' 'know' 'think' 'space' 'flat' 'moon' 'earth'
+ 'plane'] with probabilities: [0.01005658 0.01066497 0.0154172  0.01244599 0.01336705 0.01400589
+ 0.02681927 0.01192761 0.05290062 0.01485412]
+topic 66 is best described by the 10 words: ['want' 'use' 'like' 'sure' 'make' 'right' 'good' 'point' 'just' 'say'] with probabilities: [0.00476535 0.00482031 0.00498167 0.00526602 0.00667466 0.00671049
+ 0.00868643 0.02176341 0.00782283 0.01200932]
+topic 67 is best described by the 10 words: ['know' 'like' 'make' 'smoke' 'sticky' 'people' 'bitch' 'just' 'say'
+ 'insurance'] with probabilities: [0.00809982 0.0093909  0.00982649 0.01595261 0.01041342 0.01311918
+ 0.01386113 0.01445036 0.01503343 0.01393574]
+topic 68 is best described by the 10 words: ['people' 'conflict' 'english' 'state' 'church' 'jewish' 'jews' 'israel'
+ 'right' 'jew'] with probabilities: [0.00915557 0.00988311 0.01008461 0.01368294 0.01479661 0.02948293
+ 0.03042861 0.06626901 0.01492763 0.01763658]
+topic 69 is best described by the 10 words: ['know' 'good' 'thing' 'help' 'want' 'just' 'make' 'feel' 'friend' 'like'] with probabilities: [0.01478646 0.01484863 0.01653111 0.01837052 0.01925364 0.02164773
+ 0.02176578 0.03336461 0.01947616 0.02346627]
+topic 70 is best described by the 10 words: ['vote' 'bernie' 'like' 'supporter' 'politic' 'people' 'think' 'sub'
+ 'hillary' 'trump'] with probabilities: [0.01143602 0.01335666 0.01574599 0.0175565  0.0168611  0.02120795
+ 0.02265381 0.06266858 0.03889107 0.04078214]
+topic 71 is best described by the 10 words: ['like' 'cause' 'thing' 'medical' 'weight' 'people' 'beautiful' 'just'
+ 'doctor' 'risk'] with probabilities: [0.00801534 0.00999802 0.0101717  0.01249968 0.02057423 0.01077844
+ 0.01495181 0.01514869 0.01305963 0.01509243]
+topic 72 is best described by the 10 words: ['people' '11' 'think' 'just' 'say' 'fraud' 'asshole' 'proof' 'racist'
+ 'fix'] with probabilities: [0.00956321 0.01196359 0.01290409 0.01382424 0.01833033 0.01434977
+ 0.02627952 0.03006394 0.04993493 0.03619473]
+topic 73 is best described by the 10 words: ['pregnant' 'week' 'abortion' 'make' 'procedure' 'doctor' 'drink' 'just'
+ 'pain' 'like'] with probabilities: [0.00801227 0.00802444 0.01072529 0.01092456 0.01146051 0.01261337
+ 0.0131456  0.01312099 0.01506421 0.01168772]
+topic 74 is best described by the 10 words: ['like' 'ask' 'know' 'gas' 'say' 'voice' 'send' 'don' 'castro' 'campaign'] with probabilities: [0.0070385  0.00719021 0.0076418  0.01034002 0.0107224  0.01272949
+ 0.05114179 0.01709714 0.01532937 0.0129588 ]
+topic 75 is best described by the 10 words: ['alex' 'jones' 'make' 'national' 'economy' 'money' 'economic' 'policy'
+ 'people' 'government'] with probabilities: [0.00887422 0.00897479 0.00906511 0.00930113 0.01029485 0.01218106
+ 0.0136942  0.01856742 0.01921849 0.02106275]
+topic 76 is best described by the 10 words: ['just' 'wanna' 'remember' 'collapse' 'say' 'spot' 'know' 'hopefully'
+ 'make' 'happy'] with probabilities: [0.00870392 0.00944286 0.01017139 0.01160425 0.01154213 0.01225869
+ 0.01550238 0.01745193 0.01775675 0.01593795]
+topic 77 is best described by the 10 words: ['just' 'month' 'time' 'pregnancy' 'cuck' 'hour' 'period' 'day' 'test'
+ 'pill'] with probabilities: [0.01272184 0.01349626 0.01666038 0.01580252 0.01425676 0.01781508
+ 0.02863166 0.04209648 0.01807501 0.02137156]
+topic 78 is best described by the 10 words: ['progressive' 'right' 'disgusting' 'people' 'game' 'play' 'say' 'human'
+ 'just' 'surprised'] with probabilities: [0.00840282 0.00964677 0.01018256 0.01208821 0.05424539 0.05595512
+ 0.01203224 0.06580046 0.01476446 0.02272826]
+topic 79 is best described by the 10 words: ['case' 'like' 'prove' 'pizzagate' 'pizza' 'claim' 'pedophile' 'say'
+ 'police' 'evidence'] with probabilities: [0.00936377 0.01004392 0.01134389 0.0117672  0.01260013 0.01136964
+ 0.01036471 0.01458294 0.0234732  0.05720965]
+topic 80 is best described by the 10 words: ['poacher' 'elephant' 'congressional' 'hint' 'patriot' 'just' 'evil'
+ 'redirect' 'muh' 'ultimate'] with probabilities: [0.00250887 0.00270769 0.00358872 0.00467697 0.40746587 0.00772837
+ 0.00457535 0.00282209 0.00522593 0.00366684]
+topic 81 is best described by the 10 words: ['make' 'try' 'chemical' 'statement' 'attack' 'just' 'think' 'flag'
+ 'syria' 'false'] with probabilities: [0.0106709  0.01082514 0.01096382 0.01423573 0.01199071 0.01153538
+ 0.01101031 0.01759233 0.02255591 0.04133873]
+topic 82 is best described by the 10 words: ['stage' 'say' 'shoe' 'internet' 'ai' 'doctor' 'cancer' 'interesting'
+ 'jail' 'face'] with probabilities: [0.00814278 0.01029415 0.0090716  0.01095389 0.01147068 0.0147906
+ 0.01524762 0.05397183 0.01527798 0.02210538]
+topic 83 is best described by the 10 words: ['lot' 'try' 'people' 'just' 'say' 'marry' 'scary' 'like' 'want' 'think'] with probabilities: [0.00784505 0.00810545 0.02145315 0.01559831 0.02458408 0.01142298
+ 0.00854771 0.01243377 0.01018979 0.02054302]
+topic 84 is best described by the 10 words: ['say' 'honestly' 'like' 'lot' 'thing' 'people' 'wall' 'joke' 'know'
+ 'just'] with probabilities: [0.01055477 0.01150327 0.01184126 0.01207815 0.01287987 0.03392774
+ 0.01820789 0.05463765 0.01755955 0.0139815 ]
+topic 85 is best described by the 10 words: ['green' 'yup' 'happen' 'come' 'say' 'bomb' 'just' 'holy' 'exactly' 'shit'] with probabilities: [0.01124879 0.01126456 0.0119796  0.01170877 0.01248065 0.0137928
+ 0.01286435 0.02532491 0.07507039 0.06864689]
+topic 86 is best described by the 10 words: ['fuel' 'just' 'update' 'curious' 'thread' 'high' 'bush' 'energy'
+ 'criticize' 'hilarious'] with probabilities: [0.010868   0.01265233 0.01275675 0.01303013 0.03809662 0.01485728
+ 0.02264029 0.0609133  0.01486131 0.01473675]
+topic 87 is best described by the 10 words: ['like' 'just' 'luck' 'people' 'good' 'anti' 'religion' 'trigger'
+ 'religious' 'belief'] with probabilities: [0.00888021 0.01016466 0.01228459 0.01232353 0.03189123 0.01849675
+ 0.04541381 0.01706169 0.01753164 0.013968  ]
+topic 88 is best described by the 10 words: ['contact' 'worldnew' 'concern' 'message' 'question' 'automatically'
+ 'subreddit' 'reddit' 'rule' 'remove'] with probabilities: [0.02237338 0.02501205 0.02571786 0.02891716 0.02820813 0.0273239
+ 0.0289787  0.07406633 0.04476437 0.13647581]
+topic 89 is best described by the 10 words: ['attract' 'make' 'just' 'think' 'kinda' 'ready' 'people' 'say' 'really'
+ 'like'] with probabilities: [0.00952364 0.01828322 0.02260339 0.0174915  0.02403348 0.01423676
+ 0.02310486 0.01089576 0.01063581 0.01289086]
+topic 90 is best described by the 10 words: ['ass' 'guy' 'fucking' 'suck' 'bullshit' 'spez' 'people' 'shit' 'like'
+ 'fuck'] with probabilities: [0.00909805 0.00961084 0.0266996  0.01129892 0.0343405  0.02524788
+ 0.01235003 0.02986588 0.01335471 0.196253  ]
+topic 91 is best described by the 10 words: ['know' 'lazy' 'terrible' 'think' 'just' 'make' 'win' 'like' 'fair' 'hair'] with probabilities: [0.00793804 0.00912774 0.01195248 0.01081757 0.01052243 0.01351161
+ 0.02544219 0.02466852 0.03795202 0.01551838]
+topic 92 is best described by the 10 words: ['list' 'time' 'court' 'think' 'check' 'know' 'just' 'park' 'supreme' 'mr'] with probabilities: [0.00831413 0.00947303 0.02177586 0.01143396 0.01838259 0.01359526
+ 0.01474261 0.01083604 0.01079011 0.01237933]
+topic 93 is best described by the 10 words: ['jill' 'shill' '10' 'state' 'result' 'recount' 'ban' 'vote' 'count'
+ 'stein'] with probabilities: [0.01282979 0.03099712 0.0205212  0.01498126 0.0154425  0.04164552
+ 0.0468838  0.07689074 0.01893654 0.01628341]
+topic 94 is best described by the 10 words: ['4chan' 'ball' 'just' 'corrupt' 'god' 'bet' 'logic' 'lol' 'yep' 'google'] with probabilities: [0.01172374 0.01226517 0.01587733 0.01694149 0.01668723 0.01939755
+ 0.01998557 0.13359055 0.01996289 0.03924545]
+topic 95 is best described by the 10 words: ['high' 'work' 'know' 'like' 'college' 'learn' 'people' 'education'
+ 'school' 'teach'] with probabilities: [0.00840224 0.00949386 0.00841215 0.00987998 0.01238028 0.01366842
+ 0.01050616 0.01397887 0.03915105 0.01908866]
+topic 96 is best described by the 10 words: ['make' 'sweet' 'good' 'unfortunately' 'fun' 'flip' 'haha' 'like' 'ex'
+ 'genius'] with probabilities: [0.00765724 0.00883662 0.00939168 0.01881845 0.0372901  0.01204185
+ 0.03404853 0.01398172 0.01013416 0.05820028]
+topic 97 is best described by the 10 words: ['india' 'say' 'avoid' 'ha' 'lock' 'arrest' 'flight' 'gold' 'yes' 'funny'] with probabilities: [0.00814594 0.00853444 0.00908828 0.00935701 0.01308679 0.00996245
+ 0.0131133  0.01436289 0.17649697 0.04785323]
+topic 98 is best described by the 10 words: ['create' 'great' 'god' 'maga' 'coat' 'states' 'welcome' 'love'
+ 'centipede' 'united'] with probabilities: [0.01936983 0.02119338 0.02128553 0.02147857 0.04819189 0.03138065
+ 0.02775904 0.03286719 0.02807789 0.0375504 ]
+topic 99 is best described by the 10 words: ['currency' 'good' 'water' 'like' 'censorship' 'use' 'size' 'bra' 'drug'
+ 'need'] with probabilities: [0.00697516 0.00705561 0.03813549 0.01223292 0.00730304 0.01370869
+ 0.00972263 0.00872202 0.03136683 0.00734504]
+ We see that topic 0 are likely positive adverbs, similar to what we saw with our Kbest feature selection. Topic 1 is difficult to describe, but could be described as how pro-life or thoughtful the text is. Topic 2 makes a lot of sense, and is related to the religion and country of origin. Since I printed all 100 topics, I will show a select few more. Topic 97 and 99 both both related to censorship, which makes sense as they are related to generally to right-ist views. Topic 98 relates to compassion and sharing, which could be tied with left-ist views. As we can see, the topics selected by the LDA generally do correspond with generally ideas associated with the different views of different political texts. These topics enable us to reduce the number of dimensions while keeping the important information. We could use these topics to perform unsupervised learning on the different clusters of text to understand if there are any class-imbalances in our data, which might result from mis-labelled datapoints (given that our dataset was poorly labelled (texts in a Left channel might have rightist views and just be argueing there).

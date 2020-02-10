@@ -226,7 +226,7 @@ def class33(output_dir, X_train, X_test, y_train, y_test, i, X_1k, y_1k):
     top_5 = features_32k
     outf.write(f'Chosen feature intersection: {intersection}\n')
     outf.write(f'Top-5 at higher: {top_5}\n')
-    outf.write('The top-5 features for both the 32k and 1k datasets are '
+    outf.write('(a) and (c) The top-5 features for both the 32k and 1k datasets are '
                'the same, with them being the number of first-person '
                'pronouns, second-person pronouns, number of adverbs, as well as 2 features from the'
                ' linquistic query and word count features. The linquistic '
@@ -252,7 +252,7 @@ def class33(output_dir, X_train, X_test, y_train, y_test, i, X_1k, y_1k):
                ', as it is possible that left or right texts use more adverbs to '
                'express stronger emotion. The standard deviation goes as high as 7, '
                'though, indicating that this ranges a lot (as it should).'
-               'The pvalues between the 32k and 1k dataset are the same, if not, close.')
+               ' (b) The pvalues generally lower if we are given more data, as with more samples, we are genenerally more confidence in our results from a statistical test. This intuition would result in a lower pvalue, as expected.')
 
 
 def class34(output_dir, X_train, X_test, y_train, y_test, i):
@@ -314,68 +314,71 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
     scaler.fit(X_train)
     iBest = 0
     best_acc = 0
-    # outf.write('Trying mean and std removal scaling\n')
-    # for i, to_clone in enumerate(classifiers_bonus):
-    #   cls = clone(to_clone)
-    #   name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
-    #                                                                     "")
-    #   print(f'starting classifier: {name} for standard scaling')
-    #   outf.write(f'Results for {name}:\n')  # Classifier name
-    #   if name.lower().find('multi') == -1:
-    #     cls.fit(scaler.transform(X_train), y_train)
-    #     C = confusion_matrix(y_test, cls.predict(scaler.transform(X_test)))
-    #   else:
-    #     outf.write('performing multinomialNB without scaling (because you cannot.\n')
-    #     cls.fit(X_train.clip(min=0), y_train)
-    #     C = confusion_matrix(y_test, cls.predict(X_test.clip(min=0)))
-    #   acc = accuracy(C)
-    #   rec = recall(C)
-    #   prec = precision(C)
-    #   if acc > best_acc:
-    #     best_acc = acc
-    #     iBest = i
-    #   outf.write(f'\tAccuracy: {acc:.4f}\n')
-    #   outf.write(f'\tRecall: {[round(item, 4) for item in rec]}\n')
-    #   outf.write(f'\tPrecision: {[round(item, 4) for item in prec]}\n')
-    #   outf.write(f'\tConfusion Matrix: \n{C}\n\n')
-    # outf.write('\n')
-    # outf.write('Trying minmax scaling\n')
-    # scaler = MinMaxScaler()
-    # scaler.fit(X_train)
-    # iBest = 0
-    # best_acc = 0
-    # for i, to_clone in enumerate(classifiers_bonus):
-    #   cls = clone(to_clone)
-    #   name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
-    #                                                                     "")
-    #   print(f'starting classifier: {name}  for minmax scaling')
-    #   outf.write(f'Results for {name}:\n')  # Classifier name
-    #   if name.lower().find('multi') == -1:
-    #     cls.fit(scaler.transform(X_train), y_train)
-    #     C = confusion_matrix(y_test, cls.predict(scaler.transform(X_test)))
-    #   else:
-    #     outf.write('performing multinomialNB without scaling (because you cannot.\n')
-    #     cls.fit(X_train.clip(min=0), y_train)
-    #     C = confusion_matrix(y_test, cls.predict(X_test.clip(min=0)))
-    #   acc = accuracy(C)
-    #   rec = recall(C)
-    #   prec = precision(C)
-    #   if acc > best_acc:
-    #     best_acc = acc
-    #     iBest = i
-    #   outf.write(f'\tAccuracy: {acc:.4f}\n')
-    #   outf.write(f'\tRecall: {[round(item, 4) for item in rec]}\n')
-    #   outf.write(f'\tPrecision: {[round(item, 4) for item in prec]}\n')
-    #   outf.write(f'\tConfusion Matrix: \n{C}\n\n')
-    # outf.write('\n')
-    outf.write('trying HyperParam optimization\n. As neither scaling preprocessing had a major effect, we will not use them.')
+    outf.write('Trying mean and std removal scaling\n')
+    for i, to_clone in enumerate(classifiers_bonus):
+      cls = clone(to_clone)
+      name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
+                                                                        "")
+      print(f'starting classifier: {name} for standard scaling')
+      outf.write(f'Results for {name}:\n')  # Classifier name
+      if name.lower().find('multi') == -1:
+        cls.fit(scaler.transform(X_train), y_train)
+        C = confusion_matrix(y_test, cls.predict(scaler.transform(X_test)))
+      else:
+        outf.write('performing multinomialNB without scaling (because you cannot.\n')
+        cls.fit(X_train.clip(min=0), y_train)
+        C = confusion_matrix(y_test, cls.predict(X_test.clip(min=0)))
+      acc = accuracy(C)
+      rec = recall(C)
+      prec = precision(C)
+      if acc > best_acc:
+        best_acc = acc
+        iBest = i
+      outf.write(f'\tAccuracy: {acc:.4f}\n')
+      outf.write(f'\tRecall: {[round(item, 4) for item in rec]}\n')
+      outf.write(f'\tPrecision: {[round(item, 4) for item in prec]}\n')
+      outf.write(f'\tConfusion Matrix: \n{C}\n\n')
+    outf.write('\n')
+    outf.write('Trying minmax scaling\n')
+    scaler = MinMaxScaler()
+    scaler.fit(X_train)
+    iBest = 0
+    best_acc = 0
+    for i, to_clone in enumerate(classifiers_bonus):
+      cls = clone(to_clone)
+      name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
+                                                                        "")
+      print(f'starting classifier: {name}  for minmax scaling')
+      outf.write(f'Results for {name}:\n')  # Classifier name
+      if name.lower().find('multi') == -1:
+        cls.fit(scaler.transform(X_train), y_train)
+        C = confusion_matrix(y_test, cls.predict(scaler.transform(X_test)))
+      else:
+        outf.write('performing multinomialNB without scaling (because you cannot.\n')
+        cls.fit(X_train.clip(min=0), y_train)
+        C = confusion_matrix(y_test, cls.predict(X_test.clip(min=0)))
+      acc = accuracy(C)
+      rec = recall(C)
+      prec = precision(C)
+      if acc > best_acc:
+        best_acc = acc
+        iBest = i
+      outf.write(f'\tAccuracy: {acc:.4f}\n')
+      outf.write(f'\tRecall: {[round(item, 4) for item in rec]}\n')
+      outf.write(f'\tPrecision: {[round(item, 4) for item in prec]}\n')
+      outf.write(f'\tConfusion Matrix: \n{C}\n\n')
+    outf.write('\n')
+    outf.write('trying HyperParam optimization\n. As neither scaling preprocessing had a major effect, we will not use them.\n')
+    iBest = 0
+    cls_best = None
+    best_acc = None
     for i, to_clone in enumerate(classifiers_bonus):
       if i < 3:
         continue
       cls = clone(to_clone)
       name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
                                                                         "")
-      print(f'starting Randomized search optimization for {name}')
+      print(f'starting Randomized search optimization for {name}\n')
       params = search_params[name]
       rgridsearch = RandomizedSearchCV(cls, params, n_iter=10, random_state=2, scoring='accuracy')
       outf.write(f'Results for {name}:\n')  # Classifier name
@@ -391,12 +394,29 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
       prec = precision(C)
       if acc > best_acc:
         best_acc = acc
+        iBest = i
+        cls_best = rgridsearch
       outf.write(f'\tAccuracy: {acc:.4f}\n')
       outf.write(f'\tRecall: {[round(item, 4) for item in rec]}\n')
       outf.write(f'\tPrecision: {[round(item, 4) for item in prec]}\n')
       outf.write(f'\tConfusion Matrix: \n{C}\n\n')
-      outf.write(f'params for this best classifier were: {rgridsearch.best_params_}')
+      name = str(cls_best.estimator.__class__).split(".")[-1].replace(">", "").replace("\'",
+                                                                        "")
+      outf.write(f'params for this best classifier, "{name}" were: {cls_best.best_params_}\n')
     outf.write('\n')
+    outf.write('As we can see, there is a significant increase of around 3-5\% per classifier. '
+               'Unfortunately, the best classifier, AdaBoost, did not have a significant increase due to hyperparameter optimization.'
+               'This hsows that though hyperparameter optimization does have a big impact, in this case, '
+               'we are limited not by the model capacity, but by the feature information. It is possible that LSA or LDA, as we will explore next, '
+               'will enable us to have a better accuracy.\n')
+
+
+def classify_lda(output_dir, X_train, X_test, y_train, y_test):
+  with open(f"{output_dir}/a1_bonus_class_lda.txt", 'w') as outf:
+    cls = AdaBoostClassifier(**{'n_estimators': 100, 'learning_rate': 0.5})  # best classifier from rgridsearch
+    cls.fit(X_train, y_train)
+    C = confusion_matrix(y_test, cls.predict(X_test))
+    outf.write(f"accuracy using LDa is: {accuracy(C)} for Adaboost, the best classifier from before.")
 
 
 if __name__ == "__main__":
@@ -428,6 +448,25 @@ if __name__ == "__main__":
   # print(f'done class33 at {time.clock()-stime}')
   # class34(args.output_dir, X_train, X_test, y_train, y_test, iBest)
   # print(f'done class34 at {time.clock()-stime}')
-  print('starting bonus, this might take awhile')
-  classify_bonus(args.output_dir, X_train, X_test, y_train, y_test)
-  print(f'done class_bonus at {time.clock()-stime}')
+  # print('starting bonus, this might take awhile')
+  # classify_bonus(args.output_dir, X_train, X_test, y_train, y_test)
+  # print(f'done class_bonus at {time.clock()-stime}')
+  outfile = args.output
+  if outfile.find('.npz') == -1:
+    outfile += '_bonus_LDA'
+    outf = outfile
+  else:
+    outf = outfile[:outfile.rfind('.')] + '_bonus_LDA' + '.txt'
+    outfile = outfile[:outfile.rfind('.')] + '_bonus_LDA' + outfile[outfile.rfind('.'):]
+  data = np.load(outfile)
+  data = data[data.files[0]]
+  best_accuracy = []
+  stime = time.clock()
+  X_train, X_test, y_train, y_test = train_test_split(data[:, :173],
+                                                      data[:, -1],
+                                                      test_size=0.2,
+                                                      random_state=0,
+                                                      stratify=data[:, -1]
+                                                      )
+  X_train, y_train = shuffle(X_train, y_train, random_state=2)
+  classify_lda(args.output_dir, X_train, X_test, y_train, y_test)

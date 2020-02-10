@@ -135,7 +135,8 @@ trying HyperParam optimization
  [ 317  441  997  245]
  [ 380  602  608  410]]
 
-params for this best classifier were: {'penalty': 'l1', 'max_iter': 10000, 'loss': 'hinge', 'l1_ratio': 0.2, 'early_stopping': False, 'average': 100, 'alpha': 1e-06}Results for GaussianNB:
+params for this best classifier were: {'penalty': 'l1', 'max_iter': 10000, 'loss': 'hinge', 'l1_ratio': 0.2, 'early_stopping': False, 'average': 100, 'alpha': 1e-06}
+Results for GaussianNB:
 	Accuracy: 0.3613
 	Recall: [0.799, 0.458, 0.156, 0.032]
 	Precision: [0.3772, 0.3178, 0.4333, 0.3975]
@@ -145,7 +146,8 @@ params for this best classifier were: {'penalty': 'l1', 'max_iter': 10000, 'loss
  [ 815  831  312   42]
  [ 948  831  157   64]]
 
-params for this best classifier were: {'var_smoothing': 1e-07}Results for RandomForestClassifier:
+params for this best classifier were: {'var_smoothing': 1e-07}
+Results for RandomForestClassifier:
 	Accuracy: 0.4569
 	Recall: [0.6775, 0.358, 0.4645, 0.3275]
 	Precision: [0.5613, 0.4057, 0.4462, 0.3767]
@@ -154,5 +156,36 @@ params for this best classifier were: {'var_smoothing': 1e-07}Results for Random
  [ 349  716  445  490]
  [ 324  379  929  368]
  [ 386  493  466  655]]
+Results for MLPClassifier:
+	Accuracy: 0.4450
+	Recall: [0.594, 0.526, 0.4475, 0.2125]
+	Precision: [0.575, 0.3673, 0.4368, 0.4163]
+	Confusion Matrix:
+[[1188  414  227  171]
+ [ 312 1052  438  198]
+ [ 278  600  895  227]
+ [ 288  798  489  425]]
 
-params for this best classifier were: {'n_estimators': 100, 'min_samples_split': 3, 'min_samples_leaf': 1, 'max_depth': 30}Results for MLPClassifier:
+params for this best classifier were: {'max_iter': 200, 'learning_rate': 'constant', 'hidden_layer_sizes': 50, 'early_stopping': False, 'activation': 'relu'}
+Results for AdaBoostClassifier:
+	Accuracy: 0.4619
+	Recall: [0.6705, 0.3825, 0.482, 0.3125]
+	Precision: [0.5704, 0.41, 0.4471, 0.3841]
+	Confusion Matrix:
+[[1341  189  252  218]
+ [ 343  765  446  446]
+ [ 317  381  964  338]
+ [ 350  531  494  625]]
+
+params for this best classifier were: {'n_estimators': 100, 'learning_rate': 0.5}
+Results for MultinomialNB:
+performing multinomialNB without scaling (because you cannot.
+	Accuracy: 0.3407
+	Recall: [0.5215, 0.13, 0.5855, 0.126]
+	Precision: [0.3769, 0.3812, 0.3095, 0.3281]
+	Confusion Matrix:
+[[1043  107  752   98]
+ [ 588  260  933  219]
+ [ 487  143 1171  199]
+ [ 649  172  927  252]]
+ params for this best classifier were: {'alpha': 1e-05}

@@ -38,8 +38,6 @@ nfindall = len_dec(findall)  # nfindall return number of matches from findall
 a1_dir = "/u/cs401/A1/"  # can't acess args...
 # Files opened once to save time.
 wordlists_dir = "/u/cs401/Wordlists"
-a1_dir = os.getcwd()
-wordlists_dir = os.path.join(os.getcwd(), 'Wordlists')
 bgl = pd.read_csv(os.path.join(wordlists_dir, "BristolNorms+GilhoolyLogie.csv"),
                   usecols=["WORD", "AoA (100-700)", "IMG", "FAM"])  # select just needed cols
 warr = pd.read_csv(os.path.join(wordlists_dir, "Ratings_Warriner_et_al.csv"),
@@ -272,6 +270,13 @@ def extract_bonus(text, outfile):
     else:
       featurizer = TfidfVectorizer(sublinear_tf=True, stop_words='english')
     data, labels, = zip(*[(c['body'], c['cat']) for c in text])
+    new_data = []
+    for comment in data:
+      row = " ".join([word[:word.rfind('/')] for word in comment.split(' ')])
+      # sentence is now just lemmatized, tokenized words separated by spaces,
+      # as required by sklearn Coutnvectorizer.
+      new_data.append(row)
+    data = new_data
     labels = [files[lbl][1][0, -1] for lbl in labels]  # transform to integer
     data = featurizer.fit_transform(data)
     n_components = 100
@@ -283,15 +288,29 @@ def extract_bonus(text, outfile):
       topic_modeller = TruncatedSVD(n_components=n_components, n_iter=1,
                                     random_state=2)
     data = topic_modeller.fit_transform(data)
+    labels = np.array(labels)[:, np.newaxis]
     data = np.concatenate([data, labels], axis=1)
     with open(outfile, 'w' if not use_LDA else 'a') as outf:
       if use_LDA:
         topic_distribution = topic_modeller.components_ / topic_modeller.components_.sum(axis=1)[:, np.newaxis]
         for i in range(n_components):
-          top_10_words = topic_distribution[i, np.argpartition(topic_distribution, -10)[-10:]]
-          outf.write(f'topic {i} is best described by the 10 words: f{top_10_words}\n')
+          top_10_indices = np.argpartition(topic_distribution[i], -10)[-10:]
+          top_10_words = np.array(featurizer.get_feature_names())[top_10_indices]
+          top_10_probs = topic_distribution[i, top_10_indices]
+          outf.write(f'topic {i} is best described by the 10 words: {top_10_words} with probabilities: {top_10_probs}\n')
       else:
         outf.write(f"explained variance from total variance is: {topic_modeller.explained_variance_ratio_.sum()}\n")
+  with open(outfile, 'a') as outf:
+    outf.write('We see that topic 0 are likely positive adverbs, similar to what we saw with our Kbest feature selection. '
+               'Topic 1 is difficult to describe, but could be described as how pro-life or thoughtful the text is.'
+               'Topic 2 makes a lot of sense, and is related to the religion and country of origin.'
+               'Since I printed all 100 topics, I will show a select few more.'
+               'Topic 97 and 99 both both related to censorship, which makes sense as they are related to generally to right-ist views.'
+               'Topic 98 relates to compassion and sharing, which could be tied with left-ist views.'
+               'As we can see, the topics selected by the LDA generally do correspond with generally ideas associated with the different views of '
+               'different political texts. These topics enable us to reduce the number of dimensions while keeping the important information.'
+               'We could use these topics to perform unsupervised learning on the different clusters of text to understand if there are any class-imbalances '
+               'in our data, which might result from mis-labelled datapoints (given that our dataset was poorly labelled (texts in a Left channel might have rightist views and just be argueing there).')
   return data
 
 
@@ -303,27 +322,27 @@ def main(args):
   feats = np.zeros((len(data), 173 + 1))
 
   stime = time.clock()
-  # for i, comment in enumerate(data):
-  #   if (i+1) % 500 == 0:
-  #     print(f"step: '{i+1}' at time '{time.clock()-stime}'")
-  #
-  #   feats[i, :-1] = extract1(comment['body'])
-  #   feats[i, :-1] = extract2(feats[i, :-1], comment['cat'], comment['id'])
-  #   class_file = files[comment['cat']]
-  #   feats[i, -1] = class_file[1][0, -1]  # adding the label since extract2 doesn't do that.
-  #
-  # np.savez_compressed(args.output, feats)
+  for i, comment in enumerate(data):
+    if (i+1) % 500 == 0:
+      print(f"step: '{i+1}' at time '{time.clock()-stime}'")
 
-  # BELOW IS FOR BONUS
-  outfile = args.output
-  if outfile.find('.npz') == -1:
-    outfile += '_bonus'
-    outf = outfile
-  else:
-    outf = outfile[:outfile.rfind('.')] + '_bonus' + '.txt'
-    outfile = outfile[:outfile.rfind('.')] + '_bonus' + outfile[outfile.rfind('.'):]
-  feats = extract_bonus(data, outf)
-  np.savez_compressed(outfile, feats)
+    feats[i, :-1] = extract1(comment['body'])
+    feats[i, :-1] = extract2(feats[i, :-1], comment['cat'], comment['id'])
+    class_file = files[comment['cat']]
+    feats[i, -1] = class_file[1][0, -1]  # adding the label since extract2 doesn't do that.
+
+  np.savez_compressed(args.output, feats)
+
+  # BELOW IS FOR BONUS uncomment to run
+  # outfile = args.output
+  # if outfile.find('.npz') == -1:
+  #   outfile += '_bonus_LDA'
+  #   outf = outfile
+  # else:
+  #   outf = outfile[:outfile.rfind('.')] + '_bonus_LDA' + '.txt'
+  #   outfile = outfile[:outfile.rfind('.')] + '_bonus_LDA' + outfile[outfile.rfind('.'):]
+  # feats = extract_bonus(data, outf)
+  # np.savez_compressed(outfile, feats)
 
 
 if __name__ == "__main__":
