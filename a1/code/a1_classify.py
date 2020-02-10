@@ -213,14 +213,14 @@ def class33(output_dir, X_train, X_test, y_train, y_test, i, X_1k, y_1k):
     outf.write(f'Accuracy for full dataset: {accuracy_full:.4f}\n')
     k_feat = 5
     selector = SelectKBest(f_classif, k_feat)
-    X_new = selector.fit_transform(X_1k, y_1k)
+    X_new = selector.fit_transform(X_1k, y_1k)  # 1k dataset
     # print(f'1k p-values: {[round(pval, 4) for pval in selector.pvalues_]}')
     cls = clone(classifiers[i])
     try:
       cls.set_params(random_state=8)
     except:
       pass
-    cls.fit(X_new, y_1k)
+    cls.fit(X_new, y_1k)  # 1k dataset
     C = confusion_matrix(y_test, cls.predict(selector.transform(X_test)))
     accuracy_1k = accuracy(C)
     outf.write(f'Accuracy for 1k: {accuracy_1k:.4f}\n')
