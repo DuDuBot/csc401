@@ -216,6 +216,10 @@ def class33(output_dir, X_train, X_test, y_train, y_test, i, X_1k, y_1k):
     X_new = selector.fit_transform(X_1k, y_1k)
     # print(f'1k p-values: {[round(pval, 4) for pval in selector.pvalues_]}')
     cls = clone(classifiers[i])
+    try:
+      cls.set_params(random_state=8)
+    except:
+      pass
     cls.fit(X_new, y_1k)
     C = confusion_matrix(y_test, cls.predict(selector.transform(X_test)))
     accuracy_1k = accuracy(C)
@@ -434,22 +438,22 @@ if __name__ == "__main__":
   data = data[data.files[0]]
   best_accuracy = []
   stime = time.clock()
-  X_train, X_test, y_train, y_test = train_test_split(data[:, :173],
-                                                      data[:, -1],
-                                                      test_size=0.2,
-                                                      random_state=0,
-                                                      stratify=data[:, -1]
-                                                      )
-  X_train, y_train = shuffle(X_train, y_train, random_state=2)
-  iBest = class31(args.output_dir, X_train, X_test, y_train, y_test)
-  print(f'done class31 at {time.clock()-stime}')
-  (X_1k, y_1k) = class32(args.output_dir, X_train, X_test, y_train, y_test,
-                         iBest)
-  print(f'done class32 at {time.clock()-stime}')
-  class33(args.output_dir, X_train, X_test, y_train, y_test, iBest, X_1k, y_1k)
-  print(f'done class33 at {time.clock()-stime}')
-  class34(args.output_dir, X_train, X_test, y_train, y_test, iBest)
-  print(f'done class34 at {time.clock()-stime}')
+  # X_train, X_test, y_train, y_test = train_test_split(data[:, :173],
+  #                                                     data[:, -1],
+  #                                                     test_size=0.2,
+  #                                                     random_state=0,
+  #                                                     stratify=data[:, -1]
+  #                                                     )
+  # X_train, y_train = shuffle(X_train, y_train, random_state=2)
+  # iBest = class31(args.output_dir, X_train, X_test, y_train, y_test)
+  # print(f'done class31 at {time.clock()-stime}')
+  # (X_1k, y_1k) = class32(args.output_dir, X_train, X_test, y_train, y_test,
+  #                        iBest)
+  # print(f'done class32 at {time.clock()-stime}')
+  # class33(args.output_dir, X_train, X_test, y_train, y_test, iBest, X_1k, y_1k)
+  # print(f'done class33 at {time.clock()-stime}')
+  # class34(args.output_dir, X_train, X_test, y_train, y_test, iBest)
+  # print(f'done class34 at {time.clock()-stime}')
   # BELOW IS FOR BONUS, uncomment to run
   # print('starting bonus, this might take awhile')
   # classify_bonus(args.output_dir, X_train, X_test, y_train, y_test)
