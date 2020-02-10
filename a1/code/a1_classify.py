@@ -345,8 +345,6 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
     iBest = 0
     best_acc = 0
     for i, to_clone in enumerate(classifiers_bonus):
-      if i < 3:
-        continue
       cls = clone(to_clone)
       name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
                                                                         "")
@@ -372,12 +370,14 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
     outf.write('\n')
     outf.write('trying HyperParam optimization\n. As neither scaling preprocessing had a major effect, we will not use them.')
     for i, to_clone in enumerate(classifiers_bonus):
+      if i < 3:
+        continue
       cls = clone(to_clone)
       name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
                                                                         "")
       print(f'starting Randomized search optimization for {name}')
       params = search_params[name]
-      rgridsearch = RandomizedSearchCV(cls, params, n_iter=30, random_state=2, scoring='accuracy')
+      rgridsearch = RandomizedSearchCV(cls, params, n_iter=10, random_state=2, scoring='accuracy')
       outf.write(f'Results for {name}:\n')  # Classifier name
       if name.lower().find('multi') == -1:
         rgridsearch.fit(X_train, y_train)
