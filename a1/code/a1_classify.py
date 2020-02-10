@@ -51,7 +51,7 @@ search_params = {'SGDClassifier':
                  'AdaBoostClassifier':
                    {'n_estimators': [25, 50, 75, 100],
                     'learning_rate': [0.5, 1, 1.5]},
-                 'MultinomialNB': {'alpha': [0, 0.5, 1, 1.5, 2]}}
+                 'MultinomialNB': {'alpha': [0.00001, 0.5, 1, 1.5, 2]}}
 
 
 def accuracy(C):
@@ -349,7 +349,7 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
                                                                         "")
       print(f'starting classifier: {name}')
       outf.write(f'Results for {name}:\n')  # Classifier name
-      if name.lower().find('multi') != -1:
+      if name.lower().find('multi') == -1:
         cls.fit(scaler.transform(X_train), y_train)
         C = confusion_matrix(y_test, cls.predict(scaler.transform(X_test)))
       else:
