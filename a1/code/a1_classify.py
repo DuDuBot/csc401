@@ -20,13 +20,37 @@ classifiers = [SGDClassifier(), GaussianNB(),
                RandomForestClassifier(n_estimators=10, max_depth=5),
                MLPClassifier(alpha=0.05), AdaBoostClassifier()]
 
-classifiers_bonus = [SGDClassifier(), GaussianNB(),
-                     RandomForestClassifier(n_estimators=10, max_depth=5),
-                     MLPClassifier(alpha=0.05), AdaBoostClassifier(),
+classifiers_bonus = [SGDClassifier(random_state=2), GaussianNB(),
+                     RandomForestClassifier(n_estimators=10, max_depth=5, random_state=2),
+                     MLPClassifier(alpha=0.05, random_state=2), AdaBoostClassifier(random_state=2),
                      MultinomialNB()
                      ]
 
-search_params = {}
+search_params = {'SGDClassifier':
+                   {'loss': ['hinge', 'log', 'modified_huber', 'squared_hinge'],
+                    'penalty': ['l2', 'l1', 'elasticnet'],
+                    'alpha': [1e-7, 1e-6, 1e-5, 1e-4, 1e-3],
+                    'l1_ratio': [0.1, 0.15, 0.2],
+                    'max_iter': [100, 1000, 10000],
+                    'average': [False, 10, 100, 1000],
+                    'early_stopping': [False, True],
+                    },
+                 'GaussianNB': {'var_smoothing': [1e-10, 1e-9, 1e-8, 1e-7]},
+                 'RandomForestClassifier':
+                   {'n_estimators': [10, 20, 30, 40, 50, 75, 100],
+                    'max_depth': [3, 5, 10, 20, 30],
+                    'min_samples_split': [1, 2, 3, 5],
+                    'min_samples_leaf': [1, 2]},
+                 'MLPClassifier':
+                   {'hidden_layer_sizes': [1, 5, 10, 20, 50, 100],
+                    'activiation': ['relu', 'tanh'],
+                    'learning_rate': ['constant', 'adapt'],
+                    'max_iter': [200, 500, 1000],
+                    'early_stopping': [False, True]},
+                 'AdaBoostClassifier':
+                   {'n_estimators': [25, 50, 75, 100],
+                    'learning_rate': [0.5, 1, 1.5]},
+                 'MultinomialNB': {'alpha': [0, 0.5, 1, 1.5, 2]}}
 
 
 def accuracy(C):
@@ -86,14 +110,13 @@ def class31(output_dir, X_train, X_test, y_train, y_test):
       outf.write(f'\tRecall: {[round(item, 4) for item in rec]}\n')
       outf.write(f'\tPrecision: {[round(item, 4) for item in prec]}\n')
       outf.write(f'\tConfusion Matrix: \n{C}\n\n')
-    outf.write('we see that the RandomForestClassifier and the AdaBoost '
-               'classifiers perform the best on this data. This result is '
+    outf.write('we see that the RandomForestClassifier, MLP, and the AdaBoost '
+               'classifiers perform the best on this data. RandomForest and AdaBoost are '
                'expected because these are both ensemble-based models '
                '(they aggregrate many weak-learners to reduce variance).'
                ' The reduced helps these models generalize better, especially '
-               'in low data regimes. Both the SGD and MLP classifiers are based '
-               'on neural architectures which are known to require lots of '
-               'data to perform well. Finally, the GaussianNB likely suffers '
+               'in low data regimes. However, the MLP model, being a neural architecture, is a surprising result as they generally require lots of data to perform well. The MLP structure chosen by SKLearn is likely a simple MLP that does not require much data. '
+               'The SGDClassifier uses a linear SVM given the default configuration which is surprising that it does not perform well, since they generally perform well despite low-data (since they learn a simple margin from support vectors). Finally, the GaussianNB likely suffers '
                'despite NB\'s relative success in simple NKP problems because '
                'text is oftern not modelled well using a Gaussian distribution.')
   return iBest
@@ -254,8 +277,9 @@ def class34(output_dir, X_train, X_test, y_train, y_test, i):
     j = 0
     p_values = []
     for cls_base in classifiers:
-      name = str(cls_base.__class__).split(".")[-1].replace(">", "").replace("\'",
-                                                                        "")
+      name = str(cls_base.__class__).split(".")[-1].replace(">", "").replace(
+        "\'",
+        "")
       print(f'working on classifier: {name}')
       kfold_accuracies = []
       fold = 0
@@ -292,7 +316,8 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
     outf.write('Trying mean and std removal scaling')
     for i, to_clone in enumerate(classifiers_bonus):
       cls = clone(to_clone)
-      name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'", "")
+      name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
+                                                                        "")
       outf.write(f'Results for {name}:\n')  # Classifier name
       cls.fit(scaler.transform(X_train), y_train)
       C = confusion_matrix(y_test, cls.predict(scaler.transform(X_test)))
@@ -314,7 +339,8 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
     best_acc = 0
     for i, to_clone in enumerate(classifiers_bonus):
       cls = clone(to_clone)
-      name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'", "")
+      name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
+                                                                        "")
       outf.write(f'Results for {name}:\n')  # Classifier name
       cls.fit(scaler.transform(X_train), y_train)
       C = confusion_matrix(y_test, cls.predict(scaler.transform(X_test)))
@@ -332,22 +358,25 @@ def classify_bonus(output_dir, X_train, X_test, y_train, y_test):
     outf.write('trying HyperParam optimization')
     for i, to_clone in enumerate(classifiers_bonus):
       cls = clone(to_clone)
-      # rgridsearch = RandomizedSearchCV()
-      name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'", "")
+      params = search_params[name]
+      name = str(cls.__class__).split(".")[-1].replace(">", "").replace("\'",
+                                                                        "")
+      rgridsearch = RandomizedSearchCV(cls, params, n_iter=20, random_state=2, scoring='accuracy')
       outf.write(f'Results for {name}:\n')  # Classifier name
-      cls.fit(scaler.transform(X_train), y_train)
-      C = confusion_matrix(y_test, cls.predict(scaler.transform(X_test)))
+      rgridsearch.fit(scaler.transform(X_train), y_train)
+      C = confusion_matrix(y_test, rgridsearch.predict(scaler.transform(X_test)))
       acc = accuracy(C)
       rec = recall(C)
       prec = precision(C)
       if acc > best_acc:
         best_acc = acc
-        iBest = i
       outf.write(f'\tAccuracy: {acc:.4f}\n')
       outf.write(f'\tRecall: {[round(item, 4) for item in rec]}\n')
       outf.write(f'\tPrecision: {[round(item, 4) for item in prec]}\n')
       outf.write(f'\tConfusion Matrix: \n{C}\n\n')
+      outf.write(f'params for this best classifier were: {rgridsearch.best_params_}')
     outf.write('\n')
+
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
@@ -373,5 +402,4 @@ if __name__ == "__main__":
                          iBest)
   class33(args.output_dir, X_train, X_test, y_train, y_test, iBest, X_1k, y_1k)
   class34(args.output_dir, X_train, X_test, y_train, y_test, iBest)
-  # TODO: load data and split into train and test.
-  # TODO : complete each classification experiment, in sequence.
+  classify_bonus(args.output_dir, X_train, X_test, y_train, y_test)

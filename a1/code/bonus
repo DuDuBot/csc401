@@ -1,5 +1,5 @@
 For my bonus, I explored additional preprocesing steps in including minmax scaling and
 standard scaling (mean and std removal).
 
-I additoinally explored another classifier, multinomialNB.
+I additionally explored another classifier, multinomialNB.
 Finally, I optimize the parameters for each using randomized grid search to see how they all perform.
