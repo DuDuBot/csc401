@@ -55,20 +55,13 @@ class Encoder(EncoderBase):
         # h (output) is of shape (S, N, 2 * H)
         # relevant pytorch modules:
         # torch.nn.utils.rnn.{pad_packed,pack_padded}_sequence
-        print(F_lens.max())
         F_lens, perm_idx = F_lens.sort(0, descending=True)
         _, unperm_idx = perm_idx.sort(0)
-        # init_hidden = torch.zeros(1, 2, self.hidden_state_size)
         x = x[:, perm_idx, :]
         x = torch.nn.utils.rnn.pack_padded_sequence(x, F_lens)
-        outputs, hidden_states = self.rnn.forward(x)
-        # print(outputs.shape)
+        outputs, _ = self.rnn.forward(x)
         outputs, _ = torch.nn.utils.rnn.pad_packed_sequence(outputs, False, h_pad)
-        # hidden_states = torch.nn.utils.rnn.pad_packed_sequence(hidden_states, False, h_pad)
         outputs = outputs[unperm_idx]
-        # hidden_states = hidden_states[:, unperm_idx, :]
-        # print(hidden_states.shape)
-        # return hidden_states
         return outputs
 
 
@@ -275,9 +268,7 @@ class EncoderDecoder(EncoderDecoderBase):
         # Note logits sequence dimension is one shorter than E (why?)
 
         # initialize the first hidden state
-        print(f"{self.encoder_hidden_size}")
         htilde_tm1 = self.decoder.get_first_hidden_state(h, F_lens)
-        print(f"{htilde_tm1.size():}")
         if self.cell_type == 'lstm':
             htilde_tm1 = (htilde_tm1, torch.zeros_like(htilde_tm1))
         logits = []  # for holding logits as we do all steps in time
