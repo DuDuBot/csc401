@@ -45,7 +45,6 @@ class Encoder(EncoderBase):
         print(self.embedding.forward(F).shape)
         return self.embedding.forward(F)
 
-
     def get_all_hidden_states(self, x, F_lens, h_pad):
         # compute all final hidden states for provided input sequence.
         # make sure you handle padding properly!
@@ -57,7 +56,8 @@ class Encoder(EncoderBase):
         # torch.nn.utils.rnn.{pad_packed,pack_padded}_sequence
         x = x
         print(x.shape)
-        init_hidden = torch.zeros(1, 2, self.hidden_state_size)
+        print(F_lens.max())
+        # init_hidden = torch.zeros(1, 2, self.hidden_state_size)
         outputs, hidden_states = self.rnn.forward(x)
         print(hidden_states.shape)
         return hidden_states
@@ -267,12 +267,6 @@ class EncoderDecoder(EncoderDecoderBase):
             l, h_tilde = self.decoder.forward(E[i], h_tilde, h, F_lens)
             logits.append(l)
         return torch.stack(logits, 0)
-        # criterion = nn.NLLLoss()
-        # for di in range(target_length):
-        #     decoder_output, decoder_hidden, decoder_attention = decoder(
-        #         decoder_input, decoder_hidden, encoder_outputs)
-        #     loss += criterion(decoder_output, target_tensor[di])
-        #     decoder_input = target_tensor[di]  # Teacher forcing
 
     def update_beam(self, htilde_t, b_tm1_1, logpb_tm1, logpy_t):
         # perform the operations within the psuedo-code's loop in the
