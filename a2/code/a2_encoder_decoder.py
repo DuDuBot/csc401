@@ -282,7 +282,7 @@ class EncoderDecoder(EncoderDecoderBase):
             htilde_tm1 = (htilde_tm1, torch.zeros_like(htilde_tm1))
         logits = []  # for holding logits as we do all steps in time
         for t in range(E.size()[0]-1):  # T-1
-            l, h_tilde = self.decoder.forward(E[t], htilde_tm1, h, F_lens)
+            l, h_tilde_tm1 = self.decoder.forward(E[t], htilde_tm1, h, F_lens)
             logits.append(l)
         return torch.stack(logits, 0)
 
