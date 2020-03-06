@@ -275,7 +275,7 @@ class EncoderDecoder(EncoderDecoderBase):
         # initialize the first hidden state
         print(f"{self.encoder_hidden_size}")
         htilde_tm1 = self.decoder.get_first_hidden_state(h, F_lens)
-        print(f"{htilde_tm1:}")
+        print(f"{htilde_tm1.size():}")
         if self.cell_type == 'lstm':
             htilde_tm1 = (htilde_tm1, torch.zeros_like(htilde_tm1))
         logits = []  # for holding logits as we do all steps in time
