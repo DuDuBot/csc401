@@ -79,11 +79,11 @@ class DecoderWithoutAttention(DecoderBase):
         init_packet = [self.word_embedding_size,
                        self.hidden_state_size]
         if self.cell_type == 'gru':
-            self.cell = torch.nn.GRU(*init_packet)
+            self.cell = torch.nn.GRUCell(*init_packet)
         elif self.cell_type == 'rnn':
-            self.cell = torch.nn.RNN(*init_packet)
+            self.cell = torch.nn.RNNCell(*init_packet)
         elif self.cell_type == 'lstm':
-            self.cell = torch.nn.LSTM(*init_packet)
+            self.cell = torch.nn.LSTMCell(*init_packet)
         else:
             raise ValueError(f"cell type: '{self.cell_type}' not valid.")
 
@@ -130,7 +130,6 @@ class DecoderWithoutAttention(DecoderBase):
         mask = torch.where(E_tm1 == torch.tensor([self.pad_id]).to(device),
                            torch.tensor([0.]).to(device), torch.tensor([1.]).to(device)).to(device)
         xtilde_t = self.embedding(E_tm1) * mask.view(-1, 1)
-        print(xtilde_t.size())
         return xtilde_t
 
     def get_current_hidden_state(self, xtilde_t, htilde_tm1):
@@ -139,7 +138,7 @@ class DecoderWithoutAttention(DecoderBase):
         # htilde_tm1 is of shape (N, 2 * H) or a tuple of two of those (LSTM)
         # htilde_t (output) is of same shape as htilde_tm1
         # assert False, "Fill me"
-        return self.cell.forward(xtilde_t, htilde_tm1[:, :self.hidden_state_size])
+        return self.cell(xtilde_t, htilde_tm1[:, :self.hidden_state_size])
 
     def get_current_logits(self, htilde_t):
         # determine un-normalized log-probability distribution over output
@@ -165,11 +164,11 @@ class DecoderWithAttention(DecoderWithoutAttention):
           init_packet = [self.word_embedding_size+self.hidden_state_size,
                          self.hidden_state_size]
           if self.cell_type == 'gru':
-              self.cell = torch.nn.GRU(*init_packet)
+              self.cell = torch.nn.GRUCell(*init_packet)
           elif self.cell_type == 'rnn':
-              self.cell = torch.nn.RNN(*init_packet)
+              self.cell = torch.nn.RNNCell(*init_packet)
           elif self.cell_type == 'lstm':
-              self.cell = torch.nn.LSTM(*init_packet)
+              self.cell = torch.nn.LSTMCell(*init_packet)
           else:
               raise ValueError(f"cell type: '{self.cell_type}' not valid.")
 
