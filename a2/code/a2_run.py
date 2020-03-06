@@ -11,10 +11,9 @@ import gzip
 import random
 
 import torch
-
-from a2.code import a2_dataloader
-from a2.code import a2_encoder_decoder
-from a2.code import a2_training_and_testing
+import a2_dataloader
+import a2_encoder_decoder
+import a2_training_and_testing
 
 
 def build_vocab(opts):

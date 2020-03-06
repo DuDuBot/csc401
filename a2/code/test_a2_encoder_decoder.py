@@ -8,7 +8,7 @@ your grade.
 
 
 import torch
-from a2.code import a2_encoder_decoder
+import a2_encoder_decoder
 
 
 def test_update_beam():

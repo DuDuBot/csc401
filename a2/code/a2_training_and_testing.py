@@ -6,7 +6,7 @@ You don't need anything more than what's been imported here.
 '''
 
 import torch
-from a2.code import a2_bleu_score
+import a2_bleu_score
 
 
 from tqdm import tqdm

@@ -7,7 +7,7 @@ You don't need anything more than what's been imported here
 
 import torch
 
-from a2.code.a2_abcs import EncoderBase, DecoderBase, EncoderDecoderBase
+from a2_abcs import EncoderBase, DecoderBase, EncoderDecoderBase
 
 
 class Encoder(EncoderBase):
