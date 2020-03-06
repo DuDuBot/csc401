@@ -189,7 +189,7 @@ class DecoderWithAttention(DecoderWithoutAttention):
     def get_current_rnn_input(self, E_tm1, htilde_tm1, h, F_lens):
         # update to account for attention. Use attend() for c_t
         device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-        mask = torch.where(E_tm1 == torch.from_numpy(self.pad_id).to(device),
+        mask = torch.where(E_tm1 == torch.tensor([self.pad_id]).to(device),
                            torch.tensor([0.]).to(device), torch.tensor([1.])).to(device)
 
         return torch.stack([self.embedding(E_tm1), self.attend(htilde_tm1, h, F_lens)], 1) * mask.view(-1, 1)
