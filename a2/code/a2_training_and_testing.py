@@ -52,7 +52,7 @@ def train_for_epoch(model, dataloader, optimizer, device):
     Returns
     -------
     avg_loss : float
-        The total loss divided by the total numer of sequence
+        The total loss divided by the total number of sequence
     '''
     # If you want, instead of looping through your dataloader as
     # for ... in dataloader: ...
@@ -65,7 +65,22 @@ def train_for_epoch(model, dataloader, optimizer, device):
     # If you are running into CUDA memory errors part way through training,
     # try "del F, F_lens, E, logits, loss" at the end of each iteration of
     # the loop.
-    assert False, "Fill me"
+    loss = torch.nn.NLLLoss(ignore_index=model.target_eos)
+    n_batches = 0
+    for F, F_lens, E in tqdm(dataloader):
+        F = F.todevice(device)
+        F_lens = F_lens.todevice(device)
+        E = E.todevice(device)
+        optimizer.zero_grad()
+        logits = model(F, F_lens, E)
+        print(logits.shape, E.shape)
+        mask = model.get_target_padding_mask(E)
+        E = E.masked_fill(mask, model.target_eos)
+        loss = loss(logits, E)
+        loss.backward()
+        optimizer.step()
+        n_batches += 1
+    return loss/n_batches
 
 
 def compute_batch_total_bleu(E_ref, E_cand, target_sos, target_eos):
@@ -92,7 +107,12 @@ def compute_batch_total_bleu(E_ref, E_cand, target_sos, target_eos):
     '''
     # you can use E_ref.tolist() to convert the LongTensor to a python list
     # of numbers
-    assert False, "Fill me"
+    total = 0
+    for ref, cand in zip(E_ref.tolist(), E_cand.tolist()):
+        ref = ref.replace(target_eos, '').replace(target_sos, '').strip()
+        cand = cand.replace(target_eos, '').replace(target_sos, '').strip()
+        total += a2_bleu_score(ref, cand, 4)
+    return total
 
 
 def compute_average_bleu_over_dataset(
@@ -130,4 +150,13 @@ def compute_average_bleu_over_dataset(
         The total BLEU score summed over all sequences divided by the number of
         sequences
     '''
-    assert False, "Fill me"
+    n_batch = 0
+    total = 0
+    for F, F_lens, E in tqdm(dataloader):
+        F = F.todevice(device)
+        F_lens = F_lens.todevice(device)
+        b_1 = model(F, F_lens)
+        E_cand = b_1[:, 0]
+        total += compute_batch_total_bleu(E, E_cand, model.target_sos, model.target_eos)
+        n_batch += 1
+    return total / n_batch
