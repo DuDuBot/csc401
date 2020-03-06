@@ -80,6 +80,7 @@ def train_for_epoch(model, dataloader, optimizer, device):
         loss.backward()
         optimizer.step()
         n_batches += 1
+        del F, F_lens, E, logits, loss
     return loss/n_batches
 
 
@@ -157,6 +158,6 @@ def compute_average_bleu_over_dataset(
         F_lens = F_lens.todevice(device)
         b_1 = model(F, F_lens)
         E_cand = b_1[:, 0]
-        total += compute_batch_total_bleu(E, E_cand, model.target_sos, model.target_eos)
+        total += compute_batch_total_bleu(E, E_cand, target_sos, target_eos)
         n_batch += 1
     return total / n_batch

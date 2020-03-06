@@ -76,20 +76,21 @@ class DecoderWithoutAttention(DecoderBase):
         # cell_type will be one of: ['lstm', 'gru', 'rnn']
         # torch.nn.{Embedding,Linear,LSTMCell,RNNCell,GRUCell}
 
-        init_packet = [self.hidden_state_size, self.word_embedding_size]
+        init_packet = [self.word_embedding_size,
+                       self.hidden_state_size]
         if self.cell_type == 'gru':
-            self.cell = torch.nn.GRUCell(*init_packet)
+            self.cell = torch.nn.GRU(*init_packet)
         elif self.cell_type == 'rnn':
-            self.cell = torch.nn.RNNCell(*init_packet)
+            self.cell = torch.nn.RNN(*init_packet)
         elif self.cell_type == 'lstm':
-            self.cell = torch.nn.LSTMCell(*init_packet)
+            self.cell = torch.nn.LSTM(*init_packet)
         else:
             raise ValueError(f"cell type: '{self.cell_type}' not valid.")
 
-        self.embedding = torch.nn.Embedding(self.word_embedding_size,
-                                            self.target_vocab_size,
+        self.embedding = torch.nn.Embedding(self.target_vocab_size,
+                                            self.word_embedding_size,
                                             padding_idx=self.pad_id)
-        self.ff = torch.nn.Linear(self.hidden_state_size, self.word_embedding_size)
+        self.ff = torch.nn.Linear(self.hidden_state_size, self.target_vocab_size)
 
 
     def get_first_hidden_state(self, h, F_lens):
@@ -141,7 +142,7 @@ class DecoderWithoutAttention(DecoderBase):
         # htilde_t is of shape (N, 2 * H), even for LSTM (cell state discarded)
         # logits_t (output) is of shape (N, V)
         # assert False, "Fill me"
-        return self.ff(htilde_t)
+        return self.ff.forward(htilde_t)
 
 
 class DecoderWithAttention(DecoderWithoutAttention):
@@ -156,32 +157,39 @@ class DecoderWithAttention(DecoderWithoutAttention):
         # self.hidden_state_size, self.cell_type
         # cell_type will be one of: ['lstm', 'gru', 'rnn']
 
-        #   init_packet = [self.hidden_state_size, self.word_embedding_size]
-        #   if self.cell_type == 'gru':
-        #       self.cell = torch.nn.GRU(*init_packet)
-        #   elif self.cell_type == 'rnn':
-        #       self.cell = torch.nn.RNN(*init_packet)
-        #   elif self.cell_type == 'lstm':
-        #       self.cell = torch.nn.LSTM(*init_packet)
-        #   else:
-        #       raise ValueError(f"cell type: '{self.cell_type}' not valid.")
-        #
-        #   self.embedding = torch.nn.Embedding(self.word_embedding_size,
-        #                                       self.target_vocab_size,
-        #                                       padding_idx=self.pad_id)
-        #   self.ff = torch.nn.Linear(self.hidden_state_size, self.word_embedding_size)
-        # self.attn_combine = nn.Linear(self.hidden_size * 2, self.hidden_size)
-        pass
+          init_packet = [self.word_embedding_size+self.hidden_state_size,
+                         self.hidden_state_size]
+          if self.cell_type == 'gru':
+              self.cell = torch.nn.GRU(*init_packet)
+          elif self.cell_type == 'rnn':
+              self.cell = torch.nn.RNN(*init_packet)
+          elif self.cell_type == 'lstm':
+              self.cell = torch.nn.LSTM(*init_packet)
+          else:
+              raise ValueError(f"cell type: '{self.cell_type}' not valid.")
+
+          self.embedding = torch.nn.Embedding(self.target_vocab_size,
+                                              self.word_embedding_size,
+                                              padding_idx=self.pad_id)
+          self.ff = torch.nn.Linear(self.hidden_state_size, self.target_vocab_size)
+          # self.attn = torch.nn.Linear(self.hidden_size * 2, self.word_embedding_size)
 
     def get_first_hidden_state(self, h, F_lens):
         # same as before, but initialize to zeros
         # relevant pytorch modules: torch.zeros_like
         # ensure result is on same device as h!
-        assert False, "Fill me"
+        if self.cell_type == 'lstm':
+            pass
+        else:
+            return torch.zeros_like(torch.cat([h[-1, :, self.hidden_state_size // 2],
+                              h[0, :, self.hidden_state_size // 2:]], dim=0).squeeze())
 
     def get_current_rnn_input(self, E_tm1, htilde_tm1, h, F_lens):
         # update to account for attention. Use attend() for c_t
-        assert False, "Fill me"
+        if self.cell_type == 'lstm':
+            pass
+        else:
+            return torch.stack([self.embedding(E_tm1), self.attend(htilde_tm1, h, F_lens)], 1)
 
     def attend(self, htilde_t, h, F_lens):
         # compute context vector c_t. Use get_attention_weights() to calculate
@@ -190,7 +198,10 @@ class DecoderWithAttention(DecoderWithoutAttention):
         # h is of shape (S, N, 2 * H)
         # F_lens is of shape (N,)
         # c_t (output) is of shape (N, 2 * H)
-        assert False, "Fill me"
+        alpha = self.get_attention_weights(htilde_t, h, F_lens)  # (S, N)
+        alpha = alpha.tranpose(0, 1).unsqueeze(1)  # (N, 1, S)
+        h.permute(0, 1)  # (N, S, 2*H)
+        return torch.bmm(alpha, h).squeeze(1)  # (N, 2 * H) as desired.
 
     def get_attention_weights(self, htilde_t, h, F_lens):
         # DO NOT MODIFY! Calculates attention weights, ensuring padded terms
@@ -208,7 +219,11 @@ class DecoderWithAttention(DecoderWithoutAttention):
         # htilde_t is of shape (N, 2 * H)
         # h is of shape (S, N, 2 * H)
         # e_t (output) is of shape (S, N)
-        assert False, "Fill me"
+        h = h.permute(1, 2, 0)  # (N, S, 2*H) so batches front
+        scale = torch.inverse(torch.sqrt(self.hidden_state_size * 2))
+        htilde = htilde_t.unsqueeze(1)  # (N, 1, 2*H)
+        energy = scale * torch.bmm(h, htilde)  # (N, S, 1)
+        return energy.squeeze(2).transpose(0, 1)  # (S, N) as desired
 
 
 class EncoderDecoder(EncoderDecoderBase):
