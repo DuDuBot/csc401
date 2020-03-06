@@ -125,8 +125,9 @@ class DecoderWithoutAttention(DecoderBase):
         # F_lens is of shape (N,)
         # xtilde_t (output) is of shape (N, Itilde)
         # assert False, "Fill me"
+        print(torch.cuda.is_available())
         device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-        mask = torch.where(E_tm1 == torch.tensor([self.pad_id]),
+        mask = torch.where(E_tm1 == torch.tensor([self.pad_id]).to(device),
                            torch.tensor([0.]), torch.tensor([1.])).to(device)
         return self.embedding(E_tm1) * mask.view(-1, 1)
 
