@@ -5,6 +5,8 @@
 #SBATCH --cpus-per-task=1                    # CPU cores/threads
 #SBATCH --qos=normal                        
 #SBATCH --partition=gpu
+#SBATCH --output=slurm-train.out # specify output file
+#SBATCH --error=slurm-train.err  # specify error file
 
 eval "$(conda shell.bash hook)"
 conda activate 401a2

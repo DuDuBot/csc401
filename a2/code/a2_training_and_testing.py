@@ -67,7 +67,7 @@ def train_for_epoch(model, dataloader, optimizer, device):
     # the loop.
     loss = torch.nn.NLLLoss(ignore_index=model.target_eos)
     n_batches = 0
-    for F, F_lens, E in tqdm(dataloader):
+    for F, F_lens, E in dataloader:
         F = F.to(device)
         F_lens = F_lens.to(device)
         E = E.to(device)
@@ -80,6 +80,7 @@ def train_for_epoch(model, dataloader, optimizer, device):
         loss.backward()
         optimizer.step()
         n_batches += 1
+        print(f'n_batches: {n_batches}')
         del F, F_lens, E, logits, loss
     return loss/n_batches
 
