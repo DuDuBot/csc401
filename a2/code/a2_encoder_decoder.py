@@ -113,11 +113,13 @@ class DecoderWithoutAttention(DecoderBase):
         # F_lens is of shape (N,)
         # htilde_tm1 (output) is of shape (N, 2 * H)
         # relevant pytorch modules: torch.cat
+
+        mid = self.hidden_state_size // 2
         if self.cell_type == 'lstm':
             pass
         else:
-            return torch.cat([h[-1, :, self.hidden_state_size // 2],
-                              h[0, :, self.hidden_state_size // 2:]], dim=1).squeeze(0)
+            return torch.cat([h[-1, F_lens, :mid],
+                              h[0, F_lens, mid:]], dim=1).squeeze(1)
 
     def get_current_rnn_input(self, E_tm1, htilde_tm1, h, F_lens):
         # determine the input to the rnn for *just* the current time step.
@@ -270,10 +272,11 @@ class EncoderDecoder(EncoderDecoderBase):
         # hint: recall an LSTM's cell state is always initialized to zero.
         # Note logits sequence dimension is one shorter than E (why?)
 
+        # initialize the first hidden state
         htilde_tm1 = self.decoder.get_first_hidden_state(h, F_lens)
         if self.cell_type == 'lstm':
             htilde_tm1 = (htilde_tm1, torch.zeros_like(htilde_tm1))
-        logits = []
+        logits = []  # for holding logits as we do all steps in time
         for t in range(E.size()[0]-1):  # T-1
             l, h_tilde = self.decoder.forward(E[t], htilde_tm1, h, F_lens)
             logits.append(l)
