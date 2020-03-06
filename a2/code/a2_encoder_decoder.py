@@ -129,7 +129,9 @@ class DecoderWithoutAttention(DecoderBase):
         device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
         mask = torch.where(E_tm1 == torch.tensor([self.pad_id]).to(device),
                            torch.tensor([0.]).to(device), torch.tensor([1.]).to(device)).to(device)
-        return self.embedding(E_tm1) * mask.view(-1, 1)
+        xtilde_t = self.embedding(E_tm1) * mask.view(-1, 1)
+        print(xtilde_t.size())
+        return xtilde_t
 
     def get_current_hidden_state(self, xtilde_t, htilde_tm1):
         # update the previous hidden state to the current hidden state.
@@ -191,7 +193,7 @@ class DecoderWithAttention(DecoderWithoutAttention):
         # update to account for attention. Use attend() for c_t
         device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
         mask = torch.where(E_tm1 == torch.tensor([self.pad_id]).to(device),
-                           torch.tensor([0.]), torch.tensor([1.])).to(device)
+                           torch.tensor([0.]).to(device), torch.tensor([1.]).to(device)).to(device)
 
         return torch.stack([self.embedding(E_tm1), self.attend(htilde_tm1, h, F_lens)], 1) * mask.view(-1, 1)
 
