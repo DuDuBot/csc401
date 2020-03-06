@@ -236,6 +236,7 @@ class EncoderDecoder(EncoderDecoderBase):
         # self.target_vocab_size, self.target_eos
         # Recall that self.target_eos doubles as the decoder pad id since we
         # never need an embedding for it
+        print(f"{encoder_class:}, {decoder_class:}")
         self.encoder = encoder_class(self.source_vocab_size,
                                      self.source_pad_id,
                                      self.word_embedding_size,
