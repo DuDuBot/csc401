@@ -90,7 +90,6 @@ class DecoderWithoutAttention(DecoderBase):
                                             padding_idx=self.pad_id)
         self.ff = torch.nn.Linear(self.hidden_state_size, self.target_vocab_size)
 
-
     def get_first_hidden_state(self, h, F_lens):
         # build decoder's first hidden state. Ensure it is derived from encoder
         # hidden state that has processed the entire sequence in each
@@ -105,12 +104,11 @@ class DecoderWithoutAttention(DecoderBase):
         # F_lens is of shape (N,)
         # htilde_tm1 (output) is of shape (N, 2 * H)
         # relevant pytorch modules: torch.cat
-        # assert False, "Fill me"
         if self.cell_type == 'lstm':
             pass
         else:
             return torch.cat([h[-1, :, self.hidden_state_size // 2],
-                              h[0, :, self.hidden_state_size // 2:]], dim=0).squeeze()
+                              h[0, :, self.hidden_state_size // 2:]], dim=1).squeeze(0)
 
     def get_current_rnn_input(self, E_tm1, htilde_tm1, h, F_lens):
         # determine the input to the rnn for *just* the current time step.
@@ -264,7 +262,11 @@ class EncoderDecoder(EncoderDecoderBase):
         # Note logits sequence dimension is one shorter than E (why?)
 
         h_tilde = torch.zeros_like(h[0])
-        return self.decoder.forward(E, h_tilde, h, F_lens)
+        logits = []
+        for i in range(E.size()[0]-1):  # T-1
+            l, h_tilde = self.decoder.forward(E[i], h_tilde, h, F_lens)
+            logits.append(l)
+        return torch.stack(logits, 0)
         # criterion = nn.NLLLoss()
         # for di in range(target_length):
         #     decoder_output, decoder_hidden, decoder_attention = decoder(
