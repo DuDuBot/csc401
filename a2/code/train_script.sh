@@ -9,8 +9,8 @@
 eval "$(conda shell.bash hook)"
 conda activate 401a2
 
-TRAIN=/h/u1/cs401/A2/data/Hansard/Training/
-TEST=/h/u1/cs401/A2/data/Hansard/Testing/
+TRAIN=/scratch/ssd001/home/cchoquet/csc401/a2/data/Hansard/Training/
+TEST=/scratch/ssd001/home/cchoquet/csc401/a2/data/Hansard/Testing/
 python a2_run.py vocab $TRAIN e vocab.e.gz
 python a2_run.py vocab $TRAIN f vocab.f.gz
 python a2_run.py split $TRAIN train.txt.gz dev.txt.gz
