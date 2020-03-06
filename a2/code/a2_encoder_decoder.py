@@ -125,10 +125,10 @@ class DecoderWithoutAttention(DecoderBase):
         # F_lens is of shape (N,)
         # xtilde_t (output) is of shape (N, Itilde)
         # assert False, "Fill me"
-        if self.cell_type == 'lstm':
-            pass
-        else:
-            return self.embedding(E_tm1)
+        device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+        mask = torch.where(E_tm1 == torch.from_numpy(self.pad_id).to(device),
+                           torch.tensor([0.]).to(device), torch.tensor([1.])).to(device)
+        return self.embedding(E_tm1) * mask.view(-1, 1)
 
     def get_current_hidden_state(self, xtilde_t, htilde_tm1):
         # update the previous hidden state to the current hidden state.
@@ -136,7 +136,7 @@ class DecoderWithoutAttention(DecoderBase):
         # htilde_tm1 is of shape (N, 2 * H) or a tuple of two of those (LSTM)
         # htilde_t (output) is of same shape as htilde_tm1
         # assert False, "Fill me"
-        return self.cell.forward(xtilde_t, htilde_tm1)
+        return self.cell.forward(xtilde_t, htilde_tm1[:, :self.hidden_state_size])
 
     def get_current_logits(self, htilde_t):
         # determine un-normalized log-probability distribution over output
@@ -188,10 +188,11 @@ class DecoderWithAttention(DecoderWithoutAttention):
 
     def get_current_rnn_input(self, E_tm1, htilde_tm1, h, F_lens):
         # update to account for attention. Use attend() for c_t
-        if self.cell_type == 'lstm':
-            pass
-        else:
-            return torch.stack([self.embedding(E_tm1), self.attend(htilde_tm1, h, F_lens)], 1)
+        device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+        mask = torch.where(E_tm1 == torch.from_numpy(self.pad_id).to(device),
+                           torch.tensor([0.]).to(device), torch.tensor([1.])).to(device)
+
+        return torch.stack([self.embedding(E_tm1), self.attend(htilde_tm1, h, F_lens)], 1) * mask.view(-1, 1)
 
     def attend(self, htilde_t, h, F_lens):
         # compute context vector c_t. Use get_attention_weights() to calculate
