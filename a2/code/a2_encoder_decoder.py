@@ -108,8 +108,6 @@ class DecoderWithoutAttention(DecoderBase):
         # relevant pytorch modules: torch.cat
 
         mid = self.hidden_state_size // 2
-        print(f"{self.hidden_state_size}")
-        print(f"{mid:}")
         if self.cell_type == 'lstm':
             pass
         else:
@@ -146,7 +144,9 @@ class DecoderWithoutAttention(DecoderBase):
         # htilde_t is of shape (N, 2 * H), even for LSTM (cell state discarded)
         # logits_t (output) is of shape (N, V)
         # assert False, "Fill me"
-        return self.ff.forward(htilde_t)
+        logits = self.ff.forward(htilde_t)
+        print(logits.size())
+        return logits
 
 
 class DecoderWithAttention(DecoderWithoutAttention):
