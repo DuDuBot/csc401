@@ -55,13 +55,13 @@ class Encoder(EncoderBase):
         # h (output) is of shape (S, N, 2 * H)
         # relevant pytorch modules:
         # torch.nn.utils.rnn.{pad_packed,pack_padded}_sequence
-        F_lens, perm_idx = F_lens.sort(0, descending=True)
-        _, unperm_idx = perm_idx.sort(0)
-        x = x[:, perm_idx, :]
-        x = torch.nn.utils.rnn.pack_padded_sequence(x, F_lens)
+        # F_lens, perm_idx = F_lens.sort(0, descending=True)
+        # _, unperm_idx = perm_idx.sort(0)
+        # x = x[:, perm_idx, :]
+        x = torch.nn.utils.rnn.pack_padded_sequence(x, F_lens, enforce_sorted=False)
         outputs, _ = self.rnn.forward(x)
-        outputs, _ = torch.nn.utils.rnn.pad_packed_sequence(outputs, False, h_pad)
-        outputs = outputs[unperm_idx]
+        outputs, _ = torch.nn.utils.rnn.pad_packed_sequence(outputs, padding_value=h_pad)
+        # outputs = outputs[unperm_idx]
         return outputs
 
 

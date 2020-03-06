@@ -70,6 +70,7 @@ def train_for_epoch(model, dataloader, optimizer, device):
     for F, F_lens, E in dataloader:
         F = F.to(device)
         F_lens = F_lens.to(device)
+        print(F_lens.max())
         E = E.to(device)
         optimizer.zero_grad()
         print(f"{model.target_eos:}")
