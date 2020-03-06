@@ -14,7 +14,7 @@ TEST=/scratch/ssd001/home/cchoquet/csc401/a2/data/Hansard/Testing/
 #python a2_run.py vocab $TRAIN e vocab.e.gz
 #python a2_run.py vocab $TRAIN f vocab.f.gz
 python a2_run.py split $TRAIN train.txt.gz dev.txt.gz
-python a2_run.py train $TRAIN 5 vocab.e.gz vocab.f.gz train.txt.gz dev.txt.gz model_wo_att.pt.gz --device cuda
+python a2_run.py train $TRAIN vocab.e.gz vocab.f.gz train.txt.gz dev.txt.gz model_wo_att.pt.gz --device cuda
 python a2_run.py train $TRAIN vocab.e.gz vocab.f.gz train.txt.gz dev.txt.gz model_w_att.pt.gz --with-attention --device cuda
 python a2_run.py train $TRAIN vocab.e.gz vocab.f.gz train.txt.gz dev.txt.gz model_w_att.pt.gz --with-attention --device cuda
 python a2_run.py test $TEST vocab.e.gz vocab.f.gz model_w_att.pt.gz --with-attention --device cuda
