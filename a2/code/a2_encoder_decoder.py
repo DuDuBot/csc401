@@ -115,6 +115,8 @@ class DecoderWithoutAttention(DecoderBase):
         # relevant pytorch modules: torch.cat
 
         mid = self.hidden_state_size // 2
+        print(f"{self.hidden_state_size}")
+        print(f"{mid:}")
         if self.cell_type == 'lstm':
             pass
         else:
