@@ -260,7 +260,7 @@ class EncoderDecoder(EncoderDecoderBase):
             # hidden_state_size=1024, cell_type='lstm'
         self.decoder = decoder_class(self.target_vocab_size, self.target_eos,
                                      self.word_embedding_size,
-                                     self.encoder_hidden_size,
+                                     self.encoder_hidden_size * 2,
                                      self.cell_type)
 
     def get_logits_for_teacher_forcing(self, h, F_lens, E):
