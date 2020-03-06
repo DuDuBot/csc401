@@ -61,7 +61,7 @@ class Encoder(EncoderBase):
         # init_hidden = torch.zeros(1, 2, self.hidden_state_size)
         x = torch.nn.utils.rnn.pack_padded_sequence(x, F_lens)
         outputs, hidden_states = self.rnn.forward(x)
-        outputs = torch.nn.utils.rnn.pad_packed_sequence(outputs, False, h_pad)
+        outputs, _ = torch.nn.utils.rnn.pad_packed_sequence(outputs, False, h_pad)
         # hidden_states = torch.nn.utils.rnn.pad_packed_sequence(hidden_states, False, h_pad)
         outputs = outputs[unperm_idx]
         hidden_states = hidden_states[unperm_idx]
