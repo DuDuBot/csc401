@@ -273,7 +273,9 @@ class EncoderDecoder(EncoderDecoderBase):
         # Note logits sequence dimension is one shorter than E (why?)
 
         # initialize the first hidden state
+        print(f"{self.hidden_state_size}")
         htilde_tm1 = self.decoder.get_first_hidden_state(h, F_lens)
+        print(f"{htilde_tm1:}")
         if self.cell_type == 'lstm':
             htilde_tm1 = (htilde_tm1, torch.zeros_like(htilde_tm1))
         logits = []  # for holding logits as we do all steps in time
