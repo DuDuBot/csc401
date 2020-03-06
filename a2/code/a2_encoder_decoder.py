@@ -270,10 +270,12 @@ class EncoderDecoder(EncoderDecoderBase):
         # hint: recall an LSTM's cell state is always initialized to zero.
         # Note logits sequence dimension is one shorter than E (why?)
 
-        h_tilde = torch.zeros_like(h[0, :self.hidden_state_size//2, :])
+        htilde_tm1 = self.decoder.get_first_hidden_state(h, F_lens)
+        if self.cell_type == 'lstm':
+            htilde_tm1 = (htilde_tm1, torch.zeros_like(htilde_tm1))
         logits = []
-        for i in range(E.size()[0]-1):  # T-1
-            l, h_tilde = self.decoder.forward(E[i], h_tilde, h, F_lens)
+        for t in range(E.size()[0]-1):  # T-1
+            l, h_tilde = self.decoder.forward(E[t], htilde_tm1, h, F_lens)
             logits.append(l)
         return torch.stack(logits, 0)
 
