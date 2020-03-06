@@ -25,18 +25,15 @@ class Encoder(EncoderBase):
                                             self.word_embedding_size,
                                             padding_idx=self.pad_id)
         init_packet = [self.word_embedding_size, self.hidden_state_size]
+        init_kwargs = {'dropout': self.dropout,
+                       'num_layers': self.num_hidden_layers,
+                       'bidirectional': True}
         if self.cell_type == 'gru':
-            self.rnn = torch.nn.GRU(*init_packet,
-                                    dropout=self.dropout,
-                                    bidirectional=True)
+            self.rnn = torch.nn.GRU(*init_packet, **init_kwargs)
         elif self.cell_type == 'rnn':
-            self.rnn = torch.nn.RNN(*init_packet,
-                                    dropout=self.dropout,
-                                    bidirectional=True)
+            self.rnn = torch.nn.RNN(*init_packet, **init_kwargs)
         elif self.cell_type == 'lstm':
-            self.rnn = torch.nn.LSTM(*init_packet,
-                                     dropout=self.dropout,
-                                     bidirectional=True)
+            self.rnn = torch.nn.LSTM(*init_packet, **init_kwargs)
         else:
             raise ValueError(f"cell type: '{self.cell_type}' not valid.")
 
