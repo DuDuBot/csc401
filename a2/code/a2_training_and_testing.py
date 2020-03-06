@@ -78,7 +78,7 @@ def train_for_epoch(model, dataloader, optimizer, device):
         print(logits.shape, E.shape)
         mask = model.get_target_padding_mask(E)
         E = E.masked_fill(mask, model.target_eos)
-        loss = loss(logits, E)
+        loss = loss(logits, E[:-1])  # T-1
         loss.backward()
         optimizer.step()
         n_batches += 1
