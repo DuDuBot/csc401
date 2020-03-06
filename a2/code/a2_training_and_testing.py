@@ -68,9 +68,9 @@ def train_for_epoch(model, dataloader, optimizer, device):
     loss = torch.nn.NLLLoss(ignore_index=model.target_eos)
     n_batches = 0
     for F, F_lens, E in tqdm(dataloader):
-        F = F.todevice(device)
-        F_lens = F_lens.todevice(device)
-        E = E.todevice(device)
+        F = F.to(device)
+        F_lens = F_lens.to(device)
+        E = E.to(device)
         optimizer.zero_grad()
         logits = model(F, F_lens, E)
         print(logits.shape, E.shape)
@@ -154,8 +154,8 @@ def compute_average_bleu_over_dataset(
     n_batch = 0
     total = 0
     for F, F_lens, E in tqdm(dataloader):
-        F = F.todevice(device)
-        F_lens = F_lens.todevice(device)
+        F = F.to(device)
+        F_lens = F_lens.to(device)
         b_1 = model(F, F_lens)
         E_cand = b_1[:, 0]
         total += compute_batch_total_bleu(E, E_cand, target_sos, target_eos)
