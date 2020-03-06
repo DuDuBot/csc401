@@ -28,7 +28,8 @@ class Encoder(EncoderBase):
         init_kwargs = {'dropout': self.dropout,
                        'num_layers': self.num_hidden_layers,
                        'bidirectional': True}
-        print(f"{self.cell_type:}")
+        print(f"{self.cell_type:}, {self.word_embedding_size:}, "
+              f"{self.hidden_state_size:}")
         if self.cell_type == 'gru':
             self.rnn = torch.nn.GRU(*init_packet, **init_kwargs)
         elif self.cell_type == 'rnn':
@@ -54,11 +55,12 @@ class Encoder(EncoderBase):
         # h (output) is of shape (S, N, 2 * H)
         # relevant pytorch modules:
         # torch.nn.utils.rnn.{pad_packed,pack_padded}_sequence
-        x = x
-        print(x.shape)
         print(F_lens.max())
         # init_hidden = torch.zeros(1, 2, self.hidden_state_size)
+        x = torch.nn.utils.rnn.pack_padded_sequence(x, F_lens)
         outputs, hidden_states = self.rnn.forward(x)
+        outputs = torch.nn.utils.rnn.pad_packed_sequence(outputs, h_pad)
+        hidden_states = torch.nn.utils.rnn.pad_packed_sequence(hidden_states, h_pad)
         print(hidden_states.shape)
         return hidden_states
 
