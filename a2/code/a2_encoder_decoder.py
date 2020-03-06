@@ -28,6 +28,7 @@ class Encoder(EncoderBase):
         init_kwargs = {'dropout': self.dropout,
                        'num_layers': self.num_hidden_layers,
                        'bidirectional': True}
+        print(f"{self.cell_type:}")
         if self.cell_type == 'gru':
             self.rnn = torch.nn.GRU(*init_packet, **init_kwargs)
         elif self.cell_type == 'rnn':
