@@ -71,6 +71,7 @@ class Encoder(EncoderBase):
         # return hidden_states
         return outputs
 
+
 class DecoderWithoutAttention(DecoderBase):
     '''A recurrent decoder without attention'''
 
@@ -269,7 +270,7 @@ class EncoderDecoder(EncoderDecoderBase):
         # hint: recall an LSTM's cell state is always initialized to zero.
         # Note logits sequence dimension is one shorter than E (why?)
 
-        h_tilde = torch.zeros_like(h[0])
+        h_tilde = torch.zeros_like(h[0, :self.hidden_state_size//2, :])
         logits = []
         for i in range(E.size()[0]-1):  # T-1
             l, h_tilde = self.decoder.forward(E[i], h_tilde, h, F_lens)
