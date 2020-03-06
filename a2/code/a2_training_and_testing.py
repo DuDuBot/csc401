@@ -65,7 +65,7 @@ def train_for_epoch(model, dataloader, optimizer, device):
     # If you are running into CUDA memory errors part way through training,
     # try "del F, F_lens, E, logits, loss" at the end of each iteration of
     # the loop.
-    loss = torch.nn.NLLLoss(ignore_index=model.target_eos)
+    loss = torch.nn.CrossEntropyLoss(ignore_index=model.pad_id)
     n_batches = 0
     for F, F_lens, E in dataloader:
         F = F.to(device)
@@ -75,10 +75,12 @@ def train_for_epoch(model, dataloader, optimizer, device):
         optimizer.zero_grad()
         print(f"{model.target_eos:}")
         logits = model(F, F_lens, E)
-        print(logits.shape, E.shape)
         mask = model.get_target_padding_mask(E)
         E = E.masked_fill(mask, model.target_eos)
-        loss = loss(logits, E[:-1])  # T-1
+        # 5. Flatten sequence dimension
+        logits = logits.view(-1, logits.size(-1))  # (T-1, N, V) -> ((T-1)*N, V)
+        E = E[:, 1:].view(-1, 1)  # target,  (N, T) -> (N, T-1) -> ((T-1)*N, 1)
+        loss = loss(logits)  # T-1
         loss.backward()
         optimizer.step()
         n_batches += 1

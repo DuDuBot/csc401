@@ -75,7 +75,7 @@ class DecoderWithoutAttention(DecoderBase):
         # relevant pytorch modules:
         # cell_type will be one of: ['lstm', 'gru', 'rnn']
         # torch.nn.{Embedding,Linear,LSTMCell,RNNCell,GRUCell}
-
+        print(f"{self.target_vocab_size}")
         init_packet = [self.word_embedding_size,
                        self.hidden_state_size]
         if self.cell_type == 'gru':
@@ -145,7 +145,6 @@ class DecoderWithoutAttention(DecoderBase):
         # logits_t (output) is of shape (N, V)
         # assert False, "Fill me"
         logits = self.ff.forward(htilde_t)
-        print(logits.size())
         return logits
 
 
