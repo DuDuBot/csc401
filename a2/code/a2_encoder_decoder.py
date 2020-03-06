@@ -126,8 +126,8 @@ class DecoderWithoutAttention(DecoderBase):
         # xtilde_t (output) is of shape (N, Itilde)
         # assert False, "Fill me"
         device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-        mask = torch.where(E_tm1 == torch.tensor([self.pad_id]).to(device),
-                           torch.tensor([0.]).to(device), torch.tensor([1.])).to(device)
+        mask = torch.where(E_tm1 == torch.tensor([self.pad_id]),
+                           torch.tensor([0.]), torch.tensor([1.])).to(device)
         return self.embedding(E_tm1) * mask.view(-1, 1)
 
     def get_current_hidden_state(self, xtilde_t, htilde_tm1):
