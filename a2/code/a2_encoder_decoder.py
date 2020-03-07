@@ -275,9 +275,10 @@ class EncoderDecoder(EncoderDecoderBase):
         logits = []  # for holding logits as we do all steps in time
         for t in range(E.size()[0]-1):  # T-1
             l, h_tilde_tm1 = self.decoder.forward(E[t], htilde_tm1, h, F_lens)
-            print(l.size())
             logits.append(l)
-        return torch.stack(logits, 0)
+        logits = torch.stack(logits, 0)
+        print(logits.size())
+        return logits
 
     def update_beam(self, htilde_t, b_tm1_1, logpb_tm1, logpy_t):
         # perform the operations within the psuedo-code's loop in the
