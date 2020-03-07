@@ -28,8 +28,6 @@ class Encoder(EncoderBase):
         init_kwargs = {'dropout': self.dropout,
                        'num_layers': self.num_hidden_layers,
                        'bidirectional': True}
-        print(f"{self.cell_type:}, {self.word_embedding_size:}, "
-              f"{self.hidden_state_size:}")
 
         if self.cell_type == 'gru':
             initializer = torch.nn.GRU
