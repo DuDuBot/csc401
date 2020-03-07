@@ -199,7 +199,7 @@ class DecoderWithAttention(DecoderWithoutAttention):
         # F_lens is of shape (N,)
         # c_t (output) is of shape (N, 2 * H)
         alpha = self.get_attention_weights(htilde_t, h, F_lens)  # (S, N)
-        alpha = alpha.tranpose(0, 1)  # (N, S)
+        alpha = alpha.transpose(0, 1)  # (N, S)
         alpha = alpha.unsqueeze(1)  # (N, 1, S)
         h = h.permute(1, 0, 2)  # (N, S, 2*H)
         print(alpha.size(), h.size(), htilde_t.size())
