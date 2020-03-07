@@ -131,7 +131,12 @@ class DecoderWithoutAttention(DecoderBase):
         # htilde_tm1 is of shape (N, 2 * H) or a tuple of two of those (LSTM)
         # htilde_t (output) is of same shape as htilde_tm1
         # assert False, "Fill me"
-        return self.cell(xtilde_t, htilde_tm1[:, :self.hidden_state_size])
+        if self.cell_type == 'lstm':
+            htilde_tm1 = (htilde_tm1[0][:, :self.hidden_state_size],
+                          htilde_tm1[1][:, :self.hidden_state_size])
+        else:
+            htilde_tm1 = htilde_tm1[:, :self.hidden_state_size]
+        self.cell(xtilde_t, htilde_tm1)
 
     def get_current_logits(self, htilde_t):
         # determine un-normalized log-probability distribution over output
