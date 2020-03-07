@@ -697,7 +697,7 @@ class EncoderDecoderBase(torch.nn.Module, metaclass=abc.ABCMeta):
         pad_mask = pad_mask & torch.cat([pad_mask[:1], pad_mask[:-1]], 0)
         return pad_mask
 
-    def forward(self, F, F_lens, E=None, max_T=100, on_max='ignore'):
+    def forward(self, F, F_lens, E=None, max_T=100, on_max='halt'):
         if self.training:
             if E is None:
                 raise RuntimeError('E must be set for training')
