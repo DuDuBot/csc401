@@ -15,10 +15,10 @@ def test_update_beam():
     torch.manual_seed(1030)
     N, K, V, H = 2, 2, 5, 10
     ed = a2_encoder_decoder.EncoderDecoder(
-        a2_encoder_decoder.Encoder, a2_encoder_decoder.DecoderWithoutAttention,
+        a2_encoder_decoder.Encoder, a2_encoder_decoder.DecoderWithAttention,
         V, V,
         encoder_hidden_size=H,
-        cell_type='gru', beam_width=2,
+        cell_type='lstm', beam_width=2,
     )
     logpb_tm1 = torch.arange(K).flip(0).unsqueeze(0).expand(N, -1).float()
     logpb_tm1 -= 1.5
