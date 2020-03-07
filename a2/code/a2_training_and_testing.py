@@ -93,6 +93,7 @@ def train_for_epoch(model, dataloader, optimizer, device):
         loss.backward()
         optimizer.step()
         n_batches += 1
+        print(f'loss={loss}')
         print(f'n_batches: {n_batches}')
         del F, F_lens, E, logits, loss
     return total_loss/n_batches
