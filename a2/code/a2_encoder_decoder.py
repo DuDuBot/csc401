@@ -201,7 +201,7 @@ class DecoderWithAttention(DecoderWithoutAttention):
         # c_t (output) is of shape (N, 2 * H)
         alpha = self.get_attention_weights(htilde_t, h, F_lens)  # (S, N)
         alpha = alpha.transpose(0, 1).unsqueeze(1)  # (N, 1, S)
-        h.permute(0, 1)  # (N, S, 2*H)
+        h.permute(1, 0, 2)  # (N, S, 2*H)
         return torch.bmm(alpha, h).squeeze(1)  # (N, 2 * H) as desired.
 
     def get_attention_weights(self, htilde_t, h, F_lens):
@@ -271,8 +271,9 @@ class EncoderDecoder(EncoderDecoderBase):
         # give start of string
         # initialize the first hidden state
         logits = []  # for holding logits as we do all steps in time
-        for t in range(E.size()[0]-1):  # T-1
-            l, h_tilde_tm1 = self.decoder.forward(E[t], None, h, F_lens)
+        l, h_tilde_tm1 = self.decoder.forward(E[0], None, h, F_lens)
+        for t in range(1, E.size()[0]):  # T-1
+            l, h_tilde_tm1 = self.decoder.forward(E[t], h_tilde_tm1, h, F_lens)
             logits.append(l)
         logits = torch.stack(logits, 0)
         return logits
