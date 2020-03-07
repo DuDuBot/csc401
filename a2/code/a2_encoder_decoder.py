@@ -312,7 +312,7 @@ class EncoderDecoder(EncoderDecoderBase):
         # choose the htdile that coorespond to the taken baths
         if self.cell_type == 'lstm':
           b_t_0 = (htilde_t[0].gather(1, paths.unsqueeze(-1).expand_as(htilde_t[0])),
-                   htilde_t[0].gather(1, paths.unsqueeze(-1).expand_as(htilde_t[0])))
+                   htilde_t[1].gather(1, paths.unsqueeze(-1).expand_as(htilde_t[0])))
         else:
           b_t_0 = htilde_t.gather(1, paths.unsqueeze(-1).expand_as(htilde_t))
         v = v.unsqueeze(0)  # (1, N, K)
