@@ -277,7 +277,6 @@ class EncoderDecoder(EncoderDecoderBase):
             l, h_tilde_tm1 = self.decoder.forward(E[t], htilde_tm1, h, F_lens)
             logits.append(l)
         logits = torch.stack(logits, 0)
-        print(logits.size())
         return logits
 
     def update_beam(self, htilde_t, b_tm1_1, logpb_tm1, logpy_t):
