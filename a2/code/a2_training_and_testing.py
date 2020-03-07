@@ -80,7 +80,7 @@ def train_for_epoch(model, dataloader, optimizer, device):
         # 5. Flatten sequence dimension
         logits = logits.view(-1, logits.size()[-1])  # (T-1, N, V) -> ((T-1)*N, V)
         E = E[:, 1:].reshape(-1, 1)  # target,  (N, T) -> ((T-1)*N, 1)
-        loss = loss(logits)  # T-1
+        loss = loss(logits, E)  # T-1
         loss.backward()
         optimizer.step()
         n_batches += 1
