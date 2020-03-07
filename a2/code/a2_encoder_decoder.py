@@ -123,7 +123,6 @@ class DecoderWithoutAttention(DecoderBase):
         # F_lens is of shape (N,)
         # xtilde_t (output) is of shape (N, Itilde)
         # assert False, "Fill me"
-        print(torch.cuda.is_available())
         device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
         mask = torch.where(E_tm1 == torch.tensor([self.pad_id]).to(device),
                            torch.tensor([0.]).to(device), torch.tensor([1.]).to(device)).to(device)
@@ -276,6 +275,7 @@ class EncoderDecoder(EncoderDecoderBase):
         logits = []  # for holding logits as we do all steps in time
         for t in range(E.size()[0]-1):  # T-1
             l, h_tilde_tm1 = self.decoder.forward(E[t], htilde_tm1, h, F_lens)
+            print(l.size())
             logits.append(l)
         return torch.stack(logits, 0)
 
