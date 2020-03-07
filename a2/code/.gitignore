@@ -1,3 +1,4 @@
-slurm-*
+train_1.*
+train_2.*
 *.gz
 *.txt
