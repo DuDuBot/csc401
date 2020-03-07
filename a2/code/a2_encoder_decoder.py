@@ -307,10 +307,10 @@ class EncoderDecoder(EncoderDecoderBase):
         v = torch.remainder(v, V)  # the indices of the extended words that are kept
         # choose the paths from b_tm1_1 that were kept in our next propogation
         b_tm1_1 = b_tm1_1.gather(2, paths.unsqueeze(0).expand_as(b_tm1_1))
-        # choose the htdile that coorespond to the taken baths
+        # choose the htdile that coorespond to the taken paths
         if self.cell_type == 'lstm':
           b_t_0 = (htilde_t[0].gather(1, paths.unsqueeze(-1).expand_as(htilde_t[0])),
-                   htilde_t[1].gather(1, paths.unsqueeze(-1).expand_as(htilde_t[0])))
+                   htilde_t[1].gather(1, paths.unsqueeze(-1).expand_as(htilde_t[1])))
         else:
           b_t_0 = htilde_t.gather(1, paths.unsqueeze(-1).expand_as(htilde_t))
         v = v.unsqueeze(0)  # (1, N, K)

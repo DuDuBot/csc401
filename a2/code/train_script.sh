@@ -14,7 +14,7 @@ conda activate 401a2
 
 TRAIN=/scratch/ssd001/home/cchoquet/csc401/a2/data/Hansard/Training/
 TEST=/scratch/ssd001/home/cchoquet/csc401/a2/data/Hansard/Testing/
-CELL_TYPE="lstm"
+CELL_TYPE="gru"
 
 if [[ "${SLURM_ARRAY_TASK_ID}" == "1" ]]; then
 	python a2_run.py vocab $TRAIN e vocab.e.gz
