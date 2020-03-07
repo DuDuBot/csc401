@@ -18,7 +18,7 @@ def test_update_beam():
         a2_encoder_decoder.Encoder, a2_encoder_decoder.DecoderWithAttention,
         V, V,
         encoder_hidden_size=H,
-        cell_type='lstm', beam_width=2,
+        cell_type='rnn', beam_width=2,
     )
     logpb_tm1 = torch.arange(K).flip(0).unsqueeze(0).expand(N, -1).float()
     logpb_tm1 -= 1.5
