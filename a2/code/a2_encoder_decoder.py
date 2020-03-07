@@ -136,7 +136,7 @@ class DecoderWithoutAttention(DecoderBase):
                           htilde_tm1[1][:, :self.hidden_state_size])
         else:
             htilde_tm1 = htilde_tm1[:, :self.hidden_state_size]
-        self.cell(xtilde_t, htilde_tm1)
+        return self.cell(xtilde_t, htilde_tm1)
 
     def get_current_logits(self, htilde_t):
         # determine un-normalized log-probability distribution over output
@@ -270,12 +270,9 @@ class EncoderDecoder(EncoderDecoderBase):
         # Note logits sequence dimension is one shorter than E (why?)
 
         # initialize the first hidden state
-        htilde_tm1 = self.decoder.get_first_hidden_state(h, F_lens)
-        if self.cell_type == 'lstm':
-            htilde_tm1 = (htilde_tm1, torch.zeros_like(htilde_tm1))
         logits = []  # for holding logits as we do all steps in time
         for t in range(E.size()[0]-1):  # T-1
-            l, h_tilde_tm1 = self.decoder.forward(E[t], htilde_tm1, h, F_lens)
+            l, h_tilde_tm1 = self.decoder.forward(E[t], None, h, F_lens)
             logits.append(l)
         logits = torch.stack(logits, 0)
         return logits
