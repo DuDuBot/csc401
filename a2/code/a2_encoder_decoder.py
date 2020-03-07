@@ -199,9 +199,12 @@ class DecoderWithAttention(DecoderWithoutAttention):
         # F_lens is of shape (N,)
         # c_t (output) is of shape (N, 2 * H)
         alpha = self.get_attention_weights(htilde_t, h, F_lens)  # (S, N)
-        alpha = alpha.unsqueeze(2)
+        alpha = alpha.tranpose(0, 1)  # (N, S)
+        alpha = alpha.unsqueeze(1)  # (N, 1, S)
+        h = h.permute(1, 0, 2)  # (N, S, 2*H)
         print(alpha.size(), h.size(), htilde_t.size())
-        c_t = torch.bmm(alpha, h)  # (N, 2 * H) as desired.
+        c_t = torch.bmm(alpha, h).squeeze(1)  # (N, 2*H) as desired.
+        print(c_t.size())
         return c_t
 
     def get_attention_weights(self, htilde_t, h, F_lens):
