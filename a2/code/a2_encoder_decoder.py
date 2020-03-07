@@ -190,7 +190,7 @@ class DecoderWithAttention(DecoderWithoutAttention):
                            torch.tensor([0.]).to(device), torch.tensor([1.]).to(device)).to(device)
         if self.cell_type == 'lstm':
             htilde_tm1 = htilde_tm1[0]  # take the hidden states
-        return torch.stack([self.embedding(E_tm1) * mask.view(-1, 1), self.attend(htilde_tm1, h, F_lens)], 1)
+        return torch.cat([self.embedding(E_tm1) * mask.view(-1, 1), self.attend(htilde_tm1, h, F_lens)], 1)
 
     def attend(self, htilde_t, h, F_lens):
         # compute context vector c_t. Use get_attention_weights() to calculate
