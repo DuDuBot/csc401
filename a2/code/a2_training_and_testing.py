@@ -76,7 +76,7 @@ def train_for_epoch(model, dataloader, optimizer, device):
         # zero the gradient
         optimizer.zero_grad()
         # get logits
-        logits = model(F, F_lens, E)
+        logits = model(F, F_lens, E, 'ignore')
         mask = model.get_target_padding_mask(E)
         E = E.masked_fill(mask, model.target_eos)
         # 5. Flatten sequence dimension
