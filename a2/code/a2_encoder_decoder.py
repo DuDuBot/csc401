@@ -183,7 +183,8 @@ class DecoderWithAttention(DecoderWithoutAttention):
         device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
         mask = torch.where(E_tm1 == torch.tensor([self.pad_id]).to(device),
                            torch.tensor([0.]).to(device), torch.tensor([1.]).to(device)).to(device)
-
+        if self.cell_type == 'lstm':
+            htilde_tm1 = htilde_tm1[0]  # take the hidden states
         return torch.stack([self.embedding(E_tm1) * mask.view(-1, 1), self.attend(htilde_tm1, h, F_lens)], 1)
 
     def attend(self, htilde_t, h, F_lens):
@@ -214,8 +215,6 @@ class DecoderWithAttention(DecoderWithoutAttention):
         # htilde_t is of shape (N, 2 * H)
         # h is of shape (S, N, 2 * H)
         # e_t (output) is of shape (S, N)
-
-
         # h = h.permute(1, 2, 0)  # (N, S, 2*H) so batches front
         # scale = torch.inverse(torch.sqrt(self.hidden_state_size * 2))
         # htilde = htilde_t.unsqueeze(1)  # (N, 1, 2*H)
