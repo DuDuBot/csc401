@@ -779,6 +779,7 @@ class EncoderDecoderBase(torch.nn.Module, metaclass=abc.ABCMeta):
         t = 0
         while torch.any(b_tm1_1[-1, :, 0] != self.target_eos):
             if t == max_T:
+                print(b_tm1_1)
                 if on_max == 'raise':
                     raise RuntimeError(
                         f'Beam search has not finished by t={t}. Increase the '
