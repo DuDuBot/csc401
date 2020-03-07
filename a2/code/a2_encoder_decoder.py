@@ -74,7 +74,6 @@ class DecoderWithoutAttention(DecoderBase):
         # relevant pytorch modules:
         # cell_type will be one of: ['lstm', 'gru', 'rnn']
         # torch.nn.{Embedding,Linear,LSTMCell,RNNCell,GRUCell}
-        print(f"{self.target_vocab_size}")
         init_packet = [self.word_embedding_size,
                        self.hidden_state_size]
         if self.cell_type == 'gru':
@@ -199,9 +198,8 @@ class DecoderWithAttention(DecoderWithoutAttention):
         # h is of shape (S, N, 2 * H)
         # F_lens is of shape (N,)
         # c_t (output) is of shape (N, 2 * H)
-        print(htilde_t.size())
         alpha = self.get_attention_weights(htilde_t, h, F_lens)  # (S, N)
-        print(alpha.size(), h.size())
+        alpha = alpha.unsqueeze(2)
         c_t = torch.bmm(alpha, h)  # (N, 2 * H) as desired.
         return c_t
 
@@ -230,7 +228,6 @@ class DecoderWithAttention(DecoderWithoutAttention):
         for s in range(h.size()[0]):
           energy[s] = torch.nn.functional.cosine_similarity(htilde_t,
                                                             h[s], dim=1)
-        print(energy.size(), h.size())
         return energy
 
 class EncoderDecoder(EncoderDecoderBase):
