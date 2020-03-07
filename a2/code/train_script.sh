@@ -25,7 +25,7 @@ if [[ "${SLURM_ARRAY_TASK_ID}" == "1" ]]; then
 elif [[ "${SLURM_ARRAY_TASK_ID}" == "2" ]]; then
 	python a2_run.py vocab $TRAIN e vocab2.e.gz
 	python a2_run.py vocab $TRAIN f vocab2.f.gz
-    python a2_run.py split $TRAIN train2.txt.gz dev2.txt.gz -- limit 10
+    python a2_run.py split $TRAIN train2.txt.gz dev2.txt.gz --limit 10
     python a2_run.py train $TRAIN vocab2.e.gz vocab2.f.gz train2.txt.gz dev2.txt.gz model_w_att.pt.gz --cell-type $CELL_TYPE --with-attention --device cuda
     python a2_run.py test $TEST vocab2.e.gz vocab2.f.gz model_w_att.pt.gz --cell-type $CELL_TYPE --with-attention --device cuda
 fi
