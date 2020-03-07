@@ -24,5 +24,5 @@ if [[ "${SLURM_ARRAY_TASK_ID}" == "1" ]]; then
 elif [[ "${is_number}" == "2" ]]; then
     python a2_run.py train $TRAIN vocab.e.gz vocab.f.gz train.txt.gz dev.txt.gz model_w_att.pt.gz --cell-type $CELL_TYPE --with-attention --device cuda
     python a2_run.py test $TEST vocab.e.gz vocab.f.gz model_w_att.pt.gz --cell-type $CELL_TYPE --with-attention --device cuda
-
+fi
 
