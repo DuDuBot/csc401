@@ -268,7 +268,7 @@ class EncoderDecoder(EncoderDecoderBase):
         # relevant pytorch modules: torch.{zero_like,stack}
         # hint: recall an LSTM's cell state is always initialized to zero.
         # Note logits sequence dimension is one shorter than E (why?)
-
+        # give start of string
         # initialize the first hidden state
         logits = []  # for holding logits as we do all steps in time
         for t in range(E.size()[0]-1):  # T-1
