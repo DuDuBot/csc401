@@ -79,6 +79,9 @@ def train_for_epoch(model, dataloader, optimizer, device):
         E = E.masked_fill(mask, model.target_eos)
         # 5. Flatten sequence dimension
         logits = logits.view(-1, logits.size()[-1])  # (T-1, N, V) -> ((T-1)*N, V)
+        print(E.size())
+        print(logits.size())
+        print(E[:, 1:].size())
         E = E[:, 1:].reshape(-1, 1)  # target,  (N, T) -> ((T-1)*N, 1)
         loss = loss(logits, E)  # T-1
         loss.backward()
