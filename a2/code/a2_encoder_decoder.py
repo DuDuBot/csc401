@@ -199,9 +199,9 @@ class DecoderWithAttention(DecoderWithoutAttention):
         # h is of shape (S, N, 2 * H)
         # F_lens is of shape (N,)
         # c_t (output) is of shape (N, 2 * H)
-        alpha = self.get_attention_weights(htilde_t, h, F_lens)  # (S, N)
-        print(alpha.size())
-        alpha = alpha.transpose(0, 1).unsqueeze(1)  # (N, 1, S)
+        # get_attention_weights is supposed to return (S, N) but it returns (N, S)
+        alpha = self.get_attention_weights(htilde_t, h, F_lens)  # (N, S)
+        alpha = alpha.unsqueeze(1)  # (N, 1, S)
         h.permute(1, 0, 2)  # (N, S, 2*H)
         print(alpha.size(), h.size())
         return torch.bmm(alpha, h).squeeze(1)  # (N, 2 * H) as desired.
@@ -222,9 +222,6 @@ class DecoderWithAttention(DecoderWithoutAttention):
         # htilde_t is of shape (N, 2 * H)
         # h is of shape (S, N, 2 * H)
         # e_t (output) is of shape (S, N)
-
-
-
         # h = h.permute(1, 2, 0)  # (N, S, 2*H) so batches front
         # scale = torch.inverse(torch.sqrt(self.hidden_state_size * 2))
         # htilde = htilde_t.unsqueeze(1)  # (N, 1, 2*H)
@@ -234,6 +231,7 @@ class DecoderWithAttention(DecoderWithoutAttention):
         for s in range(h.size()[0]):
           energy[s] = torch.nn.functional.cosine_similarity(htilde_t,
                                                             h[s], dim=1)
+        print(energy.size(), h.size())
         return energy
 
 class EncoderDecoder(EncoderDecoderBase):
