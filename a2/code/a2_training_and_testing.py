@@ -86,7 +86,7 @@ def train_for_epoch(model, dataloader, optimizer, device):
         logits = logits.view(-1, logits.size()[-1])  # (T-1, N, V) -> ((T-1)*N, V)
         E = E.transpose(0, 1)
         print(logits.size())
-        E = E[:, 1:].reshape(-1, 1)  # target,  (N, T) -> ((T-1)*N, 1)
+        E = E[:, 1:].reshape(-1)  # target,  (N, T) -> ((T-1)*N, 1)
         print(E.size())
         loss = loss(logits, E)  # T-1
         total_loss += loss
