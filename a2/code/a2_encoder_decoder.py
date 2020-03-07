@@ -199,12 +199,9 @@ class DecoderWithAttention(DecoderWithoutAttention):
         # h is of shape (S, N, 2 * H)
         # F_lens is of shape (N,)
         # c_t (output) is of shape (N, 2 * H)
-        # get_attention_weights is supposed to return (S, N) but it returns (N, S)
-        alpha = self.get_attention_weights(htilde_t, h, F_lens)  # (N, S)
-        alpha = alpha.unsqueeze(1)  # (N, 1, S)
-        h.permute(1, 0, 2)  # (N, S, 2*H)
-        print(alpha.size(), h.size())
-        return torch.bmm(alpha, h).squeeze(1)  # (N, 2 * H) as desired.
+        alpha = self.get_attention_weights(htilde_t, h, F_lens)  # (S, N)
+        c_t = torch.bmm(alpha, h)  # (N, 2 * H) as desired.
+        return c_t
 
     def get_attention_weights(self, htilde_t, h, F_lens):
         # DO NOT MODIFY! Calculates attention weights, ensuring padded terms
