@@ -78,6 +78,7 @@ def train_for_epoch(model, dataloader, optimizer, device):
         optimizer.zero_grad()
         print(f"{model.target_eos:}")
         # get logits
+        print(F_lens.size())
         logits = model(F, F_lens, E)
         mask = model.get_target_padding_mask(E)
         E = E.masked_fill(mask, model.target_eos)
