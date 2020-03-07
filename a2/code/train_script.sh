@@ -22,6 +22,7 @@ if [[ "${SLURM_ARRAY_TASK_ID}" == "1" ]]; then
         python a2_run.py train $TRAIN vocab.e.gz vocab.f.gz train.txt.gz dev.txt.gz model_wo_att.pt.gz --cell-type $CELL_TYPE --device cuda
         python a2_run.py test $TEST vocab.e.gz vocab.f.gz model_wo_att.pt.gz --device cuda
 elif [[ "${is_number}" == "2" ]]; then
+    sleep 30
     python a2_run.py train $TRAIN vocab.e.gz vocab.f.gz train.txt.gz dev.txt.gz model_w_att.pt.gz --cell-type $CELL_TYPE --with-attention --device cuda
     python a2_run.py test $TEST vocab.e.gz vocab.f.gz model_w_att.pt.gz --cell-type $CELL_TYPE --with-attention --device cuda
 fi
