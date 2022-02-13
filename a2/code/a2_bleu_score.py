@@ -1,3 +1,6 @@
+## Please take this public repo down as you are violating copyright and 
+## depriving students from learning opportunity by posting assignment code online. 
+
 # Copyright 2020 University of Toronto, all rights reserved
 
 '''Calculate BLEU score for one reference and one hypothesis
